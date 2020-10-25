@@ -1,27 +1,45 @@
 {
-  "name": "front",
+  "name": "avviare-webapp",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "dev": "rescripts start",
+    "build": "rescripts build",
+    "lint": "eslint",
+    "format": "prettier --write"
+  },
   "dependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
+    "antd": "^4.7.3",
+    "less": "^3.12.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-scripts": "4.0.0",
-    "web-vitals": "^0.2.4"
+    "react-loadable": "^5.5.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "react-topbar-progress-indicator": "^4.1.0",
+    "styled-components": "^5.2.0"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "devDependencies": {
+    "@rescripts/cli": "^0.0.14",
+    "@rescripts/rescript-env": "^0.0.12",
+    "@rescripts/utilities": "^0.0.7",
+    "css-loader": "^5.0.0",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-prettier": "^6.14.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.21.5",
+    "husky": "^4.3.0",
+    "less-loader": "^7.0.2",
+    "prettier": "^2.1.2",
+    "pretty-quick": "^3.1.0",
+    "style-loader": "^2.0.0"
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "extends": "react-app"
   },
   "browserslist": {
     "production": [
@@ -34,5 +52,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn format . && git add . && pretty-quick --staged",
+      "pre-push": "yarn lint ."
+    }
   }
 }
