@@ -8,5 +8,6 @@ const env = {
 };
 
 const apiUrl = urljoin(process.env.REACT_APP_API_URL, 'graphql');
+const authUrl = urljoin(process.env.REACT_APP_API_URL, 'auth');
 
-export { apiUrl, env };
+export { env, apiUrl, authUrl };

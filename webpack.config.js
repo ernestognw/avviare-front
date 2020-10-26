@@ -9,6 +9,7 @@ module.exports = (config) => {
   config.resolve.alias['@config'] = path.join(__dirname, './src/config');
   config.resolve.alias['@views'] = path.join(__dirname, './src/views');
   config.resolve.alias['@graphql'] = path.join(__dirname, './src/graphql');
+  config.resolve.alias['@providers'] = path.join(__dirname, './src/providers');
 
   // Removes warning from pdfjs
   config.module.rules[0].parser.requireEnsure = true;

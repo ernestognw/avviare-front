@@ -21,7 +21,9 @@
   },
   "plugins": ["prettier", "import", "react"],
   "rules": {
-    "import/no-unresolved": [0]
+    "import/no-unresolved": [0],
+    "import/prefer-default-export": [0],
+    "react/jsx-props-no-spreading": [0]
   },
   "parser": "babel-eslint"
 }
