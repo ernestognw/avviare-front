@@ -1,17 +1,26 @@
 import styled from 'styled-components';
-import { Layout, Menu as CommonMenu } from 'antd';
+import { Layout, Button } from 'antd';
 
 const { Header } = Layout;
 
 const NavbarContainer = styled(Header)`
-  background: none !important;
+  background: #fff;
   padding: 0px !important;
-`;
-
-const Menu = styled(CommonMenu)`
-  align-items: center;
-  height: fit-content;
   display: flex;
+  align-items: center;
 `;
 
-export { NavbarContainer, Menu };
+const NameContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 15px;
+`;
+
+const ProfileButton = styled(Button)`
+  height: 100%;
+  display: flex;
+  align-items: center;
+`;
+
+export { NavbarContainer, NameContainer, ProfileButton };

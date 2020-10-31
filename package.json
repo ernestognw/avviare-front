@@ -28,7 +28,8 @@
     "react-topbar-progress-indicator": "^4.1.0",
     "shortid": "^2.2.16",
     "styled-components": "^5.2.0",
-    "url-join": "^4.0.1"
+    "url-join": "^4.0.1",
+    "use-debounce": "^5.0.1"
   },
   "devDependencies": {
     "@rescripts/cli": "^0.0.14",

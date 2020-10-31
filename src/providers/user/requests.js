@@ -6,6 +6,7 @@ const GET_USER = gql`
       id
       firstName
       lastName
+      profileImg
       email
       dateOfBirth
       overallRole

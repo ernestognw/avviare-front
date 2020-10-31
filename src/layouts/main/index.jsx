@@ -1,20 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Layout as Layer } from 'antd';
+import { Layout } from 'antd';
 import Sidebar from './sidebar';
 import Footer from './footer';
 import Navbar from './navbar';
 
+const { Content } = Layout;
+
 const MainLayout = ({ children }) => {
   return (
-    <Layer style={{ minHeight: '100vh', maxHeight: '100vh' }}>
+    <Layout style={{ minHeight: '100vh', maxHeight: '100vh' }}>
       <Sidebar />
-      <Layer>
+      <Layout>
         <Navbar />
-        {children}
+        <Content>{children}</Content>
         <Footer />
-      </Layer>
-    </Layer>
+      </Layout>
+    </Layout>
   );
 };
 

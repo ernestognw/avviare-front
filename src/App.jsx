@@ -8,6 +8,13 @@ import Auth from '@views/auth';
 import Development from '@views/development';
 import Main from '@views/main';
 import theme from '@config/theme';
+import Loadable from 'react-loadable';
+
+/* webpackChunkName: "Profile" */
+const Profile = Loadable({
+  loader: () => import('./views/profile'),
+  loading: TopBarProgress,
+});
 
 TopBarProgress.config({
   barColors: {
@@ -33,6 +40,7 @@ const App = () => {
   return (
     <MainLayout>
       <Switch>
+        <Route path="/my-profile" component={Profile} />
         <Route path="/development" component={Development} />
         <Route path="/" component={Main} />
         <Redirect to="/" />
