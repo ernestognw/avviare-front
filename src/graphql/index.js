@@ -3,6 +3,7 @@ import { apiUrl } from '@config/environment';
 
 const client = new ApolloClient({
   uri: apiUrl,
+  credentials: 'include',
   cache: new InMemoryCache({
     addTypename: false,
   }),

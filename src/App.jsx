@@ -1,11 +1,13 @@
 import React from 'react';
-import { Button } from 'antd';
 import TopBarProgress from 'react-topbar-progress-indicator';
 import { useUser } from '@providers/user';
+import { Redirect, Switch, Route } from 'react-router-dom';
 import AuthLayout from '@layouts/auth';
+import MainLayout from '@layouts/main';
 import Auth from '@views/auth';
+import Development from '@views/development';
+import Main from '@views/main';
 import theme from '@config/theme';
-import { env } from '@config/environment';
 
 TopBarProgress.config({
   barColors: {
@@ -28,22 +30,14 @@ const App = () => {
     );
   }
 
-  const handleLogout = () => {
-    if (env.development) {
-      document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT;path=/';
-    } else {
-      document.cookie =
-        'token= ; domain=.avviare.site ; expires = Thu, 01 Jan 1970 00:00:00 GMT;path=/';
-    }
-    window.location.reload();
-  };
-
   return (
-    <>
-      <Button onClick={handleLogout} type="primary">
-        Logout
-      </Button>
-    </>
+    <MainLayout>
+      <Switch>
+        <Route exact path="/" component={Main} />
+        <Route path="/development" component={Development} />
+        <Redirect to="/" />
+      </Switch>
+    </MainLayout>
   );
 };
 
