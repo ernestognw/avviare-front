@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { Layout as Layer } from 'antd';
 import Sidebar from './sidebar';
 import Footer from './footer';
+import Navbar from './navbar';
 
 const MainLayout = ({ children }) => {
   return (
     <Layer style={{ minHeight: '100vh', maxHeight: '100vh' }}>
       <Sidebar />
       <Layer>
+        <Navbar />
         {children}
         <Footer />
       </Layer>

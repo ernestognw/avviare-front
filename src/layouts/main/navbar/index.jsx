@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-expressions */
 import React from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
 import { PageHeader } from 'antd';
+import { useLayout } from '@providers/layout';
 import { env } from '@config/environment';
 import { NavbarContainer, Menu } from './elements';
 
 const { Item } = Menu;
 
 const NavBar = () => {
-  const { goBack } = useHistory();
-  const { pathname } = useLocation();
+  const { title } = useLayout();
 
   const handleLogout = () => {
     if (env.development) {
@@ -21,18 +20,13 @@ const NavBar = () => {
     window.location.reload();
   };
 
-  const format = (path) => {
-    const title = path.substring(path.lastIndexOf('/') + 1).replace(/-/g, ' ');
-    return title.charAt(0).toUpperCase() + title.slice(1);
-  };
-
   return (
     <NavbarContainer>
       <Menu mode="horizontal" style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <PageHeader
+          backIcon={false}
           style={{ marginRight: 'auto', padding: '0px 20px' }}
-          onBack={goBack}
-          title={format(pathname)}
+          title={title}
         />
         <Item key="1" disabled>
           Foo Bar

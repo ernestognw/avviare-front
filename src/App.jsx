@@ -33,8 +33,8 @@ const App = () => {
   return (
     <MainLayout>
       <Switch>
-        <Route exact path="/" component={Main} />
         <Route path="/development" component={Development} />
+        <Route path="/" component={Main} />
         <Redirect to="/" />
       </Switch>
     </MainLayout>

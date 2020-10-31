@@ -1,14 +1,14 @@
 import React from 'react';
 import { useTitle } from '@providers/layout';
 
-const Dashboard = () => {
-  useTitle('Dashboard');
+const Users = () => {
+  useTitle('Usuarios');
 
   return (
     <>
-      <p>Dashboard</p>
+      <p>Users</p>
     </>
   );
 };
 
-export default Dashboard;
+export default Users;
