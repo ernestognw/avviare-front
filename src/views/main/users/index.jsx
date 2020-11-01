@@ -3,7 +3,7 @@ import moment from 'moment';
 import { useTitle } from '@providers/layout';
 import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
-import { Card, Table, Avatar } from 'antd';
+import { Card, Table, Avatar, Tag } from 'antd';
 import { overallRoles } from '@config/constants';
 import { Container } from './elements';
 import { GET_USERS } from './requests';
@@ -54,7 +54,7 @@ const Users = () => {
       title: 'Fecha de nacimiento',
       dataIndex: 'dateOfBirth',
       key: 'dateOfBirth',
-      render: (dateOfBirth) => moment(dateOfBirth).format('lll'),
+      render: (dateOfBirth) => moment(dateOfBirth).format('ll'),
     },
     {
       title: 'Correo',
@@ -71,13 +71,13 @@ const Users = () => {
       title: 'Creado el',
       dataIndex: 'createdAt',
       key: 'createdAt',
-      render: (createdAt) => moment(createdAt).format('lll'),
+      render: (createdAt) => <Tag>{moment(createdAt).format('lll')}</Tag>,
     },
     {
       title: 'Última actualización',
       dataIndex: 'updatedAt',
       key: 'updatedAt',
-      render: (updatedAt) => moment(updatedAt).format('lll'),
+      render: (updatedAt) => <Tag>{moment(updatedAt).format('lll')}</Tag>,
     },
   ];
 

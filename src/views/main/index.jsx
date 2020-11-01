@@ -31,14 +31,14 @@ const Main = () => {
   return (
     <>
       <Menu mode="horizontal" selectedKeys={[pathname]}>
-        <Menu.Item key="/" icon={<BlockOutlined />}>
-          <Link to="/">Mis desarrollos</Link>
-        </Menu.Item>
         {overall?.admin && (
           <Menu.Item key="/all" icon={<AppstoreOutlined />}>
             <Link to="/all">Todos los desarrollos</Link>
           </Menu.Item>
         )}
+        <Menu.Item key="/" icon={<BlockOutlined />}>
+          <Link to="/">Mis desarrollos</Link>
+        </Menu.Item>
         {overall?.admin && (
           <Menu.Item key="/users" icon={<UserOutlined />}>
             <Link to="/users">Usuarios</Link>

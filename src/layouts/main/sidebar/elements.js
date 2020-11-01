@@ -20,6 +20,13 @@ const Container = styled.div`
   }
 `;
 
+const SubtitleContainer = styled.div`
+  display: flex;
+  padding: 0 15px;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Sider = styled(DefaultSider)`
   overflow-y: scroll;
 
@@ -34,4 +41,4 @@ const Avatar = styled(DefaultAvatar)`
   }
 `;
 
-export { Container, Sider, Avatar };
+export { Container, Sider, Avatar, SubtitleContainer };

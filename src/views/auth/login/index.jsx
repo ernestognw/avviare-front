@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Card, Form, Input, Button, Image, message } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Form, Input, Button, message } from 'antd';
+import { UserOutlined, LockOutlined, LoginOutlined } from '@ant-design/icons';
 import { authUrl } from '@config/environment';
 
 const { Item } = Form;
@@ -27,8 +27,8 @@ const Login = () => {
   };
 
   return (
-    <Card style={{ maxWidth: 450, width: '100%' }}>
-      <Image
+    <div style={{ maxWidth: 400, width: '100%' }}>
+      <img
         style={{ margin: '10px auto', display: 'block', marginBottom: 30 }}
         width={200}
         src="/images/brand/logo_black.png"
@@ -45,22 +45,29 @@ const Login = () => {
             { required: true, message: 'Ingresa tu email' },
           ]}
         >
-          <Input prefix={<UserOutlined />} placeholder="Email" />
+          <Input size="large" prefix={<UserOutlined />} placeholder="Email" />
         </Item>
         <Item
           style={{ marginTop: 10 }}
           name="password"
           rules={[{ required: true, message: 'Ingresa tu password' }]}
         >
-          <Input prefix={<LockOutlined />} type="password" placeholder="Password" />
+          <Input size="large" prefix={<LockOutlined />} type="password" placeholder="Password" />
         </Item>
         <Item style={{ marginTop: 20 }}>
-          <Button loading={logging} block type="primary" htmlType="submit">
+          <Button
+            icon={<LoginOutlined />}
+            size="large"
+            loading={logging}
+            block
+            type="primary"
+            htmlType="submit"
+          >
             Log in
           </Button>
         </Item>
       </Form>
-    </Card>
+    </div>
   );
 };
 

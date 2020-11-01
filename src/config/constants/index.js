@@ -10,4 +10,9 @@ const developmentRoles = {
   SALES: 'Ventas',
 };
 
-export { overallRoles, developmentRoles };
+const orders = {
+  asc: 'Ascendente',
+  desc: 'Descendente',
+};
+
+export { overallRoles, developmentRoles, orders };

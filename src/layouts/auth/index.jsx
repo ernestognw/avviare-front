@@ -1,9 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Layout } from 'antd';
 import { AuthWrapper } from './elements';
 
 const AuthLayout = ({ children }) => {
-  return <AuthWrapper>{children}</AuthWrapper>;
+  return (
+    <Layout>
+      <AuthWrapper>{children}</AuthWrapper>
+    </Layout>
+  );
 };
 
 AuthLayout.propTypes = {
