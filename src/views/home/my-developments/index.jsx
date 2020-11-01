@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useTitle } from '@providers/layout';
 import { useDebounce } from 'use-debounce';
 import { useQuery } from '@apollo/client';
 import { Typography, Input, Select, Spin, Pagination } from 'antd';
 import { orders } from '@config/constants';
+import { useUser } from '@providers/user';
 import { LoadingOutlined } from '@ant-design/icons';
 import { sortableFields } from '@config/constants/development';
 import DevelopmentCard from '@components/development-card';
@@ -24,17 +24,19 @@ const defaultSortBy = {
   order: 'asc',
 };
 
-const AllDevelopments = () => {
-  useTitle('Todos los desarrollos');
+const MyDevelopments = () => {
   const [search, setSearch] = useState();
   const [params, setParams] = useState(defaultParams);
   const [sortBy, setSortBy] = useState(defaultSortBy);
   const [debouncedSearch] = useDebounce(search, 500);
 
+  const { user } = useUser();
+
   const { data, loading } = useQuery(GET_MY_DEVELOPMENTS, {
     variables: {
       sortBy,
       params,
+      userId: user.id,
       search: {
         name: debouncedSearch,
       },
@@ -45,7 +47,7 @@ const AllDevelopments = () => {
     <Container>
       <TitleSection>
         <Title style={{ marginRight: 'auto' }} level={3}>
-          Todos los desarrollos
+          Mis Desarrollos
         </Title>
         <div>
           <Paragraph style={{ margin: 0 }} type="secondary">
@@ -123,4 +125,4 @@ const AllDevelopments = () => {
   );
 };
 
-export default AllDevelopments;
+export default MyDevelopments;

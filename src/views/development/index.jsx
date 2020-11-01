@@ -11,10 +11,12 @@ const Dashboard = Loadable({
 
 const Development = () => {
   return (
-    <Switch>
-      <Route path="/development/:developmentId" component={Dashboard} />
-      <Redirect to="/" />
-    </Switch>
+    <>
+      <Switch>
+        <Route path="/development/:developmentId" component={Dashboard} />
+        <Redirect to="/" />
+      </Switch>
+    </>
   );
 };
 

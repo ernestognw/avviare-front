@@ -1,10 +1,10 @@
 import React from 'react';
-import { Redirect, Switch, Route, Link, useLocation } from 'react-router-dom';
+import { Redirect, Switch, Route } from 'react-router-dom';
 import TopBarProgress from 'react-topbar-progress-indicator';
+import { useTitle } from '@providers/layout';
 import Loadable from 'react-loadable';
+import HomeLayout from '@layouts/home';
 import { useUser } from '@providers/user';
-import { BlockOutlined, AppstoreOutlined, UserOutlined } from '@ant-design/icons';
-import { Menu } from 'antd';
 
 /* webpackChunkName: "MyDevelopments" */
 const MyDevelopments = Loadable({
@@ -25,33 +25,18 @@ const Users = Loadable({
 });
 
 const Main = () => {
-  const { pathname } = useLocation();
   const { overall } = useUser();
+  useTitle('Home');
 
   return (
-    <>
-      <Menu mode="horizontal" selectedKeys={[pathname]}>
-        {overall?.admin && (
-          <Menu.Item key="/all" icon={<AppstoreOutlined />}>
-            <Link to="/all">Todos los desarrollos</Link>
-          </Menu.Item>
-        )}
-        <Menu.Item key="/" icon={<BlockOutlined />}>
-          <Link to="/">Mis desarrollos</Link>
-        </Menu.Item>
-        {overall?.admin && (
-          <Menu.Item key="/users" icon={<UserOutlined />}>
-            <Link to="/users">Usuarios</Link>
-          </Menu.Item>
-        )}
-      </Menu>
+    <HomeLayout>
       <Switch>
         <Route exact path="/" component={MyDevelopments} />
         {overall?.admin && <Route path="/all" component={AllDevelopments} />}
         {overall?.admin && <Route path="/users" component={Users} />}
         <Redirect to="/" />
       </Switch>
-    </>
+    </HomeLayout>
   );
 };
 

@@ -6,7 +6,7 @@ import AuthLayout from '@layouts/auth';
 import MainLayout from '@layouts/main';
 import Auth from '@views/auth';
 import Development from '@views/development';
-import Main from '@views/main';
+import Home from '@views/home';
 import theme from '@config/theme';
 import Loadable from 'react-loadable';
 
@@ -42,7 +42,7 @@ const App = () => {
       <Switch>
         <Route path="/my-profile" component={Profile} />
         <Route path="/development" component={Development} />
-        <Route path="/" component={Main} />
+        <Route path="/" component={Home} />
         <Redirect to="/" />
       </Switch>
     </MainLayout>
