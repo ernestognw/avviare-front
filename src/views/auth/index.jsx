@@ -5,7 +5,7 @@ import Loadable from 'react-loadable';
 
 /* webpackChunkName: "Login" */
 const Login = Loadable({
-  loader: () => import('./routes/login'),
+  loader: () => import('./login'),
   loading: TopBarProgress,
 });
 

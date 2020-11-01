@@ -7,7 +7,7 @@ import TitleContainer from './elements';
 const { Title } = Typography;
 const { Search } = Input;
 
-const TableTitle = ({ setSearch }) => {
+const TableTitle = ({ setSearch, openCreateUserModal }) => {
   return (
     <TitleContainer>
       <Title style={{ margin: 'auto 10px' }} level={3}>
@@ -23,7 +23,7 @@ const TableTitle = ({ setSearch }) => {
         style={{ margin: 'auto 10px' }}
         type="primary"
         icon={<UserAddOutlined />}
-        onClick={() => {}}
+        onClick={openCreateUserModal}
       >
         Añadir
       </Button>
@@ -33,6 +33,7 @@ const TableTitle = ({ setSearch }) => {
 
 TableTitle.propTypes = {
   setSearch: PropTypes.func.isRequired,
+  openCreateUserModal: PropTypes.func.isRequired,
 };
 
 export default TableTitle;

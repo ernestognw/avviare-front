@@ -4,9 +4,11 @@ import { useTitle } from '@providers/layout';
 import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
 import { Card, Table, Avatar } from 'antd';
+import { overallRoles } from '@config/constants';
 import { Container } from './elements';
 import { GET_USERS } from './requests';
 import Title from './title';
+import CreateUserModal from './create-user-modal';
 
 const defaultParams = {
   page: 1,
@@ -17,6 +19,7 @@ const Users = () => {
   useTitle('Usuarios');
   const [params, setParams] = useState(defaultParams);
   const [search, setSearch] = useState('');
+  const [isOpenCreateUserModal, toggleCreateUserModal] = useState(false);
   const [debouncedSearch] = useDebounce(search, 500);
 
   const variables = {
@@ -28,14 +31,14 @@ const Users = () => {
     },
   };
 
-  const { data, loading } = useQuery(GET_USERS, { variables });
+  const { data, loading, refetch } = useQuery(GET_USERS, { variables });
 
   const columns = [
     {
       title: '',
       dataIndex: 'profileImg',
       key: 'profileImg',
-      render: (profileImg) => <Avatar src={profileImg} />,
+      render: (profileImg, { firstName }) => <Avatar src={profileImg}>{firstName[0]}</Avatar>,
     },
     {
       title: 'Nombre',
@@ -62,6 +65,7 @@ const Users = () => {
       title: 'Rol general',
       dataIndex: 'overallRole',
       key: 'overallRole',
+      render: (overallRole) => overallRoles[overallRole],
     },
     {
       title: 'Creado el',
@@ -78,29 +82,41 @@ const Users = () => {
   ];
 
   return (
-    <Container>
-      <Card style={{ width: '100%' }}>
-        <Table
-          loading={loading}
-          columns={columns}
-          title={() => <Title setSearch={setSearch} />}
-          size="small"
-          rowKey="id"
-          pagination={{
-            current: params.page,
-            defaultCurrent: defaultParams.page,
-            pageSize: params.pageSize,
-            defaultPageSize: defaultParams.pageSize,
-            total: data?.users.info.count,
-            showTotal: (total) => `${total} usuarios`,
-            showSizeChanger: true,
-            onChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
-            onShowSizeChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
-          }}
-          dataSource={data?.users.results}
-        />
-      </Card>
-    </Container>
+    <>
+      <Container>
+        <Card style={{ width: '100%' }}>
+          <Table
+            loading={loading}
+            columns={columns}
+            title={() => (
+              <Title
+                openCreateUserModal={() => toggleCreateUserModal(true)}
+                setSearch={setSearch}
+              />
+            )}
+            size="small"
+            rowKey="id"
+            pagination={{
+              current: params.page,
+              defaultCurrent: defaultParams.page,
+              pageSize: params.pageSize,
+              defaultPageSize: defaultParams.pageSize,
+              total: data?.users.info.count,
+              showTotal: (total) => `${total} usuarios`,
+              showSizeChanger: true,
+              onChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
+              onShowSizeChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
+            }}
+            dataSource={data?.users.results}
+          />
+        </Card>
+      </Container>
+      <CreateUserModal
+        visible={isOpenCreateUserModal}
+        onClose={() => toggleCreateUserModal(false)}
+        updateUsers={refetch}
+      />
+    </>
   );
 };
 

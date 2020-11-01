@@ -51,7 +51,9 @@ const NavBar = () => {
         }
       >
         <ProfileButton type="text">
-          <Avatar style={{ marginRight: 15 }} size={35} src={user.profileImg} />
+          <Avatar style={{ marginRight: 15 }} size={35} src={user.profileImg}>
+            {user.firstName?.[0]}
+          </Avatar>
           <NameContainer>
             <Text style={{ fontSize: 12 }} type="secondary">
               Bienvenido
