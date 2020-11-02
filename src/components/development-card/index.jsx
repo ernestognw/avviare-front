@@ -4,7 +4,7 @@ import moment from 'moment';
 import theme from '@config/theme';
 import { Link } from 'react-router-dom';
 import { Typography, Tag, Tooltip } from 'antd';
-import { Avatar, Card } from './elements';
+import { Avatar, Card, Image } from './elements';
 
 const { Meta } = Card;
 const { Text, Title } = Typography;
@@ -12,7 +12,7 @@ const { Text, Title } = Typography;
 const DevelopmentCard = ({ id, name, active, cover, logo, startDate, workers }) => {
   return (
     <Link to={`/development/${id}`}>
-      <Card cover={<img alt={name} src={cover} />}>
+      <Card cover={<Image src={cover} />}>
         <Meta
           avatar={<Avatar size={60} src={logo} />}
           title={
