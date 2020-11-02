@@ -15,4 +15,6 @@ const orders = {
   desc: 'Descendente',
 };
 
-export { overallRoles, developmentRoles, orders };
+const passwordRegex = /^(?=.*?[A-z])(?=.*?[0-9])(?=.*?[^A-Za-z0-9 ]).{8,}$/;
+
+export { overallRoles, developmentRoles, orders, passwordRegex };

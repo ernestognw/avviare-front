@@ -1,0 +1,17 @@
+import { gql } from '@apollo/client';
+
+const GET_DEVELOPMENT = gql`
+  query development($id: ID!) {
+    development(id: $id) {
+      id
+      name
+      logo
+      cover
+      startDate
+      active
+    }
+    userDevelopmentRoleByToken(developmentId: $id)
+  }
+`;
+
+export { GET_DEVELOPMENT };

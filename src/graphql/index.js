@@ -8,6 +8,10 @@ const client = new ApolloClient({
     addTypename: false,
   }),
   defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'network-only',
+      errorPolicy: 'all',
+    },
     query: {
       fetchPolicy: 'network-only',
       errorPolicy: 'all',

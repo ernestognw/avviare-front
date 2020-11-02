@@ -19,6 +19,12 @@ const GET_MY_DEVELOPMENTS = gql`
         cover
         startDate
         active
+        workers {
+          id
+          firstName
+          lastName
+          profileImg
+        }
       }
     }
   }

@@ -15,7 +15,7 @@ const { Option } = Select;
 
 const defaultParams = {
   page: 1,
-  pageSize: 9,
+  pageSize: 20,
 };
 
 const defaultSortBy = {

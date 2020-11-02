@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-import { useTitle } from '@providers/layout';
 import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
 import { Card, Table, Avatar, Tag } from 'antd';
@@ -16,7 +15,6 @@ const defaultParams = {
 };
 
 const Users = () => {
-  useTitle('Usuarios');
   const [params, setParams] = useState(defaultParams);
   const [search, setSearch] = useState('');
   const [isOpenCreateUserModal, toggleCreateUserModal] = useState(false);

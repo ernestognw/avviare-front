@@ -2,7 +2,6 @@ import React from 'react';
 import TopBarProgress from 'react-topbar-progress-indicator';
 import { useUser } from '@providers/user';
 import { Redirect, Switch, Route } from 'react-router-dom';
-import AuthLayout from '@layouts/auth';
 import MainLayout from '@layouts/main';
 import Auth from '@views/auth';
 import Development from '@views/development';
@@ -29,13 +28,7 @@ TopBarProgress.config({
 const App = () => {
   const { token } = useUser();
 
-  if (!token) {
-    return (
-      <AuthLayout>
-        <Auth />
-      </AuthLayout>
-    );
-  }
+  if (!token) return <Auth />;
 
   return (
     <MainLayout>
