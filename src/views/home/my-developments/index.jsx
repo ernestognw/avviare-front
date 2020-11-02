@@ -15,7 +15,7 @@ import {
 } from './elements';
 import { GET_MY_DEVELOPMENTS } from './requests';
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Text } = Typography;
 const { Search } = Input;
 const { Option } = Select;
 
@@ -105,7 +105,18 @@ const MyDevelopments = () => {
         </EmptyAndLoaderContainer>
       ) : data?.developments.results.length === 0 ? (
         <EmptyAndLoaderContainer>
-          <Empty description="Aún no trabajas en ningún desarrollo" />
+          <Empty
+            description={
+              <>
+                <Text strong>No hay resultados</Text>
+                <br />
+                <Text>
+                  Si aún no trabajas para ningún desarrollo, solicita al administrador que te asigne
+                  a alguno
+                </Text>
+              </>
+            }
+          />
         </EmptyAndLoaderContainer>
       ) : (
         <>

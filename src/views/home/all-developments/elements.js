@@ -18,4 +18,12 @@ const DevelopmentsContainer = styled.div`
   grid-gap: 20px;
 `;
 
-export { Container, TitleSection, DevelopmentsContainer };
+const EmptyAndLoaderContainer = styled.div`
+  display: flex;
+  margin: 40px;
+  padding: 50px 0;
+  justify-content: center;
+  align-items: center;
+`;
+
+export { Container, TitleSection, DevelopmentsContainer, EmptyAndLoaderContainer };

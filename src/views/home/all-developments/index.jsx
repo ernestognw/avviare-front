@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { useQuery } from '@apollo/client';
-import { Typography, Input, Select, Spin, Pagination } from 'antd';
+import { Typography, Input, Select, Spin, Pagination, Empty } from 'antd';
 import { orders } from '@config/constants';
 import { LoadingOutlined } from '@ant-design/icons';
 import { sortableFields } from '@config/constants/development';
 import DevelopmentCard from '@components/development-card';
-import { Container, TitleSection, DevelopmentsContainer } from './elements';
+import {
+  Container,
+  TitleSection,
+  DevelopmentsContainer,
+  EmptyAndLoaderContainer,
+} from './elements';
 import { GET_MY_DEVELOPMENTS } from './requests';
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Text } = Typography;
 const { Search } = Input;
 const { Option } = Select;
 
@@ -91,11 +96,21 @@ const AllDevelopments = () => {
         </div>
       </TitleSection>
       {loading ? (
-        <div
-          style={{ display: 'flex', margin: 40, justifyContent: 'center', alignItems: 'center' }}
-        >
+        <EmptyAndLoaderContainer>
           <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
-        </div>
+        </EmptyAndLoaderContainer>
+      ) : data?.developments.results.length === 0 ? (
+        <EmptyAndLoaderContainer>
+          <Empty
+            description={
+              <>
+                <Text strong>No hay resultados</Text>
+                <br />
+                <Text>Cambia tus parámetros de búsqueda</Text>
+              </>
+            }
+          />
+        </EmptyAndLoaderContainer>
       ) : (
         <>
           <DevelopmentsContainer>
