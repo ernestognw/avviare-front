@@ -7,4 +7,8 @@ const Container = styled.div`
   border: none;
 `;
 
-export { Container };
+const ActionsContainer = styled.div`
+  display: flex;
+`;
+
+export { Container, ActionsContainer };

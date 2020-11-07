@@ -9,6 +9,7 @@ const GET_USERS = gql`
       }
       results {
         id
+        username
         firstName
         lastName
         profileImg

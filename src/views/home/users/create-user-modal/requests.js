@@ -6,6 +6,12 @@ const EMAIL_EXISTS = gql`
   }
 `;
 
+const USERNAME_EXISTS = gql`
+  query usernameExists($username: String!) {
+    usernameExists(username: $username)
+  }
+`;
+
 const CREATE_USER = gql`
   mutation createUser($user: UserCreateInput!) {
     createUser(user: $user) {
@@ -14,4 +20,4 @@ const CREATE_USER = gql`
   }
 `;
 
-export { EMAIL_EXISTS, CREATE_USER };
+export { EMAIL_EXISTS, USERNAME_EXISTS, CREATE_USER };

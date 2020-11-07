@@ -7,7 +7,7 @@ import ImgCrop from 'antd-img-crop';
 import { useMutation } from '@apollo/client';
 import { overallRoles } from '@config/constants';
 import useUpload from '@hooks/use-upload';
-import { EMAIL_EXISTS, CREATE_USER } from './requests';
+import { EMAIL_EXISTS, USERNAME_EXISTS, CREATE_USER } from './requests';
 
 const { Item } = Form;
 const { Option } = Select;
@@ -32,22 +32,39 @@ const CreateUserModal = ({ onClose, visible, updateUsers }) => {
     return userEmailExists;
   };
 
+  const checkUsername = async (username) => {
+    const {
+      data: { usernameExists },
+    } = await client.query({
+      query: USERNAME_EXISTS,
+      variables: {
+        username,
+      },
+    });
+
+    return usernameExists;
+  };
+
   const onFinish = async (data) => {
     setCreating(true);
-    const emailExists = await checkEmail(data.email);
+    const [emailExists, usernameExists] = await Promise.all([
+      checkEmail(data.email),
+      checkUsername(data.username),
+    ]);
 
     if (emailExists) {
       message.warning('El correo que estás intentando registrar ya le pertenece a alguien más');
-      return;
+    } else if (usernameExists) {
+      message.warning('El username que estás intentando registrar ya le pertenece a alguien más');
+    } else {
+      await createUser({ variables: { user: { ...data, profileImg: imageUrl } } });
+      await updateUsers();
+      onClose();
+      form.resetFields();
+      message.success('El usuario recibirá sus instrucciones de acceso en su correo');
     }
 
-    await createUser({ variables: { user: { ...data, profileImg: imageUrl } } });
-    await updateUsers();
-
     setCreating(false);
-    onClose();
-    form.resetFields();
-    message.success('El usuario recibirá sus instrucciones de acceso en su correo');
   };
 
   const beforeUpload = async (file) => {
@@ -55,12 +72,12 @@ const CreateUserModal = ({ onClose, visible, updateUsers }) => {
     if (!isJpgOrPng) {
       message.error('Sólo está permitido subir imágenes en formato PNG o JPG');
     }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
+    const isLessThanTwoMB = file.size / 1024 / 1024 < 2;
+    if (!isLessThanTwoMB) {
       message.error('La imagen debe medir menos de 2 mb');
     }
 
-    return isJpgOrPng && isLt2M;
+    return isJpgOrPng && isLessThanTwoMB;
   };
 
   const handleUpload = async ({ file }) => {
@@ -82,6 +99,18 @@ const CreateUserModal = ({ onClose, visible, updateUsers }) => {
         initialValues={{ overallRole: 'USER' }}
         onFinish={onFinish}
       >
+        <Item
+          style={{ marginTop: 10 }}
+          label="Username"
+          name="username"
+          normalize={(value) => value?.toLowerCase()}
+          rules={[
+            { min: 5, message: 'El username debe tener almenos 5 caracteres' },
+            { required: true, message: 'Ingresa el nombre del usuario' },
+          ]}
+        >
+          <Input prefix={<UserOutlined />} placeholder="Username" />
+        </Item>
         <Item
           style={{ marginTop: 10 }}
           label="Nombre (s)"

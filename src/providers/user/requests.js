@@ -4,6 +4,7 @@ const GET_USER = gql`
   query userByToken {
     userByToken {
       id
+      username
       firstName
       lastName
       profileImg

@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
-import { Card, Table, Avatar, Tag } from 'antd';
+import { Card, Table, Avatar, Tag, Button, Tooltip } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 import { overallRoles } from '@config/constants';
-import { Container } from './elements';
+import { Container, ActionsContainer } from './elements';
 import { GET_USERS } from './requests';
 import Title from './title';
 import CreateUserModal from './create-user-modal';
+import EditUserModal from './edit-user-modal';
 
 const defaultParams = {
   page: 1,
@@ -18,11 +20,13 @@ const Users = () => {
   const [params, setParams] = useState(defaultParams);
   const [search, setSearch] = useState('');
   const [isOpenCreateUserModal, toggleCreateUserModal] = useState(false);
+  const [userEditId, setUserEditId] = useState('');
   const [debouncedSearch] = useDebounce(search, 500);
 
   const variables = {
     params,
     search: {
+      username: debouncedSearch,
       firstName: debouncedSearch,
       lastName: debouncedSearch,
       email: debouncedSearch,
@@ -37,6 +41,11 @@ const Users = () => {
       dataIndex: 'profileImg',
       key: 'profileImg',
       render: (profileImg, { firstName }) => <Avatar src={profileImg}>{firstName[0]}</Avatar>,
+    },
+    {
+      title: 'Username',
+      dataIndex: 'username',
+      key: 'username',
     },
     {
       title: 'Nombre',
@@ -77,6 +86,17 @@ const Users = () => {
       key: 'updatedAt',
       render: (updatedAt) => <Tag>{moment(updatedAt).format('lll')}</Tag>,
     },
+    {
+      title: 'Acciones',
+      // eslint-disable-next-line react/prop-types
+      render: ({ id }) => (
+        <ActionsContainer>
+          <Tooltip title="Editar usuario">
+            <Button onClick={() => setUserEditId(id)} icon={<EditOutlined />} size="small" />
+          </Tooltip>
+        </ActionsContainer>
+      ),
+    },
   ];
 
   return (
@@ -93,6 +113,9 @@ const Users = () => {
               />
             )}
             size="small"
+            scroll={{
+              x: true,
+            }}
             rowKey="id"
             pagination={{
               current: params.page,
@@ -112,6 +135,12 @@ const Users = () => {
       <CreateUserModal
         visible={isOpenCreateUserModal}
         onClose={() => toggleCreateUserModal(false)}
+        updateUsers={refetch}
+      />
+      <EditUserModal
+        visible={!!userEditId}
+        userEditId={userEditId}
+        onClose={() => setUserEditId('')}
         updateUsers={refetch}
       />
     </>

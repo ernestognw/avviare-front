@@ -30,16 +30,10 @@ const Login = () => {
   return (
     <Form onFinish={onFinish}>
       <Item
-        name="email"
-        rules={[
-          {
-            type: 'email',
-            message: 'Ingresa un correo válido',
-          },
-          { required: true, message: 'Ingresa tu email' },
-        ]}
+        name="emailUsername"
+        rules={[{ required: true, message: 'Ingresa tu username o email' }]}
       >
-        <Input size="large" prefix={<UserOutlined />} placeholder="Email" />
+        <Input size="large" prefix={<UserOutlined />} placeholder="Email o username" />
       </Item>
       <Item
         style={{ marginTop: 10 }}
