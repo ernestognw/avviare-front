@@ -5,7 +5,9 @@ import { overallRoles } from '@config/constants/user';
 import client from '@graphql';
 import useUpload from '@hooks/use-upload';
 import { UserOutlined, LoadingOutlined, PlusOutlined, MailOutlined } from '@ant-design/icons';
-import { Form, Input, DatePicker, Button, Select, Avatar, Upload, Spin, message } from 'antd';
+import { Form, Input, DatePicker, Button, Select, Avatar, Upload, message } from 'antd';
+import Box from '@components/box';
+import Loading from '@components/loading';
 import { EMAIL_EXISTS, USERNAME_EXISTS } from './requests';
 
 const { Item } = Form;
@@ -80,16 +82,9 @@ const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, ...props }, 
   return (
     <Form layout="vertical" onFinish={handleOnFinish} form={form} ref={ref} {...props}>
       {loadingUser ? (
-        <div
-          style={{
-            display: 'flex',
-            margin: 40,
-            justifyContent: 'center',
-            width: '100%',
-          }}
-        >
-          <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
-        </div>
+        <Box display="flex" m={40} justifyContent="center" width="100%">
+          <Loading />
+        </Box>
       ) : (
         <>
           <Item

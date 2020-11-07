@@ -4,13 +4,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTitle } from '@providers/layout';
 import shortid from 'shortid';
 import { useDevelopment } from '@providers/development';
-import {
-  AppstoreOutlined,
-  FolderOpenOutlined,
-  LoadingOutlined,
-  SettingOutlined,
-} from '@ant-design/icons';
-import { Menu, Layout, Spin, Skeleton } from 'antd';
+import Box from '@components/box';
+import Loading from '@components/loading';
+import { AppstoreOutlined, FolderOpenOutlined, SettingOutlined } from '@ant-design/icons';
+import { Menu, Layout, Skeleton } from 'antd';
 import { Cover, SkeletonImage, Avatar } from './elements';
 
 const { Sider, Content } = Layout;
@@ -64,16 +61,9 @@ const DevelopmentLayout = ({ children }) => {
         </Menu>
       </Sider>
       {loadingDevelopment ? (
-        <div
-          style={{
-            display: 'flex',
-            margin: 40,
-            justifyContent: 'center',
-            width: '100%',
-          }}
-        >
-          <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
-        </div>
+        <Box display="flex" m={40} justifyContent="center" width="100%">
+          <Loading />
+        </Box>
       ) : (
         <Content>{children}</Content>
       )}

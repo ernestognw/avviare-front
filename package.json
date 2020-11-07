@@ -12,6 +12,7 @@
     "@ant-design/colors": "^4.0.5",
     "@ant-design/icons": "^4.2.2",
     "@apollo/client": "^3.2.5",
+    "@styled-system/prop-types": "^5.1.5",
     "antd": "^4.7.3",
     "antd-img-crop": "^3.13.1",
     "axios": "^0.21.0",
@@ -28,6 +29,7 @@
     "react-topbar-progress-indicator": "^4.1.0",
     "shortid": "^2.2.16",
     "styled-components": "^5.2.0",
+    "styled-system": "^5.1.5",
     "url-join": "^4.0.1",
     "use-debounce": "^5.0.1",
     "use-upload": "^1.0.2"

@@ -5,8 +5,10 @@ import { useTitle } from '@providers/layout';
 import moment from 'moment';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { overallRoles } from '@config/constants/user';
-import { BlockOutlined, LoadingOutlined } from '@ant-design/icons';
-import { PageHeader, Tabs, Tag, Typography, Skeleton, Spin } from 'antd';
+import { BlockOutlined } from '@ant-design/icons';
+import { PageHeader, Tabs, Tag, Typography, Skeleton } from 'antd';
+import Box from '@components/box';
+import Loading from '@components/loading';
 
 const { TabPane } = Tabs;
 const { Paragraph, Title } = Typography;
@@ -81,16 +83,9 @@ const ProfileLayout = ({ children }) => {
         }
       />
       {loadingProfile ? (
-        <div
-          style={{
-            display: 'flex',
-            margin: 40,
-            justifyContent: 'center',
-            width: '100%',
-          }}
-        >
-          <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
-        </div>
+        <Box display="flex" m={40} justifyContent="center" width="100%">
+          <Loading />
+        </Box>
       ) : (
         children
       )}

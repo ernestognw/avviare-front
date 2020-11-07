@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Form, Input, Button, Alert, Spin, message } from 'antd';
+import { Form, Input, Button, Alert, message } from 'antd';
 import { passwordRegex } from '@config/constants';
-import { LockOutlined, LoginOutlined, LoadingOutlined } from '@ant-design/icons';
+import { LockOutlined, LoginOutlined } from '@ant-design/icons';
 import { authUrl } from '@config/environment';
+import Box from '@components/box';
+import Loading from '@components/loading';
 
 const { Item } = Form;
 
@@ -53,15 +55,9 @@ const Reset = () => {
 
   if (!token)
     return (
-      <div
-        style={{
-          display: 'flex',
-          margin: 40,
-          justifyContent: 'center',
-        }}
-      >
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
-      </div>
+      <Box display="flex" m={40} justifyContent="center" width="100%">
+        <Loading />
+      </Box>
     );
 
   return (

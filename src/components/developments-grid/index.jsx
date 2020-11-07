@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Typography, Input, Select, Spin, Pagination, Radio, Empty } from 'antd';
+import { Typography, Input, Select, Pagination, Radio, Empty } from 'antd';
 import { orders } from '@config/constants';
 import { sortableFields } from '@config/constants/development';
 import DevelopmentCard from '@components/development-card';
-import { LoadingOutlined } from '@ant-design/icons';
+import Loading from '@components/loading';
 import {
   Container,
   TitleSection,
@@ -79,7 +79,7 @@ const DevelopmentsGrid = ({
       </TitleSection>
       {loading ? (
         <EmptyAndLoaderContainer>
-          <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+          <Loading />
         </EmptyAndLoaderContainer>
       ) : developments.results.length === 0 ? (
         <EmptyAndLoaderContainer>
