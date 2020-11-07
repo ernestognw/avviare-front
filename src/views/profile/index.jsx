@@ -1,14 +1,29 @@
 import React from 'react';
-import { useTitle } from '@providers/layout';
+import { Redirect, Switch, Route, useParams } from 'react-router-dom';
+import TopBarProgress from 'react-topbar-progress-indicator';
+import Loadable from 'react-loadable';
+import { ProfileProvider } from '@providers/profile';
+import ProfileLayout from '@layouts/profile';
 
-const Profile = () => {
-  useTitle('Mi perfil');
+/* webpackChunkName: "ProfileDevelopments" */
+const ProfileDevelopments = Loadable({
+  loader: () => import('./developments'),
+  loading: TopBarProgress,
+});
+
+const Main = () => {
+  const { username } = useParams();
 
   return (
-    <>
-      <p>Profile</p>
-    </>
+    <ProfileProvider>
+      <ProfileLayout>
+        <Switch>
+          <Route exact path="/@:username" component={ProfileDevelopments} />
+          <Redirect to={`/@${username}`} />
+        </Switch>
+      </ProfileLayout>
+    </ProfileProvider>
   );
 };
 
-export default Profile;
+export default Main;

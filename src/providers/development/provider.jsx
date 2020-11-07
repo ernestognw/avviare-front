@@ -1,16 +1,16 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
-import { useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { GET_DEVELOPMENT } from './requests';
 
 export const developmentContext = React.createContext({});
 
 const DevelopmentProvider = ({ children }) => {
-  const match = useRouteMatch('/development/:developmentId');
+  const { developmentId } = useParams('/development/:developmentId');
 
   const { data, loading } = useQuery(GET_DEVELOPMENT, {
-    variables: { id: match?.params?.developmentId },
+    variables: { id: developmentId },
   });
 
   return (

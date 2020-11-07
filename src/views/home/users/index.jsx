@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
+import { Link } from 'react-router-dom';
 import { Card, Table, Avatar, Tag, Button, Tooltip } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
-import { overallRoles } from '@config/constants';
+import { overallRoles } from '@config/constants/user';
 import { Container, ActionsContainer } from './elements';
 import { GET_USERS } from './requests';
 import Title from './title';
@@ -40,12 +41,23 @@ const Users = () => {
       title: '',
       dataIndex: 'profileImg',
       key: 'profileImg',
-      render: (profileImg, { firstName }) => <Avatar src={profileImg}>{firstName[0]}</Avatar>,
+      render: (profileImg, { firstName, username }) => (
+        <Link to={`/@${username}`}>
+          <Avatar src={profileImg}>{firstName[0]}</Avatar>
+        </Link>
+      ),
     },
     {
       title: 'Username',
       dataIndex: 'username',
       key: 'username',
+      render: (username) => (
+        <Link to={`/@${username}`}>
+          <Button size="small" type="link">
+            {username}
+          </Button>
+        </Link>
+      ),
     },
     {
       title: 'Nombre',

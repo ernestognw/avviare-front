@@ -9,19 +9,19 @@ export const userContext = React.createContext({});
 
 const UserProvider = ({ children }) => {
   const token = cookie.load('token');
-  const tokenPayload = token ? jwt.decode(token) : {};
+  const { overallRole, username } = token ? jwt.decode(token) : {};
 
   const { data, loading } = useQuery(GET_USER);
 
   return (
     <userContext.Provider
       value={{
-        user: data?.userByToken ?? {},
+        user: data?.userByToken ? { ...data.userByToken, username } : { username },
         loadingUser: loading,
         token,
         overall: {
-          admin: tokenPayload.overallRole === 'ADMIN',
-          user: tokenPayload.overallRole === 'USER',
+          admin: overallRole === 'ADMIN',
+          user: overallRole === 'USER',
         },
       }}
     >

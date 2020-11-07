@@ -5,15 +5,9 @@ import { Redirect, Switch, Route } from 'react-router-dom';
 import MainLayout from '@layouts/main';
 import Auth from '@views/auth';
 import Development from '@views/development';
+import Profile from '@views/profile';
 import Home from '@views/home';
 import theme from '@config/theme';
-import Loadable from 'react-loadable';
-
-/* webpackChunkName: "Profile" */
-const Profile = Loadable({
-  loader: () => import('./views/profile'),
-  loading: TopBarProgress,
-});
 
 TopBarProgress.config({
   barColors: {
@@ -33,8 +27,8 @@ const App = () => {
   return (
     <MainLayout>
       <Switch>
-        <Route path="/my-profile" component={Profile} />
-        <Route path="/development" component={Development} />
+        <Route path="/@:username" component={Profile} />
+        <Route path="/development/:developmentId" component={Development} />
         <Route path="/" component={Home} />
         <Redirect to="/" />
       </Switch>

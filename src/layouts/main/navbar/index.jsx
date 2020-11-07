@@ -38,7 +38,7 @@ const NavBar = () => {
         overlay={
           <Menu mode="vertical">
             <ItemGroup title="Perfil">
-              <Item onClick={() => push('/my-profile')} icon={<UserOutlined />}>
+              <Item onClick={() => push(`/@${user.username}`)} icon={<UserOutlined />}>
                 Mi perfil
               </Item>
             </ItemGroup>

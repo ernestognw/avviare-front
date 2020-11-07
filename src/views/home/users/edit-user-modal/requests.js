@@ -1,17 +1,5 @@
 import { gql } from '@apollo/client';
 
-const EMAIL_EXISTS = gql`
-  query userEmailExists($email: String!) {
-    userEmailExists(email: $email)
-  }
-`;
-
-const USERNAME_EXISTS = gql`
-  query usernameExists($username: String!) {
-    usernameExists(username: $username)
-  }
-`;
-
 const UPDATE_USER = gql`
   mutation updateUser($id: ID!, $user: UserUpdateInput!) {
     updateUser(id: $id, user: $user) {
@@ -36,4 +24,4 @@ const GET_USER = gql`
   }
 `;
 
-export { EMAIL_EXISTS, USERNAME_EXISTS, UPDATE_USER, GET_USER };
+export { UPDATE_USER, GET_USER };

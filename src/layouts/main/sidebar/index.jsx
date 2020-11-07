@@ -1,7 +1,7 @@
 import React from 'react';
 import { Skeleton, Tooltip, Typography } from 'antd';
 import shortid from 'shortid';
-import { Link, useRouteMatch, useLocation } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import { useUser } from '@providers/user';
 import { HomeOutlined } from '@ant-design/icons';
 import { Container, Sider, Avatar, SubtitleContainer } from './elements';
@@ -10,7 +10,7 @@ const { Paragraph } = Typography;
 
 const Sidebar = () => {
   const { user, loadingUser } = useUser();
-  const match = useRouteMatch('/development/:developmentId');
+  const { developmentId } = useParams();
   const { pathname } = useLocation();
 
   let content;
@@ -41,9 +41,7 @@ const Sidebar = () => {
           ({ development }) =>
             development.active && (
               <Tooltip key={development.id} placement="right" title={development.name}>
-                <Container
-                  active={match?.params?.developmentId === development.id ? 'true' : undefined}
-                >
+                <Container active={developmentId === development.id ? 'true' : undefined}>
                   <Link to={`/development/${development.id}`}>
                     <Avatar size={50} src={development.logo} />
                   </Link>
