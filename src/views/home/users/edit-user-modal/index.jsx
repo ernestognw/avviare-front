@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Drawer, Form, Spin, message } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
+import { Drawer, Form, message } from 'antd';
 import moment from 'moment';
 import { useMutation, useQuery } from '@apollo/client';
 import UserForm from '@components/user-form';
@@ -10,6 +9,7 @@ import { UPDATE_USER, GET_USER } from './requests';
 const EditUserModal = ({ onClose, userEditId, visible, updateUsers }) => {
   const [saving, setSaving] = useState(false);
   const [form] = Form.useForm();
+  const formRef = useRef();
   const [updateUser] = useMutation(UPDATE_USER);
   const { loading, data } = useQuery(GET_USER, {
     variables: {
@@ -18,7 +18,7 @@ const EditUserModal = ({ onClose, userEditId, visible, updateUsers }) => {
   });
 
   useEffect(() => {
-    if (data?.user) {
+    if (data?.user && formRef.current) {
       form.setFieldsValue({
         ...data.user,
         dateOfBirth: moment(data.user.dateOfBirth),
@@ -46,25 +46,13 @@ const EditUserModal = ({ onClose, userEditId, visible, updateUsers }) => {
       visible={visible}
       bodyStyle={{ paddingBottom: 80 }}
     >
-      {loading ? (
-        <div
-          style={{
-            display: 'flex',
-            margin: 40,
-            justifyContent: 'center',
-            width: '100%',
-          }}
-        >
-          <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
-        </div>
-      ) : (
-        <UserForm
-          form={form}
-          initialValues={{ overallRole: 'USER' }}
-          onFinish={onFinish}
-          loading={saving}
-        />
-      )}
+      <UserForm
+        form={form}
+        onFinish={onFinish}
+        saving={saving}
+        loadingUser={loading}
+        ref={formRef}
+      />
     </Drawer>
   );
 };

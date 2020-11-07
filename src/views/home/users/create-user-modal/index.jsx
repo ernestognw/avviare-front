@@ -34,7 +34,7 @@ const CreateUserModal = ({ onClose, visible, updateUsers }) => {
         form={form}
         initialValues={{ overallRole: 'USER' }}
         onFinish={onFinish}
-        loading={saving}
+        saving={saving}
       />
     </Drawer>
   );
