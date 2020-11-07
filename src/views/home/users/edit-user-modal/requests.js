@@ -18,7 +18,6 @@ const GET_USER = gql`
       profileImg
       email
       dateOfBirth
-      profileImg
       overallRole
     }
   }
