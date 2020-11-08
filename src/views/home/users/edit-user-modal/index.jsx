@@ -28,12 +28,17 @@ const EditUserModal = ({ onClose, userEditId, visible, updateUsers }) => {
 
   const onFinish = async (user) => {
     setSaving(true);
-    await updateUser({
+    const { errors } = await updateUser({
       variables: { id: userEditId, user },
     });
-    await updateUsers();
-    onClose();
-    message.success('Usuario actualizado con éxito');
+
+    if (errors) {
+      message.error(errors[0].message);
+    } else {
+      await updateUsers();
+      onClose();
+      message.success('Usuario actualizado con éxito');
+    }
 
     setSaving(false);
   };

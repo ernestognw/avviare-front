@@ -2,6 +2,7 @@ import React, { useState, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import ImgCrop from 'antd-img-crop';
 import { overallRoles } from '@config/constants/user';
+import { validateImageTypes } from '@config/utils/files';
 import client from '@graphql';
 import useUpload from '@hooks/use-upload';
 import { UserOutlined, LoadingOutlined, PlusOutlined, MailOutlined } from '@ant-design/icons';
@@ -14,21 +15,8 @@ const { Item } = Form;
 const { Option } = Select;
 
 const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, disabled, ...props }, ref) => {
-  const { upload, uploading, progress } = useUpload();
+  const { upload, uploading } = useUpload();
   const [imageUrl, setImageUrl] = useState('');
-
-  const beforeUpload = async (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('Sólo está permitido subir imágenes en formato PNG o JPG');
-    }
-    const isLessThanTwoMB = file.size / 1024 / 1024 < 2;
-    if (!isLessThanTwoMB) {
-      message.error('La imagen debe medir menos de 2 mb');
-    }
-
-    return isJpgOrPng && isLessThanTwoMB;
-  };
 
   const handleUpload = async ({ file }) => {
     const url = await upload(file, file.name);
@@ -156,8 +144,7 @@ const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, disabled, ..
                 listType="picture-card"
                 showUploadList={false}
                 customRequest={handleUpload}
-                beforeUpload={beforeUpload}
-                progress={progress}
+                beforeUpload={(file) => validateImageTypes(file)}
                 accept=".png,.jpg,.jpeg"
                 disabled={disabled.profileImg}
               >
@@ -166,7 +153,7 @@ const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, disabled, ..
                 ) : (
                   <div>
                     {uploading ? <LoadingOutlined /> : <PlusOutlined />}
-                    <div style={{ marginTop: 8 }}>Upload</div>
+                    <div style={{ marginTop: 8 }}>Subir foto</div>
                   </div>
                 )}
               </Upload>

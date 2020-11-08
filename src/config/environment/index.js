@@ -10,4 +10,8 @@ const env = {
 const apiUrl = urljoin(process.env.REACT_APP_API_URL, 'graphql');
 const authUrl = urljoin(process.env.REACT_APP_API_URL, 'auth');
 
-export { env, apiUrl, authUrl };
+const google = {
+  mapsApiKey: process.env.REACT_APP_MAPS_API_KEY,
+};
+
+export { env, apiUrl, authUrl, google };

@@ -13,11 +13,15 @@ const CreateUserModal = ({ onClose, visible, updateUsers }) => {
   const onFinish = async (user) => {
     setSaving(true);
 
-    await createUser({ variables: { user } });
-    await updateUsers();
-    onClose();
-    form.resetFields();
-    message.success('El usuario recibirá sus instrucciones de acceso en su correo');
+    const { errors } = await createUser({ variables: { user } });
+    if (errors) {
+      message.error(errors[0]);
+    } else {
+      await updateUsers();
+      onClose();
+      form.resetFields();
+      message.success('El usuario recibirá sus instrucciones de acceso en su correo');
+    }
 
     setSaving(false);
   };

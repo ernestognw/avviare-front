@@ -5,7 +5,7 @@ const { Sider: DefaultSider } = Layout;
 
 const Container = styled.div`
   display: flex;
-  padding: 15px;
+  padding: 7px 15px;
   justify-content: center;
   align-items: center;
 

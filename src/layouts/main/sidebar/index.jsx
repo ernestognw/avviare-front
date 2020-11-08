@@ -3,13 +3,14 @@ import { Skeleton, Tooltip, Typography } from 'antd';
 import shortid from 'shortid';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import { useUser } from '@providers/user';
-import { HomeOutlined } from '@ant-design/icons';
+import theme from '@config/theme';
+import { HomeOutlined, PlusOutlined } from '@ant-design/icons';
 import { Container, Sider, Avatar, SubtitleContainer } from './elements';
 
 const { Paragraph } = Typography;
 
 const Sidebar = () => {
-  const { user, loadingUser } = useUser();
+  const { user, loadingUser, overall } = useUser();
   const { developmentId } = useParams();
   const { pathname } = useLocation();
 
@@ -24,17 +25,34 @@ const Sidebar = () => {
   } else {
     content = (
       <>
+        <SubtitleContainer style={{ marginTop: 20, marginBottom: 10 }}>
+          <Paragraph style={{ color: 'white', margin: 0, fontSize: 10 }}>Home</Paragraph>
+        </SubtitleContainer>
         <Tooltip placement="right" title="Home">
-          <SubtitleContainer style={{ marginTop: 20 }}>
-            <Paragraph style={{ color: 'white', margin: 0, fontSize: 10 }}>Home</Paragraph>
-          </SubtitleContainer>
-          <Container active={!pathname.includes('development')}>
+          <Container active={pathname === '/all' || pathname === '/' || pathname === '/users'}>
             <Link to="/">
-              <Avatar size={50} icon={<HomeOutlined />} />
+              <Avatar
+                style={{ background: theme.colors.primaryPalette[6] }}
+                size={50}
+                icon={<HomeOutlined style={{ color: theme.colors.background.dark }} />}
+              />
             </Link>
           </Container>
         </Tooltip>
-        <SubtitleContainer>
+        {overall.admin && (
+          <Tooltip placement="right" title="Crear desarrollo">
+            <Container active={pathname === '/new'}>
+              <Link to="/new">
+                <Avatar
+                  style={{ background: theme.colors.primaryPalette[6] }}
+                  size={50}
+                  icon={<PlusOutlined style={{ color: theme.colors.background.dark }} />}
+                />
+              </Link>
+            </Container>
+          </Tooltip>
+        )}
+        <SubtitleContainer style={{ marginTop: 20, marginBottom: 10 }}>
           <Paragraph style={{ color: 'white', margin: 0, fontSize: 10 }}>Activos</Paragraph>
         </SubtitleContainer>
         {user.worksAt.map(

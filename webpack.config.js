@@ -12,9 +12,6 @@ module.exports = (config) => {
   config.resolve.alias['@providers'] = path.join(__dirname, './src/providers');
   config.resolve.alias['@hooks'] = path.join(__dirname, './src/hooks');
 
-  // Removes warning from pdfjs
-  config.module.rules[0].parser.requireEnsure = true;
-
   const styleLoaders = getPaths(
     // Styleloaders are in config.module.rules inside an object only containing the "oneOf" prop
     (inQuestion) => inQuestion && !!inQuestion.oneOf,
