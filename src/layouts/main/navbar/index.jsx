@@ -5,7 +5,7 @@ import { useLayout } from '@providers/layout';
 import { useUser } from '@providers/user';
 import { env } from '@config/environment';
 import { useHistory } from 'react-router-dom';
-import { UserOutlined, DownOutlined, LogoutOutlined } from '@ant-design/icons';
+import { UserOutlined, DownOutlined, LogoutOutlined, SettingOutlined } from '@ant-design/icons';
 import { NavbarContainer, NameContainer, ProfileButton } from './elements';
 
 const { Item, ItemGroup } = Menu;
@@ -37,9 +37,12 @@ const NavBar = () => {
         trigger={['click']}
         overlay={
           <Menu mode="vertical">
-            <ItemGroup title="Perfil">
+            <ItemGroup title="Cuenta">
               <Item onClick={() => push(`/@${user.username}`)} icon={<UserOutlined />}>
                 Mi perfil
+              </Item>
+              <Item onClick={() => push('/settings')} icon={<SettingOutlined />}>
+                Settings
               </Item>
             </ItemGroup>
             <ItemGroup title="Sesión">

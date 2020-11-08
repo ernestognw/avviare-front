@@ -11,7 +11,7 @@ const UserProvider = ({ children }) => {
   const token = cookie.load('token');
   const { overallRole, username } = token ? jwt.decode(token) : {};
 
-  const { data, loading } = useQuery(GET_USER);
+  const { data, loading, refetch } = useQuery(GET_USER);
 
   return (
     <userContext.Provider
@@ -19,6 +19,7 @@ const UserProvider = ({ children }) => {
         user: data?.userByToken ? { ...data.userByToken, username } : { username },
         loadingUser: loading,
         token,
+        reloadUser: refetch,
         overall: {
           admin: overallRole === 'ADMIN',
           user: overallRole === 'USER',

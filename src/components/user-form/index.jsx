@@ -13,7 +13,7 @@ import { EMAIL_EXISTS, USERNAME_EXISTS } from './requests';
 const { Item } = Form;
 const { Option } = Select;
 
-const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, ...props }, ref) => {
+const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, disabled, ...props }, ref) => {
   const { upload, uploading, progress } = useUpload();
   const [imageUrl, setImageUrl] = useState('');
 
@@ -97,7 +97,7 @@ const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, ...props }, 
               { required: true, message: 'Ingresa el nombre del usuario' },
             ]}
           >
-            <Input prefix={<UserOutlined />} placeholder="Username" />
+            <Input disabled={disabled.username} prefix={<UserOutlined />} placeholder="Username" />
           </Item>
           <Item
             style={{ marginTop: 10 }}
@@ -105,7 +105,11 @@ const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, ...props }, 
             name="firstName"
             rules={[{ required: true, message: 'Ingresa el nombre del usuario' }]}
           >
-            <Input prefix={<UserOutlined />} placeholder="Nombre (s)" />
+            <Input
+              disabled={disabled.firstName}
+              prefix={<UserOutlined />}
+              placeholder="Nombre (s)"
+            />
           </Item>
           <Item
             style={{ marginTop: 10 }}
@@ -113,7 +117,11 @@ const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, ...props }, 
             name="lastName"
             rules={[{ required: true, message: 'Ingresa el apellido del usuario' }]}
           >
-            <Input prefix={<UserOutlined />} placeholder="Nombre (s)" />
+            <Input
+              disabled={disabled.lastName}
+              prefix={<UserOutlined />}
+              placeholder="Nombre (s)"
+            />
           </Item>
           <Item
             label="Correo"
@@ -126,7 +134,7 @@ const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, ...props }, 
               { required: true, message: 'Ingresa el correo del usuario' },
             ]}
           >
-            <Input prefix={<MailOutlined />} placeholder="Correo" />
+            <Input disabled={disabled.email} prefix={<MailOutlined />} placeholder="Correo" />
           </Item>
           <Item
             label="Fecha de nacimiento"
@@ -138,6 +146,7 @@ const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, ...props }, 
               showToday={false}
               style={{ width: '100%' }}
               placeholder="Fecha de nacimiento"
+              disabled={disabled.dateOfBirth}
             />
           </Item>
           <Item label="Imagen de perfil" name="profileImg">
@@ -150,6 +159,7 @@ const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, ...props }, 
                 beforeUpload={beforeUpload}
                 progress={progress}
                 accept=".png,.jpg,.jpeg"
+                disabled={disabled.profileImg}
               >
                 {imageUrl ? (
                   <Avatar size={100} shape="square" src={imageUrl} alt="profileImg" />
@@ -163,7 +173,7 @@ const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, ...props }, 
             </ImgCrop>
           </Item>
           <Item name="overallRole" label="Rol general">
-            <Select placeholder="Rol general">
+            <Select disabled={disabled.overallRole} placeholder="Rol general">
               {Object.keys(overallRoles).map((role) => (
                 <Option key={role} value={role}>
                   {overallRoles[role]}
@@ -189,6 +199,7 @@ const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, ...props }, 
 
 UserForm.defaultProps = {
   loadingUser: false,
+  disabled: {},
 };
 
 UserForm.propTypes = {
@@ -196,6 +207,15 @@ UserForm.propTypes = {
   saving: PropTypes.bool.isRequired,
   loadingUser: PropTypes.bool,
   form: PropTypes.object.isRequired,
+  disabled: PropTypes.shape({
+    username: PropTypes.bool,
+    firstName: PropTypes.bool,
+    lastName: PropTypes.bool,
+    email: PropTypes.bool,
+    dateOfBirth: PropTypes.bool,
+    profileImg: PropTypes.bool,
+    overallRole: PropTypes.bool,
+  }),
 };
 
 export default UserForm;

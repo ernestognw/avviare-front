@@ -10,7 +10,7 @@ const ProfileDevelopments = lazy(() =>
   import(/* webpackChunkName: "ProfileDevelopments" */ './developments')
 );
 
-const Main = () => {
+const Profile = () => {
   const { username } = useParams();
 
   return (
@@ -27,4 +27,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default Profile;

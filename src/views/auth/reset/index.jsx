@@ -108,7 +108,7 @@ const Reset = () => {
             size="large"
             prefix={<LockOutlined />}
             type="password"
-            placeholder="Confirmacción de contraseña"
+            placeholder="Confirmación de contraseña"
           />
         </Item>
         <Item style={{ marginTop: 20 }}>
