@@ -14,7 +14,7 @@ const AllDevelopments = lazy(() =>
 const Users = lazy(() => import(/* webpackChunkName: "Users" */ './users'));
 
 const Main = () => {
-  const { overall } = useUser();
+  const { overallRole } = useUser();
   useTitle('Home');
 
   return (
@@ -22,8 +22,8 @@ const Main = () => {
       <Suspense fallback={<TopBarProgress />}>
         <Switch>
           <Route exact path="/" component={MyDevelopments} />
-          {overall?.admin && <Route path="/all" component={AllDevelopments} />}
-          {overall?.admin && <Route path="/users" component={Users} />}
+          {overallRole?.admin && <Route path="/all" component={AllDevelopments} />}
+          {overallRole?.admin && <Route path="/users" component={Users} />}
           <Redirect to="/" />
         </Switch>
       </Suspense>

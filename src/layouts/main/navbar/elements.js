@@ -8,6 +8,7 @@ const NavbarContainer = styled(Header)`
   padding: 0px !important;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid ${(props) => props.theme.colors.background.grey};
 `;
 
 const NameContainer = styled.div`

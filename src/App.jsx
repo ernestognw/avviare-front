@@ -12,7 +12,7 @@ import Home from '@views/home';
 const New = lazy(() => import(/* webpackChunkName: "New" */ '@views/new'));
 
 const App = () => {
-  const { token, overall } = useUser();
+  const { token, overallRole } = useUser();
 
   if (!token) return <Auth />;
 
@@ -20,7 +20,7 @@ const App = () => {
     <MainLayout>
       <Suspense fallback={<TopBarProgress />}>
         <Switch>
-          {overall.admin && <Route path="/new" component={New} />}
+          {overallRole.admin && <Route path="/new" component={New} />}
           <Route path="/settings" component={Settings} />
           <Route path="/@:username" component={Profile} />
           <Route path="/development/:developmentId" component={Development} />

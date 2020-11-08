@@ -13,7 +13,7 @@ const ProfileSettings = () => {
   const [form] = Form.useForm();
   const [updateUser] = useMutation(UPDATE_USER);
 
-  const { user, reloadUser, overall } = useUser();
+  const { user, reloadUser, overallRole } = useUser();
 
   const onFinish = async (newUser) => {
     setSaving(true);
@@ -42,8 +42,8 @@ const ProfileSettings = () => {
         onFinish={onFinish}
         saving={saving}
         disabled={{
-          overallRole: !overall.admin,
-          email: !overall.admin,
+          overallRole: !overallRole.admin,
+          email: !overallRole.admin,
         }}
         layout="horizontal"
         initialValues={{

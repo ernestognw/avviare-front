@@ -20,7 +20,7 @@ const UserProvider = ({ children }) => {
         loadingUser: loading,
         token,
         reloadUser: refetch,
-        overall: {
+        overallRole: {
           admin: overallRole === 'ADMIN',
           user: overallRole === 'USER',
         },

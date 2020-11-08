@@ -18,7 +18,12 @@ const DevelopmentProvider = ({ children }) => {
       value={{
         development: data?.development ?? {},
         loadingDevelopment: loading,
-        developmentRole: data?.userDevelopmentRoleByToken,
+        developmentRole: data?.userDevelopmentRoleByToken && {
+          admin: data?.userDevelopmentRoleByToken === 'ADMIN',
+          edification: data?.userDevelopmentRoleByToken === 'EDIFICATION',
+          urbanization: data?.userDevelopmentRoleByToken === 'URBANIZATION',
+          sales: data?.userDevelopmentRoleByToken === 'SALES',
+        },
       }}
     >
       {children}

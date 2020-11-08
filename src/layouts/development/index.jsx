@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTitle } from '@providers/layout';
 import shortid from 'shortid';
 import { useDevelopment } from '@providers/development';
+import { useUser } from '@providers/user';
 import Box from '@components/box';
 import Loading from '@components/loading';
 import { AppstoreOutlined, FolderOpenOutlined, SettingOutlined } from '@ant-design/icons';
@@ -16,11 +17,18 @@ const { Item } = Menu;
 const DevelopmentLayout = ({ children }) => {
   const { pathname } = useLocation();
   const [collapsed, toggleCollapsed] = useState(false);
-  const { development, loadingDevelopment } = useDevelopment();
+  const { development, loadingDevelopment, developmentRole } = useDevelopment();
+  const { overallRole } = useUser();
+
+  const role = overallRole.admin ? { admin: true } : { ...developmentRole };
 
   useTitle(development.name);
 
   const commonPath = `/development/${development.id}`;
+
+  const selectedKeys = [pathname];
+
+  if (pathname.includes('settings')) selectedKeys.push(`${commonPath}/settings`);
 
   return (
     <Layout style={{ minHeight: '100%' }}>
@@ -38,7 +46,7 @@ const DevelopmentLayout = ({ children }) => {
             <Avatar size={60} src={development?.logo} />
           </>
         )}
-        <Menu style={{ height: '100%' }} selectedKeys={[pathname]}>
+        <Menu style={{ height: '100%' }} selectedKeys={selectedKeys}>
           {loadingDevelopment ? (
             new Array(5).fill().map(() => (
               <Item key={shortid.generate()}>
@@ -47,15 +55,17 @@ const DevelopmentLayout = ({ children }) => {
             ))
           ) : (
             <>
-              <Menu.Item key={commonPath} icon={<AppstoreOutlined />}>
+              <Item key={commonPath} icon={<AppstoreOutlined />}>
                 <Link to={commonPath}>Dashboard</Link>
-              </Menu.Item>
-              <Menu.Item key={`${commonPath}/documents`} icon={<FolderOpenOutlined />}>
+              </Item>
+              <Item key={`${commonPath}/documents`} icon={<FolderOpenOutlined />}>
                 <Link to={`${commonPath}/documents`}>Documentos</Link>
-              </Menu.Item>
-              <Menu.Item key={`${commonPath}/settings`} icon={<SettingOutlined />}>
-                <Link to={`${commonPath}/settings`}>Configuración</Link>
-              </Menu.Item>
+              </Item>
+              {role.admin && (
+                <Item key={`${commonPath}/settings`} icon={<SettingOutlined />}>
+                  <Link to={`${commonPath}/settings`}>Configuración</Link>
+                </Item>
+              )}
             </>
           )}
         </Menu>
