@@ -2,10 +2,8 @@ import React, { Suspense, lazy } from 'react';
 import { Redirect, Switch, Route, useParams } from 'react-router-dom';
 import TopBarProgress from 'react-topbar-progress-indicator';
 import { ProfileProvider } from '@providers/profile';
+import ProfileLayout from '@layouts/profile';
 
-const ProfileLayout = lazy(() =>
-  import(/* webpackChunkName: "ProfileLayout" */ '@layouts/profile')
-);
 const ProfileDevelopments = lazy(() =>
   import(/* webpackChunkName: "ProfileDevelopments" */ './developments')
 );
@@ -15,14 +13,14 @@ const Profile = () => {
 
   return (
     <ProfileProvider>
-      <Suspense fallback={<TopBarProgress />}>
-        <ProfileLayout>
+      <ProfileLayout>
+        <Suspense fallback={<TopBarProgress />}>
           <Switch>
             <Route exact path="/@:username" component={ProfileDevelopments} />
             <Redirect to={`/@${username}`} />
           </Switch>
-        </ProfileLayout>
-      </Suspense>
+        </Suspense>
+      </ProfileLayout>
     </ProfileProvider>
   );
 };

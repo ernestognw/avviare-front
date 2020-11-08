@@ -3,8 +3,8 @@ import { Redirect, Switch, Route } from 'react-router-dom';
 import TopBarProgress from 'react-topbar-progress-indicator';
 import { useTitle } from '@providers/layout';
 import { useUser } from '@providers/user';
+import HomeLayout from '@layouts/home';
 
-const HomeLayout = lazy(() => import(/* webpackChunkName: "HomeLayout" */ '@layouts/home'));
 const MyDevelopments = lazy(() =>
   import(/* webpackChunkName: "MyDevelopments" */ './my-developments')
 );
@@ -18,16 +18,16 @@ const Main = () => {
   useTitle('Home');
 
   return (
-    <Suspense fallback={<TopBarProgress />}>
-      <HomeLayout>
+    <HomeLayout>
+      <Suspense fallback={<TopBarProgress />}>
         <Switch>
           <Route exact path="/" component={MyDevelopments} />
           {overall?.admin && <Route path="/all" component={AllDevelopments} />}
           {overall?.admin && <Route path="/users" component={Users} />}
           <Redirect to="/" />
         </Switch>
-      </HomeLayout>
-    </Suspense>
+      </Suspense>
+    </HomeLayout>
   );
 };
 

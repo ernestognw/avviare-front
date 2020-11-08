@@ -1,10 +1,8 @@
 import React, { Suspense, lazy } from 'react';
 import { Redirect, Switch, Route } from 'react-router-dom';
 import TopBarProgress from 'react-topbar-progress-indicator';
+import SettingsLayout from '@layouts/settings';
 
-const SettingsLayout = lazy(() =>
-  import(/* webpackChunkName: "SettingsLayout" */ '@layouts/settings')
-);
 const ProfileSettings = lazy(() => import(/* webpackChunkName: "ProfileSettings" */ './profile'));
 const SecuritySettings = lazy(() =>
   import(/* webpackChunkName: "SecuritySettings" */ './security')
@@ -12,15 +10,15 @@ const SecuritySettings = lazy(() =>
 
 const Settings = () => {
   return (
-    <Suspense fallback={<TopBarProgress />}>
-      <SettingsLayout>
+    <SettingsLayout>
+      <Suspense fallback={<TopBarProgress />}>
         <Switch>
           <Route exact path="/settings" component={ProfileSettings} />
           <Route path="/settings/security" component={SecuritySettings} />
           <Redirect to="/settings" />
         </Switch>
-      </SettingsLayout>
-    </Suspense>
+      </Suspense>
+    </SettingsLayout>
   );
 };
 
