@@ -64,7 +64,9 @@ const AddUserModal = ({ visible, onCancel, reloadUsers }) => {
       message.success('El usuario ha sido añadido correctamente al desarrollo');
       await reloadUsers();
       onCancel();
-      return;
+      setRole('');
+      setUser('');
+      setSearch('');
     }
 
     setAdding(true);
