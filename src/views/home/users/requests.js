@@ -15,7 +15,6 @@ const GET_USERS = gql`
         profileImg
         email
         dateOfBirth
-        profileImg
         overallRole
         createdAt
         updatedAt

@@ -4,10 +4,10 @@ const GET_DEVELOPMENTS = gql`
   query developments(
     $search: DevelopmentSearchInput
     $params: QueryParams
-    $userId: ID!
+    $user: Filter!
     $sortBy: DevelopmentSortInput
   ) {
-    developments(search: $search, params: $params, userId: $userId, sortBy: $sortBy) {
+    developments(search: $search, params: $params, user: $user, sortBy: $sortBy) {
       info {
         count
         pages

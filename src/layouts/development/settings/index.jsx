@@ -2,15 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, useParams, Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
-import { useTitle } from '@providers/layout';
 import { UserOutlined, EditOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
 const { Item } = Menu;
 
 const DevelopmentSettingsLayout = ({ children }) => {
-  useTitle('Settings');
-
   const { pathname } = useLocation();
   const { developmentId } = useParams();
 

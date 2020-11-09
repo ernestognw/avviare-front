@@ -30,7 +30,9 @@ const MyDevelopments = () => {
     variables: {
       sortBy,
       params,
-      userId: user.id,
+      user: {
+        in: [user.id],
+      },
       search: {
         name: debouncedSearch,
       },

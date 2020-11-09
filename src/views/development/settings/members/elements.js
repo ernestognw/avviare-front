@@ -11,9 +11,4 @@ const Container = styled.div`
   }
 `;
 
-const ActionsContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-export { Container, ActionsContainer };
+export { Container };

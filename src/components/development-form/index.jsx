@@ -222,7 +222,7 @@ const DevelopmentForm = ({ onFinish, loading, form, initialValues, ...props }) =
                 htmlType="submit"
                 loading={loading}
               >
-                Crear
+                Guardar
               </Button>
             </Item>
           </FormCol>

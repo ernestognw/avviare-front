@@ -43,7 +43,9 @@ const Users = () => {
       key: 'profileImg',
       render: (profileImg, { firstName, username }) => (
         <Link to={`/@${username}`}>
-          <Avatar src={profileImg}>{firstName[0]}</Avatar>
+          <Avatar style={{ marginLeft: 10 }} src={profileImg}>
+            {firstName[0]}
+          </Avatar>
         </Link>
       ),
     },
