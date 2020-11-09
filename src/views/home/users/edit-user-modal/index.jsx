@@ -1,30 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Drawer, Form, message } from 'antd';
-import moment from 'moment';
 import { useMutation, useQuery } from '@apollo/client';
 import UserForm from '@components/user-form';
+import Box from '@components/box';
+import Loading from '@components/loading';
 import { UPDATE_USER, GET_USER } from './requests';
 
 const EditUserModal = ({ onClose, userEditId, visible, updateUsers }) => {
   const [saving, setSaving] = useState(false);
   const [form] = Form.useForm();
-  const formRef = useRef();
   const [updateUser] = useMutation(UPDATE_USER);
   const { loading, data } = useQuery(GET_USER, {
     variables: {
       id: userEditId,
     },
   });
-
-  useEffect(() => {
-    if (data?.user && formRef.current) {
-      form.setFieldsValue({
-        ...data.user,
-        dateOfBirth: moment(data.user.dateOfBirth),
-      });
-    }
-  }, [data, form]);
 
   const onFinish = async (user) => {
     setSaving(true);
@@ -51,13 +42,18 @@ const EditUserModal = ({ onClose, userEditId, visible, updateUsers }) => {
       visible={visible}
       bodyStyle={{ paddingBottom: 80 }}
     >
-      <UserForm
-        form={form}
-        onFinish={onFinish}
-        saving={saving}
-        loadingUser={loading}
-        ref={formRef}
-      />
+      {loading ? (
+        <Box display="flex" m={40} justifyContent="center" width="100%">
+          <Loading />
+        </Box>
+      ) : (
+        <UserForm
+          form={form}
+          onFinish={onFinish}
+          loading={saving}
+          initialValues={{ ...data.user }}
+        />
+      )}
     </Drawer>
   );
 };

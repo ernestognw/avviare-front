@@ -1,22 +1,21 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ImgCrop from 'antd-img-crop';
 import { overallRoles } from '@config/constants/user';
 import { validateImageTypes } from '@config/utils/files';
 import client from '@graphql';
+import moment from 'moment';
 import useUpload from '@hooks/use-upload';
 import { UserOutlined, LoadingOutlined, PlusOutlined, MailOutlined } from '@ant-design/icons';
 import { Form, Input, DatePicker, Button, Select, Avatar, Upload, message } from 'antd';
-import Box from '@components/box';
-import Loading from '@components/loading';
 import { EMAIL_EXISTS, USERNAME_EXISTS } from './requests';
 
 const { Item } = Form;
 const { Option } = Select;
 
-const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, disabled, ...props }, ref) => {
+const UserForm = ({ onFinish, loadingUser, loading, form, disabled, initialValues, ...props }) => {
   const { upload, uploading } = useUpload();
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState(initialValues?.profileImg || '');
 
   const handleUpload = async ({ file }) => {
     const url = await upload(file, file.name);
@@ -63,137 +62,137 @@ const UserForm = forwardRef(({ onFinish, loadingUser, saving, form, disabled, ..
       message.warning('El username que estás intentando registrar ya le pertenece a alguien más');
     } else {
       await onFinish({ ...values, profileImg: values.profileImg || imageUrl });
-      setImageUrl('');
     }
   };
 
   return (
-    <Form layout="vertical" onFinish={handleOnFinish} form={form} ref={ref} {...props}>
-      {loadingUser ? (
-        <Box display="flex" m={40} justifyContent="center" width="100%">
-          <Loading />
-        </Box>
-      ) : (
-        <>
-          <Item
-            style={{ marginTop: 10 }}
-            label="Username"
-            name="username"
-            normalize={(value) => value?.toLowerCase()}
-            rules={[
-              { min: 5, message: 'El username debe tener almenos 5 caracteres' },
-              { required: true, message: 'Ingresa el nombre del usuario' },
-            ]}
+    <Form
+      layout="vertical"
+      onFinish={handleOnFinish}
+      form={form}
+      initialValues={
+        initialValues
+          ? {
+              ...initialValues,
+              dateOfBirth: initialValues.dateOfBirth
+                ? moment(initialValues.dateOfBirth)
+                : undefined,
+            }
+          : undefined
+      }
+      {...props}
+    >
+      <Item
+        style={{ marginTop: 10 }}
+        label="Username"
+        name="username"
+        normalize={(value) => value?.toLowerCase()}
+        rules={[
+          { min: 5, message: 'El username debe tener almenos 5 caracteres' },
+          { required: true, message: 'Ingresa el nombre del usuario' },
+        ]}
+      >
+        <Input disabled={disabled.username} prefix={<UserOutlined />} placeholder="Username" />
+      </Item>
+      <Item
+        style={{ marginTop: 10 }}
+        label="Nombre (s)"
+        name="firstName"
+        rules={[{ required: true, message: 'Ingresa el nombre del usuario' }]}
+      >
+        <Input disabled={disabled.firstName} prefix={<UserOutlined />} placeholder="Nombre (s)" />
+      </Item>
+      <Item
+        style={{ marginTop: 10 }}
+        label="Apellido (s)"
+        name="lastName"
+        rules={[{ required: true, message: 'Ingresa el apellido del usuario' }]}
+      >
+        <Input disabled={disabled.lastName} prefix={<UserOutlined />} placeholder="Nombre (s)" />
+      </Item>
+      <Item
+        label="Correo"
+        name="email"
+        rules={[
+          {
+            type: 'email',
+            message: 'Ingresa un correo válido',
+          },
+          { required: true, message: 'Ingresa el correo del usuario' },
+        ]}
+      >
+        <Input disabled={disabled.email} prefix={<MailOutlined />} placeholder="Correo" />
+      </Item>
+      <Item
+        label="Fecha de nacimiento"
+        name="dateOfBirth"
+        rules={[{ required: true, message: 'Ingresa la fecha de nacimiento' }]}
+      >
+        <DatePicker
+          clearIcon={false}
+          showToday={false}
+          style={{ width: '100%' }}
+          placeholder="Fecha de nacimiento"
+          disabled={disabled.dateOfBirth}
+        />
+      </Item>
+      <Item label="Imagen de perfil" name="profileImg">
+        <ImgCrop name="profileImg">
+          <Upload
+            name="profileImg"
+            listType="picture-card"
+            showUploadList={false}
+            customRequest={handleUpload}
+            beforeUpload={(file) => validateImageTypes(file)}
+            accept=".png,.jpg,.jpeg"
+            disabled={disabled.profileImg}
           >
-            <Input disabled={disabled.username} prefix={<UserOutlined />} placeholder="Username" />
-          </Item>
-          <Item
-            style={{ marginTop: 10 }}
-            label="Nombre (s)"
-            name="firstName"
-            rules={[{ required: true, message: 'Ingresa el nombre del usuario' }]}
-          >
-            <Input
-              disabled={disabled.firstName}
-              prefix={<UserOutlined />}
-              placeholder="Nombre (s)"
-            />
-          </Item>
-          <Item
-            style={{ marginTop: 10 }}
-            label="Apellido (s)"
-            name="lastName"
-            rules={[{ required: true, message: 'Ingresa el apellido del usuario' }]}
-          >
-            <Input
-              disabled={disabled.lastName}
-              prefix={<UserOutlined />}
-              placeholder="Nombre (s)"
-            />
-          </Item>
-          <Item
-            label="Correo"
-            name="email"
-            rules={[
-              {
-                type: 'email',
-                message: 'Ingresa un correo válido',
-              },
-              { required: true, message: 'Ingresa el correo del usuario' },
-            ]}
-          >
-            <Input disabled={disabled.email} prefix={<MailOutlined />} placeholder="Correo" />
-          </Item>
-          <Item
-            label="Fecha de nacimiento"
-            name="dateOfBirth"
-            rules={[{ required: true, message: 'Ingresa la fecha de nacimiento' }]}
-          >
-            <DatePicker
-              clearIcon={false}
-              showToday={false}
-              style={{ width: '100%' }}
-              placeholder="Fecha de nacimiento"
-              disabled={disabled.dateOfBirth}
-            />
-          </Item>
-          <Item label="Imagen de perfil" name="profileImg">
-            <ImgCrop name="profileImg">
-              <Upload
-                name="profileImg"
-                listType="picture-card"
-                showUploadList={false}
-                customRequest={handleUpload}
-                beforeUpload={(file) => validateImageTypes(file)}
-                accept=".png,.jpg,.jpeg"
-                disabled={disabled.profileImg}
-              >
-                {imageUrl ? (
-                  <Avatar size={100} shape="square" src={imageUrl} alt="profileImg" />
-                ) : (
-                  <div>
-                    {uploading ? <LoadingOutlined /> : <PlusOutlined />}
-                    <div style={{ marginTop: 8 }}>Subir foto</div>
-                  </div>
-                )}
-              </Upload>
-            </ImgCrop>
-          </Item>
-          <Item name="overallRole" label="Rol general">
-            <Select disabled={disabled.overallRole} placeholder="Rol general">
-              {Object.keys(overallRoles).map((role) => (
-                <Option key={role} value={role}>
-                  {overallRoles[role]}
-                </Option>
-              ))}
-            </Select>
-          </Item>
-          <Item style={{ marginTop: 20 }}>
-            <Button
-              loading={saving}
-              style={{ display: 'block', marginLeft: 'auto' }}
-              type="primary"
-              htmlType="submit"
-            >
-              Guardar
-            </Button>
-          </Item>
-        </>
-      )}
+            {imageUrl ? (
+              <Avatar size={100} shape="square" src={imageUrl} alt="profileImg" />
+            ) : (
+              <div>
+                {uploading ? <LoadingOutlined /> : <PlusOutlined />}
+                <div style={{ marginTop: 8 }}>Subir foto</div>
+              </div>
+            )}
+          </Upload>
+        </ImgCrop>
+      </Item>
+      <Item name="overallRole" label="Rol general">
+        <Select disabled={disabled.overallRole} placeholder="Rol general">
+          {Object.keys(overallRoles).map((role) => (
+            <Option key={role} value={role}>
+              {overallRoles[role]}
+            </Option>
+          ))}
+        </Select>
+      </Item>
+      <Item style={{ marginTop: 20 }}>
+        <Button
+          loading={loading}
+          style={{ display: 'block', marginLeft: 'auto' }}
+          type="primary"
+          htmlType="submit"
+        >
+          Guardar
+        </Button>
+      </Item>
     </Form>
   );
-});
+};
 
 UserForm.defaultProps = {
   loadingUser: false,
   disabled: {},
+  form: null,
+  initialValues: null,
 };
 
 UserForm.propTypes = {
   onFinish: PropTypes.func.isRequired,
-  saving: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   loadingUser: PropTypes.bool,
-  form: PropTypes.object.isRequired,
+  form: PropTypes.object,
   disabled: PropTypes.shape({
     username: PropTypes.bool,
     firstName: PropTypes.bool,
@@ -202,6 +201,15 @@ UserForm.propTypes = {
     dateOfBirth: PropTypes.bool,
     profileImg: PropTypes.bool,
     overallRole: PropTypes.bool,
+  }),
+  initialValues: PropTypes.shape({
+    username: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    email: PropTypes.string,
+    dateOfBirth: PropTypes.string,
+    profileImg: PropTypes.string,
+    overallRole: PropTypes.string,
   }),
 };
 

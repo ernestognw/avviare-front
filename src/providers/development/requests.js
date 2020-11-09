@@ -9,6 +9,14 @@ const GET_DEVELOPMENT = gql`
       cover
       startDate
       active
+      location {
+        formattedAddress
+        geolocation {
+          type
+          coordinates
+        }
+        extraInfo
+      }
     }
     userDevelopmentRoleByToken(developmentId: $id)
   }

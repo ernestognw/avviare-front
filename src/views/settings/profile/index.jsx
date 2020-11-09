@@ -3,7 +3,6 @@ import { Typography, Form, Divider, message } from 'antd';
 import { useMutation } from '@apollo/client';
 import { useUser } from '@providers/user';
 import UserForm from '@components/user-form';
-import moment from 'moment';
 import { UPDATE_USER } from './requests';
 
 const { Title } = Typography;
@@ -40,7 +39,7 @@ const ProfileSettings = () => {
       <UserForm
         form={form}
         onFinish={onFinish}
-        saving={saving}
+        loading={saving}
         disabled={{
           overallRole: !overallRole.admin,
           email: !overallRole.admin,
@@ -48,7 +47,6 @@ const ProfileSettings = () => {
         layout="horizontal"
         initialValues={{
           ...user,
-          dateOfBirth: moment(user.dateOfBirth),
         }}
       />
     </>

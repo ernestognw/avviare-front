@@ -9,7 +9,7 @@ export const developmentContext = React.createContext({});
 const DevelopmentProvider = ({ children }) => {
   const { developmentId } = useParams('/development/:developmentId');
 
-  const { data, loading } = useQuery(GET_DEVELOPMENT, {
+  const { data, loading, refetch } = useQuery(GET_DEVELOPMENT, {
     variables: { id: developmentId },
   });
 
@@ -18,6 +18,7 @@ const DevelopmentProvider = ({ children }) => {
       value={{
         development: data?.development ?? {},
         loadingDevelopment: loading,
+        reloadDevelopment: refetch,
         developmentRole: data?.userDevelopmentRoleByToken && {
           admin: data?.userDevelopmentRoleByToken === 'ADMIN',
           edification: data?.userDevelopmentRoleByToken === 'EDIFICATION',
