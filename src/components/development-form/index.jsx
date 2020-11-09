@@ -64,10 +64,10 @@ const DevelopmentForm = ({ onFinish, loading, form, initialValues, ...props }) =
       startDate,
       active,
       location: {
-        formattedAddress: place.formattedAddress,
+        formattedAddress: place?.formattedAddress,
         geolocation: {
           type: 'Point',
-          coordinates: [place.location.lng, place.location.lat],
+          coordinates: [place?.location.lng, place?.location.lat],
         },
         extraInfo,
       },
