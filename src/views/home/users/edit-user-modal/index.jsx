@@ -7,7 +7,7 @@ import Box from '@components/box';
 import Loading from '@components/loading';
 import { UPDATE_USER, GET_USER } from './requests';
 
-const EditUserModal = ({ onClose, userEditId, visible, updateUsers }) => {
+const EditUserModal = ({ onClose, userEditId, visible }) => {
   const [saving, setSaving] = useState(false);
   const [form] = Form.useForm();
   const [updateUser] = useMutation(UPDATE_USER);
@@ -15,6 +15,7 @@ const EditUserModal = ({ onClose, userEditId, visible, updateUsers }) => {
     variables: {
       id: userEditId,
     },
+    skip: !userEditId,
   });
 
   const onFinish = async (user) => {
@@ -26,7 +27,6 @@ const EditUserModal = ({ onClose, userEditId, visible, updateUsers }) => {
     if (errors) {
       message.error(errors[0].message);
     } else {
-      await updateUsers();
       onClose();
       message.success('Usuario actualizado con éxito');
     }
@@ -51,7 +51,7 @@ const EditUserModal = ({ onClose, userEditId, visible, updateUsers }) => {
           form={form}
           onFinish={onFinish}
           loading={saving}
-          initialValues={{ ...data.user }}
+          initialValues={{ ...data?.user }}
         />
       )}
     </Drawer>
@@ -65,7 +65,6 @@ EditUserModal.defaultProps = {
 EditUserModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   userEditId: PropTypes.string,
-  updateUsers: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
 };
 

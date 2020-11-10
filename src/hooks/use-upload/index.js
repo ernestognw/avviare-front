@@ -8,7 +8,10 @@ const useUpload = () => {
   });
 
   const upload = (file, filePath) =>
-    originalUpload(file, { variables: { filePath, fileType: file.type } });
+    originalUpload(file, {
+      variables: { filePath, fileType: file.type },
+      fetchPolicy: 'network-only',
+    });
 
   return { upload, ...rest };
 };

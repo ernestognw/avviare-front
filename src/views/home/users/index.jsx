@@ -155,7 +155,6 @@ const Users = () => {
         visible={!!userEditId}
         userEditId={userEditId}
         onClose={() => setUserEditId('')}
-        updateUsers={refetch}
       />
     </>
   );

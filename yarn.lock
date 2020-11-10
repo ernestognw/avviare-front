@@ -12076,10 +12076,10 @@ use-debounce@^5.0.1:
   resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-5.0.1.tgz#b11861bc63970bfc6fd8393a0a3cc3d7cb5944ce"
   integrity sha512-YHzlVa7qKFRlrMpVRiStGWGE0lumwJiQPvsTMlatsIrck39ycyJkdf0npUYG5MJEVxaJQWwvpmePRYZb534upg==
 
-use-upload@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/use-upload/-/use-upload-1.0.2.tgz#d1a235ddecc4e854ba0feb05275c878838b2e401"
-  integrity sha512-MVgfbE04WgJmxAlmPhZezD+KUssaJu39JBu1Bbor5JeaeaaEmIlHYLfvovUpD4O1rSinouPQGINKLtZsSVng7A==
+use-upload@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/use-upload/-/use-upload-1.0.3.tgz#b0e9726fc4f27f0a5aeea9b399d72d22a1c6b7c6"
+  integrity sha512-nJxsRLH0W2ztFaC6NEy/kXIvtp4JIXND1LwBvdVyW3YwpVwpSlKARUDzcveeB8INuEaPoNp6S5qgtt7DLDz6xg==
   dependencies:
     axios "^0.20.0"
 

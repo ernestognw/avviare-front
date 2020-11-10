@@ -1,5 +1,20 @@
 import { gql } from '@apollo/client';
 
+// Used on edit user modal.
+// Should fetch the same query so cache could update user withouth refetching the entire list
+const userInfo = `
+  id
+  username
+  firstName
+  lastName
+  profileImg
+  email
+  dateOfBirth
+  overallRole
+  createdAt
+  updatedAt
+`;
+
 const GET_USERS = gql`
   query users($search: UserSearchInput, $params: QueryParams) {
     users(search: $search, params: $params) {
@@ -8,19 +23,10 @@ const GET_USERS = gql`
         pages
       }
       results {
-        id
-        username
-        firstName
-        lastName
-        profileImg
-        email
-        dateOfBirth
-        overallRole
-        createdAt
-        updatedAt
+        ${userInfo}
       }
     }
   }
 `;
 
-export { GET_USERS };
+export { userInfo, GET_USERS };

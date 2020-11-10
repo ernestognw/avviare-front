@@ -4,16 +4,14 @@ import { apiUrl } from '@config/environment';
 const client = new ApolloClient({
   uri: apiUrl,
   credentials: 'include',
-  cache: new InMemoryCache({
-    addTypename: false,
-  }),
+  cache: new InMemoryCache({}),
   defaultOptions: {
     watchQuery: {
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'cache-and-network',
       errorPolicy: 'all',
     },
     query: {
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'cache-and-network',
       errorPolicy: 'all',
     },
     mutate: {

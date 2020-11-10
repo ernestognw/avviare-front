@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ImgCrop from 'antd-img-crop';
 import { overallRoles } from '@config/constants/user';
 import { validateImageTypes } from '@config/utils/files';
-import client from '@graphql';
+import { useApolloClient } from '@apollo/client';
 import moment from 'moment';
 import useUpload from '@hooks/use-upload';
 import { UserOutlined, LoadingOutlined, PlusOutlined, MailOutlined } from '@ant-design/icons';
@@ -16,35 +16,42 @@ const { Option } = Select;
 const UserForm = ({ onFinish, loadingUser, loading, form, disabled, initialValues, ...props }) => {
   const { upload, uploading } = useUpload();
   const [imageUrl, setImageUrl] = useState(initialValues?.profileImg || '');
+  const { query } = useApolloClient();
 
   const handleUpload = async ({ file }) => {
     const url = await upload(file, file.name);
     setImageUrl(url);
   };
 
+  useEffect(() => {
+    form.resetFields();
+  }, [loadingUser]);
+
   const checkEmail = async (email) => {
-    if (email === form.getFieldValue('email')) return false;
+    if (email === initialValues?.email) return false;
     const {
       data: { userEmailExists },
-    } = await client.query({
+    } = await query({
       query: EMAIL_EXISTS,
       variables: {
         email,
       },
+      fetchPolicy: 'network-only',
     });
 
     return userEmailExists;
   };
 
   const checkUsername = async (username) => {
-    if (username === form.getFieldValue('username')) return false;
+    if (username === initialValues?.username) return false;
     const {
       data: { usernameExists },
-    } = await client.query({
+    } = await query({
       query: USERNAME_EXISTS,
       variables: {
         username,
       },
+      fetchPolicy: 'network-only',
     });
 
     return usernameExists;

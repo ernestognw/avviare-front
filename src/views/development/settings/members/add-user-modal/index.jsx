@@ -40,6 +40,7 @@ const AddUserModal = ({ visible, onCancel, reloadUsers }) => {
         nin: [development.id],
       },
     },
+    skip: !visible,
   });
 
   const addUser = async () => {
