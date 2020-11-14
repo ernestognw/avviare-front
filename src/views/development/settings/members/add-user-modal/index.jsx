@@ -17,13 +17,12 @@ const defaultParams = {
 };
 
 const AddUserModal = ({ visible, onCancel, reloadUsers }) => {
-  const [user, setUser] = useState('');
-  const [role, setRole] = useState('');
   const [params] = useState(defaultParams);
   const [search, setSearch] = useState('');
   const [adding, setAdding] = useState('');
   const [debouncedSearch] = useDebounce(search, 500);
   const { development } = useDevelopment();
+  const [form] = Form.useForm();
 
   const [addUserToDevelopment] = useMutation(ADD_USER_TO_DEVELOPMENT);
 
@@ -43,17 +42,7 @@ const AddUserModal = ({ visible, onCancel, reloadUsers }) => {
     skip: !visible,
   });
 
-  const addUser = async () => {
-    if (!user) {
-      message.warning('Necesitas seleccionar a un usuario');
-      return;
-    }
-
-    if (!role) {
-      message.warning('Necesitas añadir un rol');
-      return;
-    }
-
+  const addUser = async ({ user, role }) => {
     setAdding(true);
     const { errors } = await addUserToDevelopment({
       variables: { user, development: development.id, role },
@@ -65,33 +54,33 @@ const AddUserModal = ({ visible, onCancel, reloadUsers }) => {
       message.success('El usuario ha sido añadido correctamente al desarrollo');
       await reloadUsers();
       onCancel();
-      setRole('');
-      setUser('');
       setSearch('');
+      form.resetFields();
     }
 
-    setAdding(true);
+    setAdding(false);
   };
 
   return (
     <Modal
       title={`Agrega a un usuario a ${development.name}`}
       visible={visible}
-      onOk={addUser}
+      onOk={form.submit}
       onCancel={onCancel}
       confirmLoading={adding}
     >
-      <Form>
-        <Item>
+      <Form layout="vertical" form={form} onFinish={addUser}>
+        <Item
+          label="Selecciona un usuario"
+          name="user"
+          rules={[{ required: true, message: 'Ingresa el usuario' }]}
+        >
           <Select
-            value={search}
+            allowClear
             placeholder="Selecciona un usuario"
+            onClear={() => setSearch('')}
             loading={loading}
             onSearch={setSearch}
-            onSelect={(value) => {
-              setSearch(value);
-              setUser(value);
-            }}
             filterOption={false}
             showSearch
           >
@@ -106,8 +95,12 @@ const AddUserModal = ({ visible, onCancel, reloadUsers }) => {
             ))}
           </Select>
         </Item>
-        <Item>
-          <Select placeholder="Rol en el desarrollo" onSelect={setRole}>
+        <Item
+          label="Rol en el desarrollo"
+          name="role"
+          rules={[{ required: true, message: 'Ingresa el rol del usuario' }]}
+        >
+          <Select placeholder="Rol en el desarrollo">
             {Object.keys(developmentRoles).map((developmentRole) => (
               <Option key={developmentRole} value={developmentRole}>
                 {developmentRoles[developmentRole]}

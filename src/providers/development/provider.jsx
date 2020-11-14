@@ -22,7 +22,7 @@ const DevelopmentProvider = ({ children }) => {
         development: data?.development ?? {},
         loadingDevelopment: loading,
         reloadDevelopment: refetch,
-        developmentRole: data?.userDevelopmentRoleByToken && {
+        developmentRole: (data?.userDevelopmentRoleByToken || overallRole) && {
           admin: data?.userDevelopmentRoleByToken === 'ADMIN' || overallRole.admin,
           edification: data?.userDevelopmentRoleByToken === 'EDIFICATION',
           urbanization: data?.userDevelopmentRoleByToken === 'URBANIZATION',

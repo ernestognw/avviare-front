@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
 import { Link } from 'react-router-dom';
-import { Card, Table, Avatar, Button, Select, message } from 'antd';
+import { Card, Table, Avatar, Button, Select, Tooltip, Modal, message } from 'antd';
 import { useDevelopment } from '@providers/development';
 import { overallRoles, developmentRoles } from '@config/constants/user';
-import { Container } from './elements';
-import { GET_MEMBERS, UPDATE_DEVELOPMENT_ROLE } from './requests';
+import { CloseOutlined } from '@ant-design/icons';
+import { Container, ActionsContainer } from './elements';
+import { GET_MEMBERS, UPDATE_DEVELOPMENT_ROLE, REMOVE_USER_FROM_DEVELOPMENT } from './requests';
 import Title from './title';
 import AddUserModal from './add-user-modal';
 
@@ -39,6 +40,7 @@ const Members = () => {
   };
   const { data, loading, refetch } = useQuery(GET_MEMBERS, { variables });
   const [updateDevelopmentRole] = useMutation(UPDATE_DEVELOPMENT_ROLE);
+  const [removeUserFromDevelopment] = useMutation(REMOVE_USER_FROM_DEVELOPMENT);
 
   const updateRole = async (role, user) => {
     const { errors } = await updateDevelopmentRole({
@@ -56,6 +58,31 @@ const Members = () => {
       message.success('Rol actualizado');
     }
   };
+
+  const removeUser = async (user) => {
+    const { errors } = await removeUserFromDevelopment({
+      variables: {
+        user,
+        development: development.id,
+      },
+    });
+
+    if (errors) {
+      message.error(errors[0].message);
+    } else {
+      await refetch();
+      message.success(`Usuario removido de ${development.name}`);
+    }
+  };
+
+  const confirmRemoveUser = (id) =>
+    Modal.confirm({
+      title: `Remover usuario de ${development.name}`,
+      content: 'Estás a punto de remover a este usuario del desarrollo',
+      okText: 'Confirmar',
+      cancelText: 'Cancelar',
+      onOk: () => removeUser(id),
+    });
 
   const columns = [
     {
@@ -120,6 +147,22 @@ const Members = () => {
             </Option>
           ))}
         </Select>
+      ),
+    },
+    {
+      title: 'Acciones',
+      // eslint-disable-next-line react/prop-types
+      render: ({ id }) => (
+        <ActionsContainer>
+          <Tooltip title="Remover">
+            <Button
+              onClick={() => confirmRemoveUser(id)}
+              icon={<CloseOutlined />}
+              type="danger"
+              size="small"
+            />
+          </Tooltip>
+        </ActionsContainer>
       ),
     },
   ];

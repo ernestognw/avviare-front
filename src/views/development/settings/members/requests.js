@@ -29,4 +29,10 @@ const UPDATE_DEVELOPMENT_ROLE = gql`
   }
 `;
 
-export { GET_MEMBERS, UPDATE_DEVELOPMENT_ROLE };
+const REMOVE_USER_FROM_DEVELOPMENT = gql`
+  mutation userRemoveFromDevelopment($user: ID!, $development: ID!) {
+    userRemoveFromDevelopment(user: $user, development: $development)
+  }
+`;
+
+export { GET_MEMBERS, UPDATE_DEVELOPMENT_ROLE, REMOVE_USER_FROM_DEVELOPMENT };
