@@ -20,10 +20,15 @@ const GET_MY_DEVELOPMENTS = gql`
         startDate
         active
         workers {
-          id
-          firstName
-          lastName
-          profileImg
+          info {
+            count
+          }
+          results {
+            id
+            firstName
+            lastName
+            profileImg
+          }
         }
       }
     }

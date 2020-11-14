@@ -34,13 +34,13 @@ const DevelopmentCard = ({ id, name, active, cover, logo, startDate, workers }) 
             </>
           }
         />
-        {workers.length > 0 && (
+        {workers?.results.length > 0 && (
           <Avatar.Group
             style={{ marginTop: 20 }}
             maxCount={5}
             maxStyle={{ backgroundColor: theme.colors.primary }}
           >
-            {workers.map(({ id: workerId, firstName, lastName, profileImg }) => (
+            {workers?.results.map(({ id: workerId, firstName, lastName, profileImg }) => (
               <Tooltip key={workerId} title={`${firstName} ${lastName}`} placement="top">
                 <Avatar src={profileImg}>{firstName[0]}</Avatar>
               </Tooltip>
@@ -63,14 +63,16 @@ DevelopmentCard.propTypes = {
   cover: PropTypes.string.isRequired,
   logo: PropTypes.string.isRequired,
   startDate: PropTypes.any.isRequired,
-  workers: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      firstName: PropTypes.string.isRequired,
-      lastName: PropTypes.string.isRequired,
-      profileImg: PropTypes.string,
-    })
-  ),
+  workers: PropTypes.shape({
+    results: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        firstName: PropTypes.string.isRequired,
+        lastName: PropTypes.string.isRequired,
+        profileImg: PropTypes.string,
+      })
+    ),
+  }),
 };
 
 export default DevelopmentCard;
