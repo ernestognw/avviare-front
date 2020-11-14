@@ -7,11 +7,7 @@ const ADD_USER_TO_DEVELOPMENT = gql`
 `;
 
 const SEARCH_USERS = gql`
-  query usersNotInDevelopment(
-    $development: Filter
-    $search: UserSearchInput
-    $params: QueryParams
-  ) {
+  query users($development: Filter, $search: UserSearchInput, $params: QueryParams) {
     users(development: $development, search: $search, params: $params) {
       results {
         id

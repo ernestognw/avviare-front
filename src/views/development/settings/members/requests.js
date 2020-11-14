@@ -23,4 +23,10 @@ const GET_MEMBERS = gql`
   }
 `;
 
-export { GET_MEMBERS };
+const UPDATE_DEVELOPMENT_ROLE = gql`
+  mutation userUpdateDevelopmentRole($user: ID!, $development: ID!, $role: DevelopmentRole!) {
+    userUpdateDevelopmentRole(user: $user, development: $development, role: $role)
+  }
+`;
+
+export { GET_MEMBERS, UPDATE_DEVELOPMENT_ROLE };

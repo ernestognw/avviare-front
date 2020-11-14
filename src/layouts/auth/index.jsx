@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Layout } from 'antd';
+import Box from '@components/box';
 import { AuthWrapper } from './elements';
 
 const AuthLayout = ({ children }) => {
@@ -8,8 +9,12 @@ const AuthLayout = ({ children }) => {
     <Layout>
       <AuthWrapper>
         <div style={{ maxWidth: 400, width: '100%', padding: 20, height: 'auto' }}>
-          <img
-            style={{ margin: '10px auto', display: 'block', marginBottom: 30 }}
+          <Box
+            as="img"
+            mb={30}
+            mx="auto"
+            mt={10}
+            display="block"
             width={200}
             src="/images/brand/logo_black.png"
             alt="Logo"
