@@ -15,7 +15,7 @@ const GET_MEMBERS = gql`
         profileImg
         email
         overallRole
-        worksAt {
+        worksAt(development: $development) {
           developmentRole
         }
       }

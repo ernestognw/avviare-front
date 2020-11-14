@@ -25,7 +25,7 @@ const UserForm = ({ onFinish, loadingUser, loading, form, disabled, initialValue
 
   useEffect(() => {
     form.resetFields();
-  }, [loadingUser]);
+  }, [loadingUser, form]);
 
   const checkEmail = async (email) => {
     if (email === initialValues?.email) return false;
