@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useUser } from '@providers/user';
 import { GET_DEVELOPMENT } from './requests';
 
 export const developmentContext = React.createContext({});
@@ -13,6 +14,8 @@ const DevelopmentProvider = ({ children }) => {
     variables: { id: developmentId },
   });
 
+  const { overallRole } = useUser();
+
   return (
     <developmentContext.Provider
       value={{
@@ -20,7 +23,7 @@ const DevelopmentProvider = ({ children }) => {
         loadingDevelopment: loading,
         reloadDevelopment: refetch,
         developmentRole: data?.userDevelopmentRoleByToken && {
-          admin: data?.userDevelopmentRoleByToken === 'ADMIN',
+          admin: data?.userDevelopmentRoleByToken === 'ADMIN' || overallRole.admin,
           edification: data?.userDevelopmentRoleByToken === 'EDIFICATION',
           urbanization: data?.userDevelopmentRoleByToken === 'URBANIZATION',
           sales: data?.userDevelopmentRoleByToken === 'SALES',

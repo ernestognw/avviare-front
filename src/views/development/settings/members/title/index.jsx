@@ -9,7 +9,7 @@ const { Title } = Typography;
 const { Search } = Input;
 
 const TableTitle = ({ setSearch, openCreateUserModal }) => {
-  const { development } = useDevelopment();
+  const { development, developmentRole } = useDevelopment();
   return (
     <TitleContainer>
       <Title style={{ margin: 'auto 10px' }} level={3}>
@@ -24,6 +24,7 @@ const TableTitle = ({ setSearch, openCreateUserModal }) => {
       <Button
         style={{ margin: 'auto 10px' }}
         type="primary"
+        disabled={!developmentRole.admin}
         icon={<UserAddOutlined />}
         onClick={openCreateUserModal}
       >

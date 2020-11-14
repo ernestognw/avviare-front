@@ -4,7 +4,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTitle } from '@providers/layout';
 import shortid from 'shortid';
 import { useDevelopment } from '@providers/development';
-import { useUser } from '@providers/user';
 import Box from '@components/box';
 import Loading from '@components/loading';
 import { AppstoreOutlined, FolderOpenOutlined, SettingOutlined } from '@ant-design/icons';
@@ -18,9 +17,6 @@ const DevelopmentLayout = ({ children }) => {
   const { pathname } = useLocation();
   const [collapsed, toggleCollapsed] = useState(false);
   const { development, loadingDevelopment, developmentRole } = useDevelopment();
-  const { overallRole } = useUser();
-
-  const role = overallRole.admin ? { admin: true } : { ...developmentRole };
 
   useTitle(development.name);
 
@@ -61,7 +57,7 @@ const DevelopmentLayout = ({ children }) => {
               <Item key={`${commonPath}/documents`} icon={<FolderOpenOutlined />}>
                 <Link to={`${commonPath}/documents`}>Documentos</Link>
               </Item>
-              {role.admin && (
+              {developmentRole.admin && (
                 <Item key={`${commonPath}/settings`} icon={<SettingOutlined />}>
                   <Link to={`${commonPath}/settings`}>Configuración</Link>
                 </Item>

@@ -1,7 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { Redirect, Switch, Route } from 'react-router-dom';
 import TopBarProgress from 'react-topbar-progress-indicator';
-import { useUser } from '@providers/user';
 import { DevelopmentProvider, useDevelopment } from '@providers/development';
 import DevelopmentLayout from '@layouts/development';
 
@@ -11,9 +10,6 @@ const Settings = lazy(() => import(/* webpackChunkName: "Settings" */ './setting
 
 const DevelopmentWithContext = () => {
   const { developmentRole } = useDevelopment();
-  const { overallRole } = useUser();
-
-  const role = overallRole.admin ? { admin: true } : { ...developmentRole };
 
   return (
     <DevelopmentLayout>
@@ -21,7 +17,9 @@ const DevelopmentWithContext = () => {
         <Switch>
           <Route exact path="/development/:developmentId" component={Dashboard} />
           <Route path="/development/:developmentId/documents" component={Documents} />
-          {role.admin && <Route path="/development/:developmentId/settings" component={Settings} />}
+          {developmentRole?.admin && (
+            <Route path="/development/:developmentId/settings" component={Settings} />
+          )}
           <Redirect to="/" />
         </Switch>
       </Suspense>

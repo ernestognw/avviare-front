@@ -23,7 +23,7 @@ const Members = () => {
   const [isOpenAddUserModal, toggleAddUserModal] = useState(false);
   const [debouncedSearch] = useDebounce(search, 500);
 
-  const { development } = useDevelopment();
+  const { development, developmentRole } = useDevelopment();
 
   const variables = {
     params,
@@ -111,11 +111,12 @@ const Members = () => {
         <Select
           onSelect={(role) => updateRole(role, id)}
           size="small"
+          disabled={!developmentRole.admin}
           value={worksAt[0].developmentRole}
         >
-          {Object.keys(developmentRoles).map((developmentRole) => (
-            <Option key={developmentRole} value={developmentRole}>
-              {developmentRoles[developmentRole]}
+          {Object.keys(developmentRoles).map((role) => (
+            <Option key={role} value={role}>
+              {developmentRoles[role]}
             </Option>
           ))}
         </Select>
