@@ -5,7 +5,7 @@ import { useDebounce } from 'use-debounce';
 import { Link } from 'react-router-dom';
 import { Card, Table, Avatar, Tag, Button, Tooltip } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
-import { overallRoles } from '@config/constants/user';
+import { overallRoles, searchableFields } from '@config/constants/user';
 import { Container, ActionsContainer } from './elements';
 import { GET_USERS } from './requests';
 import Title from './title';
@@ -26,12 +26,10 @@ const Users = () => {
 
   const variables = {
     params,
-    search: {
-      username: debouncedSearch,
-      firstName: debouncedSearch,
-      lastName: debouncedSearch,
-      email: debouncedSearch,
-    },
+    search: searchableFields.reduce((acc, curr) => {
+      acc[curr] = debouncedSearch;
+      return acc;
+    }, {}),
   };
 
   const { data, loading, refetch } = useQuery(GET_USERS, { variables });

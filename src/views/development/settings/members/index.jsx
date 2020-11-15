@@ -4,7 +4,7 @@ import { useDebounce } from 'use-debounce';
 import { Link } from 'react-router-dom';
 import { Card, Table, Avatar, Button, Select, Tooltip, Modal, message } from 'antd';
 import { useDevelopment } from '@providers/development';
-import { overallRoles, developmentRoles } from '@config/constants/user';
+import { overallRoles, developmentRoles, searchableFields } from '@config/constants/user';
 import { CloseOutlined } from '@ant-design/icons';
 import { Container, ActionsContainer } from './elements';
 import { GET_MEMBERS, UPDATE_DEVELOPMENT_ROLE, REMOVE_USER_FROM_DEVELOPMENT } from './requests';
@@ -28,12 +28,10 @@ const Members = () => {
 
   const variables = {
     params,
-    search: {
-      username: debouncedSearch,
-      firstName: debouncedSearch,
-      lastName: debouncedSearch,
-      email: debouncedSearch,
-    },
+    search: searchableFields.reduce((acc, curr) => {
+      acc[curr] = debouncedSearch;
+      return acc;
+    }, {}),
     development: {
       in: [development.id],
     },

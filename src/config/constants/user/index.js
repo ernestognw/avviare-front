@@ -10,4 +10,6 @@ const developmentRoles = {
   SALES: 'Ventas',
 };
 
-export { overallRoles, developmentRoles };
+const searchableFields = ['username', 'firstName', 'lastName', 'email'];
+
+export { overallRoles, developmentRoles, searchableFields };
