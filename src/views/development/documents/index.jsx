@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
 import { useDevelopment } from '@providers/development';
 import { Card, Table, Tag, Button, Avatar, Tooltip, Typography } from 'antd';
-import { RightOutlined } from '@ant-design/icons';
+import { RightOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { searchableFields, documentCategories } from '@config/constants/document';
 import theme from '@config/theme';
@@ -11,6 +11,7 @@ import { GET_DOCUMENTS } from './requests';
 import { Container, ActionsContainer } from './elements';
 import Title from './title';
 import CreateDocumentModal from './create-document-modal';
+import EditDocumentModal from './edit-document-modal';
 
 const { Text } = Typography;
 
@@ -21,6 +22,7 @@ const defaultParams = {
 
 const Documents = () => {
   const [search, setSearch] = useState('');
+  const [documentEditId, setDocumentEditId] = useState('');
   const [categories, setCategories] = useState([]);
   const [isOpenCreateDocumentModal, toggleCreateDocumentModal] = useState(false);
   const [params, setParams] = useState(defaultParams);
@@ -110,11 +112,19 @@ const Documents = () => {
       title: 'Acciones',
       fixed: 'right',
       // eslint-disable-next-line react/prop-types
-      render: () => (
+      render: ({ id }) => (
         <ActionsContainer>
           <Button type="primary" icon={<RightOutlined />} size="small">
             Ver
           </Button>
+          <Tooltip title="Editar documento">
+            <Button
+              style={{ marginLeft: 10 }}
+              onClick={() => setDocumentEditId(id)}
+              icon={<EditOutlined />}
+              size="small"
+            />
+          </Tooltip>
         </ActionsContainer>
       ),
     },
@@ -157,6 +167,11 @@ const Documents = () => {
         visible={isOpenCreateDocumentModal}
         onClose={() => toggleCreateDocumentModal(false)}
         updateDocuments={refetch}
+      />
+      <EditDocumentModal
+        visible={!!documentEditId}
+        onClose={() => setDocumentEditId('')}
+        documentEditId={documentEditId}
       />
     </>
   );

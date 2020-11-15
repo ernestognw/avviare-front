@@ -1,5 +1,30 @@
 import { gql } from '@apollo/client';
 
+// Used on edit document modal.
+// Should fetch the same query so cache could document user withouth refetching the entire list
+const documentInfo = `
+  id
+  name
+  description
+  categories
+  versions {
+    info {
+      count
+    }
+  }
+  lastVersion {
+    approvedBy {
+      user {
+        id
+        firstName
+        lastName
+        profileImg
+      }
+      approvalDate
+    }
+  }
+`;
+
 const GET_DOCUMENTS = gql`
   query documents(
     $search: DocumentSearchInput
@@ -19,29 +44,10 @@ const GET_DOCUMENTS = gql`
         count
       }
       results {
-        id
-        name
-        description
-        categories
-        versions {
-          info {
-            count
-          }
-        }
-        lastVersion {
-          approvedBy {
-            user {
-              id
-              firstName
-              lastName
-              profileImg
-            }
-            approvalDate
-          }
-        }
+       ${documentInfo}
       }
     }
   }
 `;
 
-export { GET_DOCUMENTS };
+export { documentInfo, GET_DOCUMENTS };

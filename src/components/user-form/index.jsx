@@ -13,7 +13,7 @@ import { EMAIL_EXISTS, USERNAME_EXISTS } from './requests';
 const { Item } = Form;
 const { Option } = Select;
 
-const UserForm = ({ onFinish, loadingUser, loading, form, disabled, initialValues, ...props }) => {
+const UserForm = ({ onFinish, loading, form, disabled, initialValues, ...props }) => {
   const { upload, uploading } = useUpload();
   const [imageUrl, setImageUrl] = useState(initialValues?.profileImg || '');
   const { query } = useApolloClient();
@@ -25,7 +25,7 @@ const UserForm = ({ onFinish, loadingUser, loading, form, disabled, initialValue
 
   useEffect(() => {
     form.resetFields();
-  }, [loadingUser, form]);
+  }, [form]);
 
   const checkEmail = async (email) => {
     if (email === initialValues?.email) return false;
@@ -189,7 +189,6 @@ const UserForm = ({ onFinish, loadingUser, loading, form, disabled, initialValue
 };
 
 UserForm.defaultProps = {
-  loadingUser: false,
   disabled: {},
   form: null,
   initialValues: null,
@@ -198,7 +197,6 @@ UserForm.defaultProps = {
 UserForm.propTypes = {
   onFinish: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-  loadingUser: PropTypes.bool,
   form: PropTypes.object,
   disabled: PropTypes.shape({
     username: PropTypes.bool,

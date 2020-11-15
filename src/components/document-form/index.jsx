@@ -33,7 +33,7 @@ const DocumentForm = ({ onFinish, loading, form, initialValues, ...props }) => {
         <TextArea placeholder="Descripe este documento..." rows={4} />
       </Item>
       <Item name="categories" label="Categorías del documento">
-        <Select mode="multiple" allowClear placeholder="Rol general">
+        <Select mode="multiple" allowClear placeholder="Categorías">
           {Object.keys(documentCategories).map((category) => (
             <Option key={category} value={category}>
               {documentCategories[category]}
