@@ -4,6 +4,7 @@ import shortid from 'shortid';
 import { Link, useLocation } from 'react-router-dom';
 import { useUser } from '@providers/user';
 import theme from '@config/theme';
+import Box from '@components/box';
 import { HomeOutlined, PlusOutlined } from '@ant-design/icons';
 import { Container, Sider, Avatar, SubtitleContainer } from './elements';
 
@@ -24,6 +25,14 @@ const Sidebar = () => {
   } else {
     content = (
       <>
+        <Box
+          mt={20}
+          mx="auto"
+          width={40}
+          display="block"
+          as="img"
+          src="/images/brand/isotype-primary.svg"
+        />
         <SubtitleContainer style={{ marginTop: 20, marginBottom: 10 }}>
           <Paragraph style={{ color: 'white', margin: 0, fontSize: 10 }}>Home</Paragraph>
         </SubtitleContainer>

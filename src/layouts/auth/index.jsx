@@ -16,7 +16,7 @@ const AuthLayout = ({ children }) => {
             mt={10}
             display="block"
             width={200}
-            src="/images/brand/logo_black.png"
+            src="/images/brand/logo-primary.svg"
             alt="Logo"
           />
           {children}
