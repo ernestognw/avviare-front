@@ -24,7 +24,7 @@ const TableTitle = ({ setSearch, openCreateUserModal }) => {
       <Button
         style={{ margin: 'auto 10px' }}
         type="primary"
-        disabled={!developmentRole.admin}
+        disabled={!developmentRole.manager}
         icon={<UserAddOutlined />}
         onClick={openCreateUserModal}
       >

@@ -4,7 +4,7 @@ const overallRoles = {
 };
 
 const developmentRoles = {
-  ADMIN: 'Administrador',
+  MANAGER: 'Gerente',
   EDIFICATION: 'Residente de edificación',
   URBANIZATION: 'Residente de urbanización',
   SALES: 'Ventas',

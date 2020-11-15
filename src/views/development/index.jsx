@@ -17,7 +17,7 @@ const DevelopmentWithContext = () => {
         <Switch>
           <Route exact path="/development/:developmentId" component={Dashboard} />
           <Route path="/development/:developmentId/documents" component={Documents} />
-          {developmentRole?.admin && (
+          {developmentRole?.manager && (
             <Route path="/development/:developmentId/settings" component={Settings} />
           )}
           <Redirect to="/" />

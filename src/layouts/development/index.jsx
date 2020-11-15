@@ -57,7 +57,7 @@ const DevelopmentLayout = ({ children }) => {
               <Item key={`${commonPath}/documents`} icon={<FolderOpenOutlined />}>
                 <Link to={`${commonPath}/documents`}>Documentos</Link>
               </Item>
-              {developmentRole.admin && (
+              {developmentRole.manager && (
                 <Item key={`${commonPath}/settings`} icon={<SettingOutlined />}>
                   <Link to={`${commonPath}/settings`}>Configuración</Link>
                 </Item>

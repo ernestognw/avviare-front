@@ -138,7 +138,7 @@ const Members = () => {
         <Select
           onSelect={(role) => updateRole(role, id)}
           size="small"
-          disabled={!developmentRole.admin}
+          disabled={!developmentRole.manager}
           value={worksAt[0].developmentRole}
         >
           {Object.keys(developmentRoles).map((role) => (
