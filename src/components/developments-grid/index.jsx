@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Typography, Input, Select, Pagination, Radio, Empty } from 'antd';
 import { orders } from '@config/constants';

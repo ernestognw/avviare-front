@@ -1,4 +1,3 @@
-import React from 'react';
 import propTypes from '@styled-system/prop-types';
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';

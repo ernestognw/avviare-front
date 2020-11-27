@@ -1,4 +1,3 @@
-import React from 'react';
 import { Typography, Divider } from 'antd';
 import UpdatePassword from './update-password';
 

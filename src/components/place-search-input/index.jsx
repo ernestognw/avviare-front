@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Input, Typography, Skeleton } from 'antd';
 import shortid from 'shortid';

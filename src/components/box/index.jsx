@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import propTypes from '@styled-system/prop-types';
 import { SystemBox } from './elements';

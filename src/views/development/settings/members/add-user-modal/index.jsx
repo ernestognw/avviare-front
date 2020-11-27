@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
 import PropTypes from 'prop-types';

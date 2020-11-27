@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTitle } from '@providers/layout';
 import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';

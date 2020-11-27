@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { useQuery } from '@apollo/client';
 import { Typography } from 'antd';

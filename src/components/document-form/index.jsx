@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { documentCategories } from '@config/constants/document';
 import { FileDoneOutlined } from '@ant-design/icons';

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { Redirect, Switch, Route, useParams } from 'react-router-dom';
 import TopBarProgress from 'react-topbar-progress-indicator';
 import DevelopmentSettingsLayout from '@layouts/development/settings';

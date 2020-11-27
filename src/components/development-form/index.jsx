@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import PlaceSearchInput from '@components/place-search-input';
 import Map, { Marker } from '@components/map';

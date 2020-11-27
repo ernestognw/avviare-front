@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, useParams, Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';

@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useProfile } from '@providers/profile';
 import { useTitle } from '@providers/layout';

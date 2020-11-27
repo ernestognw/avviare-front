@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { useUser } from '@providers/user';
 import { Redirect, Switch, Route } from 'react-router-dom';
 import MainLayout from '@layouts/main';

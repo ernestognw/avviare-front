@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { passwordRegex } from '@config/constants';
 import { LockOutlined } from '@ant-design/icons';
 import { useMutation } from '@apollo/client';

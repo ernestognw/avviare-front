@@ -1,11 +1,11 @@
-import React from 'react';
+import { createContext } from 'react';
 import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useUser } from '@providers/user';
 import { GET_USER } from './requests';
 
-export const profileContext = React.createContext({});
+const profileContext = createContext({});
 
 const ProfileProvider = ({ children }) => {
   const { username } = useParams('/@:username');
@@ -32,4 +32,5 @@ ProfileProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
+export { profileContext };
 export default ProfileProvider;

@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
 import { useDevelopment } from '@providers/development';
 import { Card, Table, Tag, Button, Avatar, Tooltip, Typography } from 'antd';
+import { Link, useLocation } from 'react-router-dom';
+import { join } from 'path';
 import { RightOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { searchableFields, documentCategories } from '@config/constants/document';
@@ -27,6 +29,7 @@ const Documents = () => {
   const [isOpenCreateDocumentModal, toggleCreateDocumentModal] = useState(false);
   const [params, setParams] = useState(defaultParams);
   const { development } = useDevelopment();
+  const { pathname } = useLocation();
   const [debouncedSearch] = useDebounce(search, 500);
 
   const { data, loading, refetch } = useQuery(GET_DOCUMENTS, {
@@ -114,9 +117,11 @@ const Documents = () => {
       // eslint-disable-next-line react/prop-types
       render: ({ id }) => (
         <ActionsContainer>
-          <Button type="primary" icon={<RightOutlined />} size="small">
-            Ver
-          </Button>
+          <Link to={join(pathname, id)}>
+            <Button type="primary" icon={<RightOutlined />} size="small">
+              Ver
+            </Button>
+          </Link>
           <Tooltip title="Editar documento">
             <Button
               style={{ marginLeft: 10 }}

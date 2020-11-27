@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState, createContext } from 'react';
 import PropTypes from 'prop-types';
 
-export const layoutContext = React.createContext({});
+const layoutContext = createContext({});
 
 const LayoutProvider = ({ children }) => {
   const [title, setTitle] = useState('');
@@ -22,4 +22,5 @@ LayoutProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
+export { layoutContext };
 export default LayoutProvider;

@@ -1,11 +1,11 @@
-import React from 'react';
+import { createContext } from 'react';
 import jwt from 'jsonwebtoken';
 import { useQuery } from '@apollo/client';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import { GET_USER } from './requests';
 
-export const userContext = React.createContext({});
+const userContext = createContext({});
 
 const UserProvider = ({ children }) => {
   const token = cookie.load('token');
@@ -35,4 +35,5 @@ UserProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
+export { userContext };
 export default UserProvider;

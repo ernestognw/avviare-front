@@ -1,4 +1,3 @@
-import React from 'react';
 import { Skeleton, Tooltip, Typography } from 'antd';
 import shortid from 'shortid';
 import { Link, useLocation } from 'react-router-dom';

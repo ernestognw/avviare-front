@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import theme from '@config/theme';
 import GoogleMapReact from 'google-map-react';

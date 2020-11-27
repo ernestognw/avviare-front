@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-import React from 'react';
 import { PageHeader, Avatar, Dropdown, Menu, Typography } from 'antd';
 import { useLayout } from '@providers/layout';
 import { useUser } from '@providers/user';

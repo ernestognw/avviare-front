@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Typography } from 'antd';
 import { UserAddOutlined } from '@ant-design/icons';
