@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import { useTitle } from '@providers/layout';
 import shortid from 'shortid';
 import { useDevelopment } from '@providers/development';
@@ -16,7 +16,12 @@ const { Item } = Menu;
 const DevelopmentLayout = ({ children }) => {
   const { pathname } = useLocation();
   const [collapsed, toggleCollapsed] = useState(false);
-  const { development, loadingDevelopment, developmentRole } = useDevelopment();
+  const { development, loadingDevelopment, developmentRole, userHasAccess } = useDevelopment();
+  const { push } = useHistory();
+
+  useEffect(() => {
+    if (!userHasAccess) push('/');
+  }, [userHasAccess]);
 
   useTitle(development.name);
 
@@ -25,6 +30,7 @@ const DevelopmentLayout = ({ children }) => {
   const selectedKeys = [pathname];
 
   if (pathname.includes('settings')) selectedKeys.push(`${commonPath}/settings`);
+  if (pathname.includes('documents')) selectedKeys.push(`${commonPath}/documents`);
 
   return (
     <Layout style={{ minHeight: '100%' }}>

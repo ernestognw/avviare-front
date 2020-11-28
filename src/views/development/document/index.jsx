@@ -1,14 +1,15 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import DocViewer, { DocViewerRenderers } from 'react-doc-viewer';
 import { useParams, Link } from 'react-router-dom';
 import Box from '@components/box';
 import { documentCategories } from '@config/constants/document';
-import { FileAddOutlined } from '@ant-design/icons';
+import { FileAddOutlined, FlagOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import { Card, Typography, Select, Avatar, Tag, Divider, Button, Empty } from 'antd';
+import { useDevelopment } from '@providers/development';
+import { Card, Typography, Select, Avatar, Tag, Divider, Button, Empty, message } from 'antd';
 import Loading from '@components/loading';
-import { GET_DOCUMENT } from './requests';
+import { GET_DOCUMENT, UPDATE_DOCUMENT } from './requests';
 import CreateDocumentVersionModal from './create-document-version-modal';
 
 const { Title, Paragraph, Text } = Typography;
@@ -16,19 +17,45 @@ const { Option } = Select;
 
 const Document = () => {
   const [isOpenCreateDocumentVersionModal, toggleCreateDocumentVersionModal] = useState(false);
+  const [settingFinalVersion, setSettingFinalVersion] = useState(false);
   const { documentId } = useParams();
+  const { development, developmentRole } = useDevelopment();
   const { data, loading, refetch } = useQuery(GET_DOCUMENT, { variables: { id: documentId } });
+  const [setFinalVersion] = useMutation(UPDATE_DOCUMENT);
 
   const [selectedVersion, setSelectedVersion] = useState(0);
 
-  useEffect(() => setSelectedVersion(data?.document?.lastVersion.version), [
-    data?.document?.lastVersion.version,
-  ]);
+  useEffect(
+    () =>
+      setSelectedVersion(
+        data?.document?.finalVersion?.version || data?.document?.lastVersion?.version
+      ),
+    [data?.document?.finalVersion?.version, data?.document?.lastVersion?.version]
+  );
 
   const versionToShow = useMemo(
     () => data?.document.versions.results?.find(({ version }) => selectedVersion === version),
     [selectedVersion]
   );
+
+  const handleSetFinalVersion = async (finalVersion) => {
+    setSettingFinalVersion(true);
+    await setFinalVersion({
+      variables: {
+        id: data.document.id,
+        document: {
+          development: development.id,
+          finalVersion,
+        },
+      },
+    });
+    if (finalVersion) {
+      message.success('Se ha definido a esta versión como la final para este documento');
+    } else {
+      message.success('Se ha removido la versión final de este documento');
+    }
+    setSettingFinalVersion(false);
+  };
 
   if (loading && !selectedVersion)
     return (
@@ -52,6 +79,7 @@ const Document = () => {
             </Title>
             <Button
               type="primary"
+              disabled={!!data.document.finalVersion}
               icon={<FileAddOutlined />}
               onClick={() => toggleCreateDocumentVersionModal(true)}
             >
@@ -61,21 +89,41 @@ const Document = () => {
           <Paragraph ellipsis={{ rows: 2, expandable: true, symbol: 'Ver más' }} type="secondary">
             {data.document.description}
           </Paragraph>
-          {data.document.versions.results.length > 0 && (
-            <Select
-              value={data.document.lastVersion?.version || 0}
-              style={{ width: '100%' }}
-              size="small"
-              onChange={setSelectedVersion}
-            >
-              {data.document.versions.results.map(({ version, createdAt }) => (
-                <Option key={version} value={version}>
-                  {version === data.document?.lastVersion.version
-                    ? `Última versión (${moment(createdAt).format('lll')})`
-                    : `Version ${moment(createdAt).format('lll')}`}
-                </Option>
-              ))}
-            </Select>
+          {data.document.versions.info.count > 0 && (
+            <Box display="flex">
+              <Select
+                value={selectedVersion}
+                style={{ width: '100%' }}
+                size="small"
+                onChange={(value) => setSelectedVersion(Number(value))}
+              >
+                {data.document.versions.results.map(({ version, createdAt }) => (
+                  <Option key={version} value={version}>
+                    {version === data.document.finalVersion?.version
+                      ? `Versión final (${moment(createdAt).format('lll')})`
+                      : version === data.document.lastVersion?.version
+                      ? `Última versión (${moment(createdAt).format('lll')})`
+                      : `Version ${moment(createdAt).format('lll')}`}
+                  </Option>
+                ))}
+              </Select>
+              <Button
+                disabled={settingFinalVersion || !developmentRole.manager}
+                loading={settingFinalVersion}
+                size="small"
+                onClick={() =>
+                  handleSetFinalVersion(
+                    versionToShow?.id === data.document.finalVersion?.id ? null : versionToShow?.id
+                  )
+                }
+                style={{ marginLeft: 10 }}
+                icon={<FlagOutlined />}
+              >
+                {versionToShow?.id === data.document.finalVersion?.id
+                  ? 'Desmarcar como final'
+                  : 'Marcar como final'}
+              </Button>
+            </Box>
           )}
         </Card>
         {versionToShow ? (
@@ -98,7 +146,7 @@ const Document = () => {
             <Empty description="Este documento no tiene ninguna versión disponible" />
           </Box>
         )}
-        {data.document.versions.results.length > 0 && (
+        {data.document.versions.info.count > 0 && (
           <Card>
             {data.document.categories.length > 0 && (
               <>
@@ -114,8 +162,13 @@ const Document = () => {
             )}
             <Divider style={{ margin: '12px 0' }} />
             <Title style={{ marginBottom: 10 }} level={5}>
-              Aprobado por:
+              Aprobaciones
             </Title>
+            {versionToShow?.approvedBy.length === 0 && (
+              <Box my={60}>
+                <Empty description="Esta versión no ha sido aprobada" />
+              </Box>
+            )}
             {versionToShow?.approvedBy.map(
               ({ approvalDate, user: { id, username, firstName, lastName, profileImg } }) => (
                 <Link key={id} to={`/@${username}`}>

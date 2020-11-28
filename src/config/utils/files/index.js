@@ -13,4 +13,13 @@ const validateImageTypes = async (file, types = ['png', 'jpeg'], mbLimit = 2) =>
   return isValidType && isLessThanMbLimit;
 };
 
-export { validateImageTypes };
+const downloadFile = (url, name) => {
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = name;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+};
+
+export { validateImageTypes, downloadFile };

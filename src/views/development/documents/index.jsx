@@ -5,8 +5,14 @@ import { useDevelopment } from '@providers/development';
 import { Card, Table, Tag, Button, Avatar, Tooltip, Typography } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import { join } from 'path';
-import { RightOutlined, EditOutlined } from '@ant-design/icons';
+import {
+  RightOutlined,
+  EditOutlined,
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+} from '@ant-design/icons';
 import moment from 'moment';
+import { downloadFile } from '@config/utils/files';
 import { searchableFields, documentCategories } from '@config/constants/document';
 import theme from '@config/theme';
 import { GET_DOCUMENTS } from './requests';
@@ -112,16 +118,71 @@ const Documents = () => {
         ),
     },
     {
+      title: 'Versión final aprobada por',
+      width: 200,
+      dataIndex: 'finalVersion',
+      key: 'finalVersion',
+      // eslint-disable-next-line react/prop-types
+      render: (finalVersion) =>
+        // eslint-disable-next-line react/prop-types
+        finalVersion?.approvedBy.length > 0 ? (
+          <Avatar.Group
+            style={{ marginTop: 20 }}
+            maxCount={5}
+            maxStyle={{ backgroundColor: theme.colors.primary }}
+          >
+            {/* eslint-disable-next-line react/prop-types */}
+            {finalVersion?.approvedBy.map(({ user, approvalDate }) => (
+              <Tooltip
+                key={user.id}
+                title={`${user.firstName} ${user.lastName} aprobó el ${moment(approvalDate).format(
+                  'lll'
+                )}`}
+                placement="top"
+              >
+                <Avatar src={user.profileImg}>{user.firstName[0]}</Avatar>
+              </Tooltip>
+            ))}
+          </Avatar.Group>
+        ) : (
+          <Text>Nadie</Text>
+        ),
+    },
+    {
       title: 'Acciones',
       fixed: 'right',
       // eslint-disable-next-line react/prop-types
-      render: ({ id }) => (
+      render: ({ id, name, finalVersion, lastVersion }) => (
         <ActionsContainer>
           <Link to={join(pathname, id)}>
             <Button type="primary" icon={<RightOutlined />} size="small">
               Ver
             </Button>
           </Link>
+          <Tooltip title="Descargar versión final">
+            <Button
+              onClick={() =>
+                // eslint-disable-next-line react/prop-types
+                downloadFile(finalVersion?.fileSource, `${name}-${finalVersion?.version}`)
+              }
+              disabled={!finalVersion}
+              style={{ marginLeft: 10 }}
+              icon={<CheckCircleOutlined />}
+              size="small"
+            />
+          </Tooltip>
+          <Tooltip title="Descargar última versión">
+            <Button
+              onClick={() =>
+                // eslint-disable-next-line react/prop-types
+                downloadFile(lastVersion?.fileSource, `${name}-${lastVersion?.version}`)
+              }
+              disabled={!lastVersion}
+              style={{ marginLeft: 10 }}
+              icon={<ClockCircleOutlined />}
+              size="small"
+            />
+          </Tooltip>
           <Tooltip title="Editar documento">
             <Button
               style={{ marginLeft: 10 }}

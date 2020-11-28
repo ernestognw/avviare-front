@@ -12,7 +12,22 @@ const documentInfo = `
       count
     }
   }
+  finalVersion {
+    id
+    fileSource
+    approvedBy {
+      user {
+        id
+        firstName
+        lastName
+        profileImg
+      }
+      approvalDate
+    }
+  }
   lastVersion {
+    id
+    fileSource
     approvedBy {
       user {
         id
