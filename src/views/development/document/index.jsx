@@ -4,22 +4,26 @@ import DocViewer, { DocViewerRenderers } from 'react-doc-viewer';
 import { useParams, Link } from 'react-router-dom';
 import Box from '@components/box';
 import { documentCategories } from '@config/constants/document';
-import { FileAddOutlined, FlagOutlined } from '@ant-design/icons';
+import { FileAddOutlined, FlagOutlined, CheckOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { useDevelopment } from '@providers/development';
+import { useUser } from '@providers/user';
 import { Card, Typography, Select, Avatar, Tag, Divider, Button, Empty, message } from 'antd';
 import Loading from '@components/loading';
 import { GET_DOCUMENT, UPDATE_DOCUMENT } from './requests';
 import CreateDocumentVersionModal from './create-document-version-modal';
+import ApproveModal from './approve-modal';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
 
 const Document = () => {
+  const [isOpenApproveModal, toggleApproveModal] = useState(false);
   const [isOpenCreateDocumentVersionModal, toggleCreateDocumentVersionModal] = useState(false);
   const [settingFinalVersion, setSettingFinalVersion] = useState(false);
   const { documentId } = useParams();
   const { development, developmentRole } = useDevelopment();
+  const { user } = useUser();
   const { data, loading, refetch } = useQuery(GET_DOCUMENT, { variables: { id: documentId } });
   const [setFinalVersion] = useMutation(UPDATE_DOCUMENT);
 
@@ -35,7 +39,12 @@ const Document = () => {
 
   const versionToShow = useMemo(
     () => data?.document.versions.results?.find(({ version }) => selectedVersion === version),
-    [selectedVersion]
+    [selectedVersion, data?.document?.versions]
+  );
+
+  const hasApprovedThisVersion = useMemo(
+    () => versionToShow?.approvedBy?.some(({ user: userApproved }) => userApproved.id === user.id),
+    [versionToShow]
   );
 
   const handleSetFinalVersion = async (finalVersion) => {
@@ -66,6 +75,12 @@ const Document = () => {
 
   return (
     <>
+      <ApproveModal
+        visible={isOpenApproveModal}
+        onCancel={() => toggleApproveModal(false)}
+        reloadDocument={refetch}
+        documentVersionId={versionToShow?.id}
+      />
       <CreateDocumentVersionModal
         visible={isOpenCreateDocumentVersionModal}
         onCancel={() => toggleCreateDocumentVersionModal(false)}
@@ -161,9 +176,20 @@ const Document = () => {
               </>
             )}
             <Divider style={{ margin: '12px 0' }} />
-            <Title style={{ marginBottom: 10 }} level={5}>
-              Aprobaciones
-            </Title>
+            <Box display="flex">
+              <Title style={{ marginBottom: 10, marginRight: 'auto' }} level={5}>
+                Aprobaciones
+              </Title>
+              <Button
+                type="primary"
+                size="small"
+                onClick={() => toggleApproveModal(true)}
+                disabled={hasApprovedThisVersion}
+                icon={<CheckOutlined />}
+              >
+                {hasApprovedThisVersion ? 'Aprobado' : 'Aprobar'}
+              </Button>
+            </Box>
             {versionToShow?.approvedBy.length === 0 && (
               <Box my={60}>
                 <Empty description="Esta versión no ha sido aprobada" />

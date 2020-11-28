@@ -54,6 +54,9 @@ const CreateDocumentVersionModal = ({ visible, onCancel, reloadDocument }) => {
       onOk={handleCreate}
       onCancel={onCancel}
       confirmLoading={adding}
+      okButtonProps={{
+        disabled: uploading,
+      }}
     >
       <Dragger
         fileList={fileList}
