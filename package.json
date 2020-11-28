@@ -19,6 +19,7 @@
     "google-map-react": "^2.1.9",
     "graphql": "^15.3.0",
     "jsonwebtoken": "^8.5.1",
+    "jszip": "^3.5.0",
     "less": "^3.12.2",
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
