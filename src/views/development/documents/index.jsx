@@ -1,5 +1,7 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';
+import axios from 'axios';
 import { useDebounce } from 'use-debounce';
 import { useDevelopment } from '@providers/development';
 import { Card, Table, Tag, Button, Avatar, Tooltip, Typography } from 'antd';
@@ -57,6 +59,14 @@ const Documents = () => {
     },
   });
 
+  const download = async ({ fileSource, name, version, createdAt }) => {
+    const filename = `${name.replace(/ /g, '-')}_Version-${version}_${moment(createdAt).format()}`;
+    const { data: blob } = await axios.get(fileSource, { responseType: 'blob' });
+    const url = window.URL.createObjectURL(blob);
+    downloadFile(url, filename);
+    window.URL.revokeObjectURL(data);
+  };
+
   const columns = [
     {
       title: 'Nombre',
@@ -91,9 +101,7 @@ const Documents = () => {
       width: 200,
       dataIndex: 'lastVersion',
       key: 'lastVersion',
-      // eslint-disable-next-line react/prop-types
       render: (lastVersion) =>
-        // eslint-disable-next-line react/prop-types
         lastVersion?.approvedBy.length > 0 ? (
           <Avatar.Group
             style={{ marginTop: 20 }}
@@ -122,16 +130,13 @@ const Documents = () => {
       width: 200,
       dataIndex: 'finalVersion',
       key: 'finalVersion',
-      // eslint-disable-next-line react/prop-types
       render: (finalVersion) =>
-        // eslint-disable-next-line react/prop-types
         finalVersion?.approvedBy.length > 0 ? (
           <Avatar.Group
             style={{ marginTop: 20 }}
             maxCount={5}
             maxStyle={{ backgroundColor: theme.colors.primary }}
           >
-            {/* eslint-disable-next-line react/prop-types */}
             {finalVersion?.approvedBy.map(({ user, approvalDate }) => (
               <Tooltip
                 key={user.id}
@@ -151,7 +156,6 @@ const Documents = () => {
     {
       title: 'Acciones',
       fixed: 'right',
-      // eslint-disable-next-line react/prop-types
       render: ({ id, name, finalVersion, lastVersion }) => (
         <ActionsContainer>
           <Link to={join(pathname, id)}>
@@ -162,8 +166,12 @@ const Documents = () => {
           <Tooltip title="Descargar versión final">
             <Button
               onClick={() =>
-                // eslint-disable-next-line react/prop-types
-                downloadFile(finalVersion?.fileSource, `${name}-${finalVersion?.version}`)
+                download({
+                  fileSource: finalVersion.fileSource,
+                  name,
+                  version: finalVersion.version,
+                  createdAt: finalVersion.createdAt,
+                })
               }
               disabled={!finalVersion}
               style={{ marginLeft: 10 }}
@@ -174,8 +182,12 @@ const Documents = () => {
           <Tooltip title="Descargar última versión">
             <Button
               onClick={() =>
-                // eslint-disable-next-line react/prop-types
-                downloadFile(lastVersion?.fileSource, `${name}-${lastVersion?.version}`)
+                download({
+                  fileSource: lastVersion.fileSource,
+                  name,
+                  version: lastVersion.version,
+                  createdAt: lastVersion.createdAt,
+                })
               }
               disabled={!lastVersion}
               style={{ marginLeft: 10 }}

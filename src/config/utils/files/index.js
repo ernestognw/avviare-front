@@ -15,11 +15,12 @@ const validateImageTypes = async (file, types = ['png', 'jpeg'], mbLimit = 2) =>
 
 const downloadFile = (url, name) => {
   const link = document.createElement('a');
-  link.href = url;
   link.download = name;
+  link.href = url;
+  link.target = '_blank';
   document.body.appendChild(link);
   link.click();
-  link.remove();
+  document.body.removeChild(link);
 };
 
 export { validateImageTypes, downloadFile };

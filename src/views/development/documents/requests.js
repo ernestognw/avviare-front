@@ -14,6 +14,7 @@ const documentInfo = `
   }
   finalVersion {
     id
+    version
     fileSource
     approvedBy {
       user {
@@ -27,6 +28,7 @@ const documentInfo = `
   }
   lastVersion {
     id
+    version
     fileSource
     approvedBy {
       user {

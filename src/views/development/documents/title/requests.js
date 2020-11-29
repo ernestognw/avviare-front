@@ -9,11 +9,15 @@ const GET_DOCUMENTS = gql`
         lastVersion {
           id
           fileSource
+          createdAt
+          version
         }
         name
         finalVersion {
           id
           fileSource
+          createdAt
+          version
         }
       }
     }

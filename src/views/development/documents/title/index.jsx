@@ -46,7 +46,12 @@ const TableTitle = ({ setCategories, setSearch, openCreateDocumentModal }) => {
     files.forEach(({ data }, index) => {
       const pointIndex = urls[index].url.lastIndexOf('.');
       const extension = urls[index].url.slice(pointIndex);
-      zip.file(`${urls[index].name}${extension}`, data);
+      zip.file(
+        `${urls[index].name}_Version-${urls[index].version}_${moment(
+          urls[index].createdAt
+        ).format()}${extension}`,
+        data
+      );
     });
 
     return zip.generateAsync({ type: 'base64' });
@@ -61,6 +66,8 @@ const TableTitle = ({ setCategories, setSearch, openCreateDocumentModal }) => {
       .map(({ name, finalVersion }) => ({
         name: name.replace(/ /g, '-'),
         url: finalVersion.fileSource,
+        version: finalVersion.version,
+        createdAt: finalVersion.createdAt,
       }));
 
     if (urls.length === 0) {
@@ -69,7 +76,7 @@ const TableTitle = ({ setCategories, setSearch, openCreateDocumentModal }) => {
       const zipFileBase64 = await zipFiles(urls);
       downloadFile(
         `data:application/zip;base64,${zipFileBase64}`,
-        `${development.name}-finals-${moment().format('lll')}`
+        `${development.name.replace(/ /g, '-')}-finals-${moment().format()}`
       );
     }
 
