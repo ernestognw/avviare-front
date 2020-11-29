@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import PropTypes from 'prop-types';
+import { useDevelopment } from '@providers/development';
 import { Modal, message, Input } from 'antd';
 import { APPROVE_DOCUMENT_VERSION } from './requests';
 
 const ApproveModal = ({ visible, onCancel, reloadDocument, documentVersionId }) => {
   const [approving, setApproving] = useState(false);
   const [password, setPassword] = useState('');
+
+  const { development } = useDevelopment();
 
   const [approveDocumentVersion] = useMutation(APPROVE_DOCUMENT_VERSION);
 
@@ -15,6 +18,7 @@ const ApproveModal = ({ visible, onCancel, reloadDocument, documentVersionId }) 
     const { errors } = await approveDocumentVersion({
       variables: {
         id: documentVersionId,
+        development: development.id,
         password,
       },
     });

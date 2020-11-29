@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { Card } from 'antd';
 
-const InfoContainer = styled(Card)`
-  border-radius: 0;
-  border: 0;
+const ViewerContainer = styled.div`
+  #pdf-download {
+    display: none;
+  }
 `;
 
-export { InfoContainer };
+export { ViewerContainer };

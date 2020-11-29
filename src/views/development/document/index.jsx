@@ -13,6 +13,7 @@ import Loading from '@components/loading';
 import { GET_DOCUMENT, UPDATE_DOCUMENT } from './requests';
 import CreateDocumentVersionModal from './create-document-version-modal';
 import ApproveModal from './approve-modal';
+import { ViewerContainer } from './elements';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -142,20 +143,22 @@ const Document = () => {
           )}
         </Card>
         {versionToShow ? (
-          <DocViewer
-            pluginRenderers={DocViewerRenderers}
-            style={{ minHeight: 600 }}
-            config={{
-              header: {
-                disableHeader: true,
-              },
-            }}
-            documents={[
-              {
-                uri: versionToShow?.fileSource,
-              },
-            ]}
-          />
+          <ViewerContainer>
+            <DocViewer
+              pluginRenderers={DocViewerRenderers}
+              style={{ minHeight: 600 }}
+              config={{
+                header: {
+                  disableHeader: true,
+                },
+              }}
+              documents={[
+                {
+                  uri: versionToShow?.fileSource,
+                },
+              ]}
+            />
+          </ViewerContainer>
         ) : (
           <Box my={60}>
             <Empty description="Este documento no tiene ninguna versión disponible" />
@@ -184,7 +187,7 @@ const Document = () => {
                 type="primary"
                 size="small"
                 onClick={() => toggleApproveModal(true)}
-                disabled={hasApprovedThisVersion}
+                disabled={hasApprovedThisVersion || !developmentRole.manager}
                 icon={<CheckOutlined />}
               >
                 {hasApprovedThisVersion ? 'Aprobado' : 'Aprobar'}
