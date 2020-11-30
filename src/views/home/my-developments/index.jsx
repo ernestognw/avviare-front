@@ -31,7 +31,7 @@ const MyDevelopments = () => {
       sortBy,
       params,
       user: {
-        in: [user.id],
+        eq: user.id,
       },
       search: {
         name: debouncedSearch,

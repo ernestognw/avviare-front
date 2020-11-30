@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 const GET_MEMBERS = gql`
-  query users($development: QueryField, $search: UserSearchInput, $params: QueryParams) {
+  query users($development: QueryOperators, $search: UserSearchInput, $params: QueryParams) {
     users(development: $development, search: $search, params: $params) {
       info {
         count

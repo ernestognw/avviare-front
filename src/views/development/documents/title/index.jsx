@@ -27,7 +27,7 @@ const TableTitle = ({ setCategories, setSearch, openCreateDocumentModal }) => {
       query: GET_DOCUMENTS,
       variables: {
         development: {
-          in: development.id,
+          eq: development.id,
         },
       },
       fetchPolicy: 'network-only',

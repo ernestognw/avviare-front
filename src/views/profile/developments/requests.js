@@ -4,7 +4,7 @@ const GET_DEVELOPMENTS = gql`
   query developments(
     $search: DevelopmentSearchInput
     $params: QueryParams
-    $user: QueryField!
+    $user: QueryOperators!
     $sortBy: DevelopmentSortInput
   ) {
     developments(search: $search, params: $params, user: $user, sortBy: $sortBy) {

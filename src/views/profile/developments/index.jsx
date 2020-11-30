@@ -31,7 +31,7 @@ const ProfileDevelopments = () => {
       sortBy,
       params,
       user: {
-        in: [profile.id],
+        eq: profile.id,
       },
       search: {
         name: debouncedSearch,

@@ -36,7 +36,7 @@ const AddUserModal = ({ visible, onCancel, reloadUsers }) => {
         email: debouncedSearch,
       },
       development: {
-        nin: [development.id],
+        ne: development.id,
       },
     },
     skip: !visible,

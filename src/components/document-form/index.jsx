@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { documentCategories } from '@config/constants/document';
+import { developmentRoles } from '@config/constants/user';
 import { FileDoneOutlined } from '@ant-design/icons';
 import { Form, Input, Button, Select } from 'antd';
 
@@ -37,6 +38,15 @@ const DocumentForm = ({ onFinish, loading, form, initialValues, ...props }) => {
           {Object.keys(documentCategories).map((category) => (
             <Option key={category} value={category}>
               {documentCategories[category]}
+            </Option>
+          ))}
+        </Select>
+      </Item>
+      <Item name="hiddenForRoles" label="Esconder a:">
+        <Select mode="multiple" allowClear placeholder="Roles">
+          {Object.keys(developmentRoles).map((role) => (
+            <Option key={role} value={role}>
+              {developmentRoles[role]}
             </Option>
           ))}
         </Select>

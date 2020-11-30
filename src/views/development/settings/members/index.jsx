@@ -33,7 +33,7 @@ const Members = () => {
       return acc;
     }, {}),
     development: {
-      in: [development.id],
+      eq: development.id,
     },
   };
   const { data, loading, refetch } = useQuery(GET_MEMBERS, { variables });

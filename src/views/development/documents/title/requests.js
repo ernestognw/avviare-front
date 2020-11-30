@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 const GET_DOCUMENTS = gql`
-  query documents($development: QueryField!) {
+  query documents($development: QueryOperators!) {
     documents(development: $development) {
       results {
         id

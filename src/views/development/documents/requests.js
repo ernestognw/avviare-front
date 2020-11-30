@@ -46,8 +46,8 @@ const GET_DOCUMENTS = gql`
   query documents(
     $search: DocumentSearchInput
     $params: QueryParams!
-    $development: QueryField!
-    $categories: QueryField
+    $development: QueryOperators!
+    $categories: QueryOperators
     $sortBy: DocumentSortInput
   ) {
     documents(

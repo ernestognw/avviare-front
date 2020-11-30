@@ -8,6 +8,7 @@ const GET_DOCUMENT = gql`
       name
       description
       categories
+      hiddenForRoles
     }
   }
 `;

@@ -48,7 +48,7 @@ const Documents = () => {
         return acc;
       }, {}),
       development: {
-        in: [development.id],
+        eq: development.id,
       },
       categories:
         categories.length > 0
