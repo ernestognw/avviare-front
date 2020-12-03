@@ -75,7 +75,7 @@ const CreateDocumentVersionModal = ({ visible, onCancel, reloadDocument }) => {
           </Box>
         )}
         <Box as="p" className="ant-upload-text">
-          Arrastra aquí el archivo
+          Arrastra aquí el archivo o haz click para seleccionar el archivo
         </Box>
       </Dragger>
     </Modal>
