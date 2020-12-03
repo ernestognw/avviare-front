@@ -22,7 +22,7 @@ const DevelopmentProvider = ({ children }) => {
         development: data?.development ?? {},
         loadingDevelopment: loading,
         reloadDevelopment: refetch,
-        userHasAccess: loading || !!data?.userDevelopmentRoleByToken, // Access is assumed when is loading to avoid hard redirects in the midtime
+        userHasAccess: loading || !!data?.userDevelopmentRoleByToken || overallRole.admin, // Access is assumed when is loading to avoid hard redirects in the midtime
         developmentRole: (data?.userDevelopmentRoleByToken || overallRole) && {
           manager: data?.userDevelopmentRoleByToken === 'MANAGER' || overallRole.admin,
           edification: data?.userDevelopmentRoleByToken === 'EDIFICATION',
