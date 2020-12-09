@@ -15,7 +15,7 @@ const CreateUserModal = ({ onClose, visible, updateUsers }) => {
 
     const { errors } = await createUser({ variables: { user } });
     if (errors) {
-      message.error(errors[0]);
+      message.error(errors[0].message);
     } else {
       await updateUsers();
       onClose();

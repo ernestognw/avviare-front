@@ -19,7 +19,7 @@ const CreateDocumentModal = ({ onClose, visible, updateDocuments }) => {
       variables: { document: { development: development.id, ...document } },
     });
     if (errors) {
-      message.error(errors[0]);
+      message.error(errors[0].message);
     } else {
       await updateDocuments();
       onClose();
