@@ -59,8 +59,8 @@ const Documents = () => {
     },
   });
 
-  const download = async ({ fileSource, name, version, createdAt }) => {
-    const filename = `${name.replace(/ /g, '-')}_Version-${version}_${moment(createdAt).format()}`;
+  const download = async ({ fileSource, name, version }) => {
+    const filename = `${name.replace(/ /g, '-')}_Version-${version}`;
     const { data: blob } = await axios.get(fileSource, { responseType: 'blob' });
     const url = window.URL.createObjectURL(blob);
     downloadFile(url, filename);
@@ -170,7 +170,6 @@ const Documents = () => {
                   fileSource: finalVersion.fileSource,
                   name,
                   version: finalVersion.version,
-                  createdAt: finalVersion.createdAt,
                 })
               }
               disabled={!finalVersion}
@@ -186,7 +185,6 @@ const Documents = () => {
                   fileSource: lastVersion.fileSource,
                   name,
                   version: lastVersion.version,
-                  createdAt: lastVersion.createdAt,
                 })
               }
               disabled={!lastVersion}

@@ -3,7 +3,6 @@ import JSZip from 'jszip';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { downloadFile } from '@config/utils/files';
-import moment from 'moment';
 import { useApolloClient } from '@apollo/client';
 import { Button, Input, Typography, Select, Popconfirm, message } from 'antd';
 import { documentCategories } from '@config/constants/document';
@@ -46,12 +45,7 @@ const TableTitle = ({ setCategories, setSearch, openCreateDocumentModal }) => {
     files.forEach(({ data }, index) => {
       const pointIndex = urls[index].url.lastIndexOf('.');
       const extension = urls[index].url.slice(pointIndex);
-      zip.file(
-        `${urls[index].name}_Version-${urls[index].version}_${moment(
-          urls[index].createdAt
-        ).format()}${extension}`,
-        data
-      );
+      zip.file(`${urls[index].name}_Version-${urls[index].version}${extension}`, data);
     });
 
     return zip.generateAsync({ type: 'base64' });
@@ -67,7 +61,6 @@ const TableTitle = ({ setCategories, setSearch, openCreateDocumentModal }) => {
         name: name.replace(/ /g, '-'),
         url: finalVersion.fileSource,
         version: finalVersion.version,
-        createdAt: finalVersion.createdAt,
       }));
 
     if (urls.length === 0) {
@@ -76,7 +69,7 @@ const TableTitle = ({ setCategories, setSearch, openCreateDocumentModal }) => {
       const zipFileBase64 = await zipFiles(urls);
       downloadFile(
         `data:application/zip;base64,${zipFileBase64}`,
-        `${development.name.replace(/ /g, '-')}-finals-${moment().format()}`
+        `${development.name.replace(/ /g, '-')}-finals`
       );
     }
 
@@ -92,16 +85,14 @@ const TableTitle = ({ setCategories, setSearch, openCreateDocumentModal }) => {
       .map(({ name, lastVersion }) => ({
         name: name.replace(/ /g, '-'),
         url: lastVersion.fileSource,
+        version: lastVersion.version,
       }));
 
     if (urls.length === 0) {
       message.warning('Ningún documento tiene versión final');
     } else {
       const zipFileBase64 = await zipFiles(urls);
-      downloadFile(
-        `data:application/zip;base64,${zipFileBase64}`,
-        `${development.name}-latest-${moment().format('lll')}`
-      );
+      downloadFile(`data:application/zip;base64,${zipFileBase64}`, `${development.name}-latest`);
     }
 
     setDownloading(false);
