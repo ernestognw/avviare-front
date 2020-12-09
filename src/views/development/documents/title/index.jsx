@@ -92,7 +92,10 @@ const TableTitle = ({ setCategories, setSearch, openCreateDocumentModal }) => {
       message.warning('Ningún documento tiene versión final');
     } else {
       const zipFileBase64 = await zipFiles(urls);
-      downloadFile(`data:application/zip;base64,${zipFileBase64}`, `${development.name}-latest`);
+      downloadFile(
+        `data:application/zip;base64,${zipFileBase64}`,
+        `${development.name.replace(/ /g, '-')}-latest`
+      );
     }
 
     setDownloading(false);

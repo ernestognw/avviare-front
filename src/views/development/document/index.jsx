@@ -1,19 +1,25 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import DocViewer, { DocViewerRenderers } from 'react-doc-viewer';
 import { useParams, Link } from 'react-router-dom';
 import Box from '@components/box';
+import axios from 'axios';
 import { documentCategories } from '@config/constants/document';
-import { FileAddOutlined, FlagOutlined, CheckOutlined } from '@ant-design/icons';
+import {
+  FileAddOutlined,
+  FlagOutlined,
+  CheckOutlined,
+  CloudDownloadOutlined,
+} from '@ant-design/icons';
 import moment from 'moment';
 import { useDevelopment } from '@providers/development';
+import { downloadFile } from '@config/utils/files';
 import { useUser } from '@providers/user';
 import { Card, Typography, Select, Avatar, Tag, Divider, Button, Empty, message } from 'antd';
 import Loading from '@components/loading';
 import { GET_DOCUMENT, UPDATE_DOCUMENT } from './requests';
 import CreateDocumentVersionModal from './create-document-version-modal';
 import ApproveModal from './approve-modal';
-import { ViewerContainer } from './elements';
+import DocumentViewer from './document-viewer';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -47,6 +53,15 @@ const Document = () => {
     () => versionToShow?.approvedBy?.some(({ user: userApproved }) => userApproved.id === user.id),
     [versionToShow]
   );
+
+  const downloadVersion = async () => {
+    const { version, fileSource } = versionToShow;
+    const filename = `${data.document.name.replace(/ /g, '-')}_Version-${version}`;
+    const { data: blob } = await axios.get(fileSource, { responseType: 'blob' });
+    const url = window.URL.createObjectURL(blob);
+    downloadFile(url, filename);
+    window.URL.revokeObjectURL(data);
+  };
 
   const handleSetFinalVersion = async (finalVersion) => {
     setSettingFinalVersion(true);
@@ -139,26 +154,21 @@ const Document = () => {
                   ? 'Desmarcar como final'
                   : 'Marcar como final'}
               </Button>
+              <Button
+                disabled={!developmentRole.manager}
+                type="primary"
+                size="small"
+                onClick={downloadVersion}
+                style={{ marginLeft: 10 }}
+                icon={<CloudDownloadOutlined />}
+              >
+                Descargar esta versión
+              </Button>
             </Box>
           )}
         </Card>
-        {versionToShow ? (
-          <ViewerContainer>
-            <DocViewer
-              pluginRenderers={DocViewerRenderers}
-              style={{ minHeight: 600 }}
-              config={{
-                header: {
-                  disableHeader: true,
-                },
-              }}
-              documents={[
-                {
-                  uri: versionToShow?.fileSource,
-                },
-              ]}
-            />
-          </ViewerContainer>
+        {versionToShow?.fileSource ? (
+          <DocumentViewer uri={versionToShow.fileSource} />
         ) : (
           <Box my={60}>
             <Empty description="Este documento no tiene ninguna versión disponible" />

@@ -59,9 +59,11 @@ const Sidebar = () => {
             </Container>
           </Tooltip>
         )}
-        <SubtitleContainer style={{ marginTop: 20, marginBottom: 10 }}>
-          <Paragraph style={{ color: 'white', margin: 0, fontSize: 10 }}>Activos</Paragraph>
-        </SubtitleContainer>
+        {user.worksAt.length > 0 && (
+          <SubtitleContainer style={{ marginTop: 20, marginBottom: 10 }}>
+            <Paragraph style={{ color: 'white', margin: 0, fontSize: 10 }}>Activos</Paragraph>
+          </SubtitleContainer>
+        )}
         {user.worksAt.map(
           ({ development }) =>
             development.active && (
