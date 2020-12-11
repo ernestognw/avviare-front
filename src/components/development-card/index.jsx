@@ -43,7 +43,7 @@ const DevelopmentCard = ({ id, name, active, cover, logo, startDate, workers }) 
               <Tooltip key={workerId} title={`${firstName} ${lastName}`} placement="top">
                 <Avatar src={profileImg}>{firstName[0]}</Avatar>
               </Tooltip>
-            ))}{' '}
+            ))}
           </Avatar.Group>
         )}
       </Card>

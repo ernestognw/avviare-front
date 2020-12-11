@@ -4,26 +4,16 @@ import { useQuery } from '@apollo/client';
 import axios from 'axios';
 import { useDebounce } from 'use-debounce';
 import { useDevelopment } from '@providers/development';
-import { Card, Table, Tag, Button, Avatar, Tooltip, Typography } from 'antd';
-import { Link, useLocation } from 'react-router-dom';
-import { join } from 'path';
-import {
-  RightOutlined,
-  EditOutlined,
-  CheckCircleOutlined,
-  ClockCircleOutlined,
-} from '@ant-design/icons';
-import moment from 'moment';
 import { downloadFile } from '@config/utils/files';
-import { searchableFields, documentCategories } from '@config/constants/document';
-import theme from '@config/theme';
+import { useLayout } from '@providers/layout';
+import { searchableFields } from '@config/constants/document';
 import { GET_DOCUMENTS } from './requests';
-import { Container, ActionsContainer } from './elements';
+import { Container } from './elements';
 import Title from './title';
 import CreateDocumentModal from './create-document-modal';
 import EditDocumentModal from './edit-document-modal';
-
-const { Text } = Typography;
+import DocumentsTable from './documents-table';
+import DocumentsGrid from './documents-grid';
 
 const defaultParams = {
   page: 1,
@@ -37,8 +27,8 @@ const Documents = () => {
   const [isOpenCreateDocumentModal, toggleCreateDocumentModal] = useState(false);
   const [params, setParams] = useState(defaultParams);
   const { development } = useDevelopment();
-  const { pathname } = useLocation();
   const [debouncedSearch] = useDebounce(search, 500);
+  const { displays } = useLayout();
 
   const { data, loading, refetch } = useQuery(GET_DOCUMENTS, {
     variables: {
@@ -67,152 +57,28 @@ const Documents = () => {
     window.URL.revokeObjectURL(data);
   };
 
-  const columns = [
-    {
-      title: 'Nombre',
-      dataIndex: 'name',
-      key: 'name',
-      fixed: 'left',
-    },
-    {
-      title: 'Descripción',
-      dataIndex: 'description',
-      key: 'description',
-    },
-    {
-      title: 'Categorías',
-      dataIndex: 'categories',
-      key: 'categories',
-      render: (innerCategories) =>
-        innerCategories.map((category) => (
-          <Tag color="green" key={category}>
-            {documentCategories[category]}
-          </Tag>
-        )),
-    },
-    {
-      title: 'Versiones',
-      dataIndex: 'versions',
-      key: 'versions',
-      render: (versions) => versions.info.count,
-    },
-    {
-      title: 'Última versión aprobada por',
-      width: 200,
-      dataIndex: 'lastVersion',
-      key: 'lastVersion',
-      render: (lastVersion) =>
-        lastVersion?.approvedBy.length > 0 ? (
-          <Avatar.Group
-            style={{ marginTop: 20 }}
-            maxCount={5}
-            maxStyle={{ backgroundColor: theme.colors.primary }}
-          >
-            {/* eslint-disable-next-line react/prop-types */}
-            {lastVersion?.approvedBy.map(({ user, approvalDate }) => (
-              <Tooltip
-                key={user.id}
-                title={`${user.firstName} ${user.lastName} aprobó el ${moment(approvalDate).format(
-                  'lll'
-                )}`}
-                placement="top"
-              >
-                <Avatar src={user.profileImg}>{user.firstName[0]}</Avatar>
-              </Tooltip>
-            ))}
-          </Avatar.Group>
-        ) : (
-          <Text>Nadie</Text>
-        ),
-    },
-    {
-      title: 'Versión final aprobada por',
-      width: 200,
-      dataIndex: 'finalVersion',
-      key: 'finalVersion',
-      render: (finalVersion) =>
-        finalVersion?.approvedBy.length > 0 ? (
-          <Avatar.Group
-            style={{ marginTop: 20 }}
-            maxCount={5}
-            maxStyle={{ backgroundColor: theme.colors.primary }}
-          >
-            {finalVersion?.approvedBy.map(({ user, approvalDate }) => (
-              <Tooltip
-                key={user.id}
-                title={`${user.firstName} ${user.lastName} aprobó el ${moment(approvalDate).format(
-                  'lll'
-                )}`}
-                placement="top"
-              >
-                <Avatar src={user.profileImg}>{user.firstName[0]}</Avatar>
-              </Tooltip>
-            ))}
-          </Avatar.Group>
-        ) : (
-          <Text>Nadie</Text>
-        ),
-    },
-    {
-      title: 'Acciones',
-      fixed: 'right',
-      render: ({ id, name, finalVersion, lastVersion }) => (
-        <ActionsContainer>
-          <Link to={join(pathname, id)}>
-            <Button type="primary" icon={<RightOutlined />} size="small">
-              Ver
-            </Button>
-          </Link>
-          <Tooltip title="Descargar versión final">
-            <Button
-              onClick={() =>
-                download({
-                  fileSource: finalVersion.fileSource,
-                  name,
-                  version: finalVersion.version,
-                })
-              }
-              disabled={!finalVersion}
-              style={{ marginLeft: 10 }}
-              icon={<CheckCircleOutlined />}
-              size="small"
-            />
-          </Tooltip>
-          <Tooltip title="Descargar última versión">
-            <Button
-              onClick={() =>
-                download({
-                  fileSource: lastVersion.fileSource,
-                  name,
-                  version: lastVersion.version,
-                })
-              }
-              disabled={!lastVersion}
-              style={{ marginLeft: 10 }}
-              icon={<ClockCircleOutlined />}
-              size="small"
-            />
-          </Tooltip>
-          <Tooltip title="Editar documento">
-            <Button
-              style={{ marginLeft: 10 }}
-              onClick={() => setDocumentEditId(id)}
-              icon={<EditOutlined />}
-              size="small"
-            />
-          </Tooltip>
-        </ActionsContainer>
-      ),
-    },
-  ];
+  const pagination = {
+    current: params.page,
+    defaultCurrent: defaultParams.page,
+    pageSize: params.pageSize,
+    defaultPageSize: defaultParams.pageSize,
+    total: data?.documents.info.count,
+    showTotal: (total) => `${total} usuarios`,
+    showSizeChanger: true,
+    onChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
+    onShowSizeChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
+  };
 
   return (
     <>
       <Container>
-        <Card style={{ width: '100%', padding: 0 }}>
-          <Table
+        {displays.documents === 'table' && (
+          <DocumentsTable
+            download={download}
             loading={loading}
-            columns={columns}
+            pagination={pagination}
+            documents={data?.documents.results}
+            setDocumentEditId={setDocumentEditId}
             title={() => (
               <Title
                 setCategories={setCategories}
@@ -220,24 +86,24 @@ const Documents = () => {
                 openCreateDocumentModal={() => toggleCreateDocumentModal(true)}
               />
             )}
-            scroll={{
-              x: true,
-            }}
-            rowKey="id"
-            pagination={{
-              current: params.page,
-              defaultCurrent: defaultParams.page,
-              pageSize: params.pageSize,
-              defaultPageSize: defaultParams.pageSize,
-              total: data?.documents.info.count,
-              showTotal: (total) => `${total} usuarios`,
-              showSizeChanger: true,
-              onChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
-              onShowSizeChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
-            }}
-            dataSource={data?.documents.results}
           />
-        </Card>
+        )}
+        {displays.documents === 'grid' && (
+          <DocumentsGrid
+            download={download}
+            loading={loading}
+            pagination={pagination}
+            documents={data?.documents.results}
+            setDocumentEditId={setDocumentEditId}
+            title={() => (
+              <Title
+                setCategories={setCategories}
+                setSearch={setSearch}
+                openCreateDocumentModal={() => toggleCreateDocumentModal(true)}
+              />
+            )}
+          />
+        )}
       </Container>
       <CreateDocumentModal
         visible={isOpenCreateDocumentModal}

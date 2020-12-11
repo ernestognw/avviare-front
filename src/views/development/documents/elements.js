@@ -9,11 +9,10 @@ const Container = styled.div`
   .ant-card-body {
     padding: 0;
   }
+
+  .ant-table-title {
+    padding: 0;
+  }
 `;
 
-const ActionsContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-export { Container, ActionsContainer };
+export { Container };

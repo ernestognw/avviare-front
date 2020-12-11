@@ -4,10 +4,16 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { downloadFile } from '@config/utils/files';
 import { useApolloClient } from '@apollo/client';
-import { Button, Input, Typography, Select, Popconfirm, message } from 'antd';
+import { Button, Input, Typography, Select, Popconfirm, Radio, message } from 'antd';
 import { documentCategories } from '@config/constants/document';
-import { FileAddOutlined, DownloadOutlined } from '@ant-design/icons';
+import {
+  FileAddOutlined,
+  DownloadOutlined,
+  AppstoreOutlined,
+  TableOutlined,
+} from '@ant-design/icons';
 import Box from '@components/box';
+import { useLayout } from '@providers/layout';
 import { useDevelopment } from '@providers/development';
 import { TitleContainer } from './elements';
 import { GET_DOCUMENTS } from './requests';
@@ -20,6 +26,7 @@ const TableTitle = ({ setCategories, setSearch, openCreateDocumentModal }) => {
   const [downloading, setDownloading] = useState();
   const { development, developmentRole } = useDevelopment();
   const { query } = useApolloClient();
+  const { displays, setDisplays } = useLayout();
 
   const getDocs = async () => {
     const { data } = await query({
@@ -107,9 +114,21 @@ const TableTitle = ({ setCategories, setSearch, openCreateDocumentModal }) => {
         <Title style={{ margin: 'auto 10px' }} level={3}>
           Documentos de {development.name}
         </Title>
-
+        <Radio.Group
+          style={{ margin: '10px 10px auto auto' }}
+          optionType="button"
+          onChange={({ target: { value } }) => setDisplays({ documents: value })}
+          defaultValue={displays.documents}
+        >
+          <Radio.Button value="table">
+            <TableOutlined />
+          </Radio.Button>
+          <Radio.Button value="grid">
+            <AppstoreOutlined />
+          </Radio.Button>
+        </Radio.Group>
         <Button
-          style={{ margin: '10px 0 auto auto' }}
+          style={{ marginTop: 10 }}
           type="primary"
           disabled={!developmentRole.manager}
           icon={<FileAddOutlined />}
