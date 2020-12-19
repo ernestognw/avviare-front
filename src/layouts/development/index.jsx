@@ -6,7 +6,13 @@ import shortid from 'shortid';
 import { useDevelopment } from '@providers/development';
 import Box from '@components/box';
 import Loading from '@components/loading';
-import { AppstoreOutlined, FolderOpenOutlined, SettingOutlined } from '@ant-design/icons';
+import {
+  AppstoreOutlined,
+  FolderOpenOutlined,
+  SettingOutlined,
+  BuildOutlined,
+  LayoutOutlined,
+} from '@ant-design/icons';
 import { Menu, Layout, Skeleton } from 'antd';
 import { Cover, SkeletonImage, Avatar } from './elements';
 
@@ -62,6 +68,12 @@ const DevelopmentLayout = ({ children }) => {
               </Item>
               <Item key={`${commonPath}/documents`} icon={<FolderOpenOutlined />}>
                 <Link to={`${commonPath}/documents`}>Documentos</Link>
+              </Item>
+              <Item key={`${commonPath}/prototypes`} icon={<BuildOutlined />}>
+                <Link to={`${commonPath}/prototypes`}>Prototipos</Link>
+              </Item>
+              <Item key={`${commonPath}/allotments`} icon={<LayoutOutlined />}>
+                <Link to={`${commonPath}/allotments`}>Lotes</Link>
               </Item>
               {developmentRole.manager && (
                 <Item key={`${commonPath}/settings`} icon={<SettingOutlined />}>

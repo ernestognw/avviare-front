@@ -57,53 +57,36 @@ const Documents = () => {
     window.URL.revokeObjectURL(data);
   };
 
-  const pagination = {
-    current: params.page,
-    defaultCurrent: defaultParams.page,
-    pageSize: params.pageSize,
-    defaultPageSize: defaultParams.pageSize,
-    total: data?.documents.info.count,
-    showTotal: (total) => `${total} usuarios`,
-    showSizeChanger: true,
-    onChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
-    onShowSizeChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
+  const viewProps = {
+    download,
+    loading,
+    pagination: {
+      current: params.page,
+      defaultCurrent: defaultParams.page,
+      pageSize: params.pageSize,
+      defaultPageSize: defaultParams.pageSize,
+      total: data?.documents.info.count,
+      showTotal: (total) => `${total} documentos`,
+      showSizeChanger: true,
+      onChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
+      onShowSizeChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
+    },
+    documents: data?.documents.results,
+    setDocumentEditId,
+    title: () => (
+      <Title
+        setCategories={setCategories}
+        setSearch={setSearch}
+        openCreateDocumentModal={() => toggleCreateDocumentModal(true)}
+      />
+    ),
   };
 
   return (
     <>
       <Container>
-        {displays.documents === 'table' && (
-          <DocumentsTable
-            download={download}
-            loading={loading}
-            pagination={pagination}
-            documents={data?.documents.results}
-            setDocumentEditId={setDocumentEditId}
-            title={() => (
-              <Title
-                setCategories={setCategories}
-                setSearch={setSearch}
-                openCreateDocumentModal={() => toggleCreateDocumentModal(true)}
-              />
-            )}
-          />
-        )}
-        {displays.documents === 'grid' && (
-          <DocumentsGrid
-            download={download}
-            loading={loading}
-            pagination={pagination}
-            documents={data?.documents.results}
-            setDocumentEditId={setDocumentEditId}
-            title={() => (
-              <Title
-                setCategories={setCategories}
-                setSearch={setSearch}
-                openCreateDocumentModal={() => toggleCreateDocumentModal(true)}
-              />
-            )}
-          />
-        )}
+        {displays.documents === 'table' && <DocumentsTable {...viewProps} />}
+        {displays.documents === 'grid' && <DocumentsGrid {...viewProps} />}
       </Container>
       <CreateDocumentModal
         visible={isOpenCreateDocumentModal}

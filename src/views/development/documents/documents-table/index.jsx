@@ -167,7 +167,7 @@ const DocumentsTable = ({ loading, download, pagination, documents, title, setDo
           x: true,
         }}
         rowKey="id"
-        pagination={pagination}
+        pagination={{ ...pagination, style: { marginRight: 20 } }}
         dataSource={documents}
       />
     </Card>
