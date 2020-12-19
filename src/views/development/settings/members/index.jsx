@@ -32,7 +32,7 @@ const Members = () => {
       acc[curr] = debouncedSearch;
       return acc;
     }, {}),
-    development: {
+    worksAt: {
       eq: development.id,
     },
   };

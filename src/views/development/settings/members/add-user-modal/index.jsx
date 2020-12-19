@@ -35,7 +35,7 @@ const AddUserModal = ({ visible, onCancel, reloadUsers }) => {
         lastName: debouncedSearch,
         email: debouncedSearch,
       },
-      development: {
+      worksAt: {
         ne: development.id,
       },
     },

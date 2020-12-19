@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 const GET_MEMBERS = gql`
-  query users($development: QueryOperators, $search: UserSearchInput, $params: QueryParams) {
-    users(development: $development, search: $search, params: $params) {
+  query users($worksAt: QueryOperators, $search: UserSearchInput, $params: QueryParams) {
+    users(worksAt: $worksAt, search: $search, params: $params) {
       info {
         count
         pages
@@ -15,7 +15,7 @@ const GET_MEMBERS = gql`
         profileImg
         email
         overallRole
-        worksAt(development: $development) {
+        worksAt(development: $worksAt) {
           developmentRole
         }
       }
