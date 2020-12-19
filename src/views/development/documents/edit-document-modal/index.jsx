@@ -4,7 +4,6 @@ import { Drawer, Form, message } from 'antd';
 import { useMutation, useQuery } from '@apollo/client';
 import DocumentForm from '@components/document-form';
 import Box from '@components/box';
-import { useDevelopment } from '@providers/development';
 import Loading from '@components/loading';
 import { UPDATE_DOCUMENT, GET_DOCUMENT } from './requests';
 
@@ -12,7 +11,6 @@ const EditDocumentForm = ({ onClose, documentEditId, visible }) => {
   const [saving, setSaving] = useState(false);
   const [form] = Form.useForm();
   const [updateDocument] = useMutation(UPDATE_DOCUMENT);
-  const { development } = useDevelopment();
   const { loading, data } = useQuery(GET_DOCUMENT, {
     variables: {
       id: documentEditId,
@@ -23,7 +21,7 @@ const EditDocumentForm = ({ onClose, documentEditId, visible }) => {
   const onFinish = async (document) => {
     setSaving(true);
     const { errors } = await updateDocument({
-      variables: { id: documentEditId, document: { ...document, development: development.id } },
+      variables: { id: documentEditId, document: { ...document } },
     });
 
     if (errors) {

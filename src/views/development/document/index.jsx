@@ -29,7 +29,7 @@ const Document = () => {
   const [isOpenCreateDocumentVersionModal, toggleCreateDocumentVersionModal] = useState(false);
   const [settingFinalVersion, setSettingFinalVersion] = useState(false);
   const { documentId } = useParams();
-  const { development, developmentRole } = useDevelopment();
+  const { developmentRole } = useDevelopment();
   const { user } = useUser();
   const { data, loading, refetch } = useQuery(GET_DOCUMENT, { variables: { id: documentId } });
   const [setFinalVersion] = useMutation(UPDATE_DOCUMENT);
@@ -69,7 +69,6 @@ const Document = () => {
       variables: {
         id: data.document.id,
         document: {
-          development: development.id,
           finalVersion,
         },
       },

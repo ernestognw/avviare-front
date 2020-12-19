@@ -34,9 +34,9 @@ const CreateDocumentVersionModal = ({ visible, onCancel, reloadDocument }) => {
     setAdding(true);
     await createDocumentVersion({
       variables: {
-        document: documentId,
         documentVersion: {
           fileSource,
+          document: documentId,
         },
       },
     });
