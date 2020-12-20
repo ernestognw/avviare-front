@@ -10,6 +10,7 @@ import { Container, ActionsContainer } from './elements';
 import { GET_PROVIDERS } from './requests';
 import Title from './title';
 import CreateProviderModal from './create-provider-modal';
+import EditProviderModal from './edit-provider-modal';
 
 const defaultParams = {
   page: 1,
@@ -19,6 +20,7 @@ const defaultParams = {
 const Providers = () => {
   const [params, setParams] = useState(defaultParams);
   const [search, setSearch] = useState('');
+  const [providerEditId, setProviderEditId] = useState('');
   const [isOpenCreateProviderModal, toggleCreateProviderModal] = useState(false);
   const [debouncedSearch] = useDebounce(search, 500);
 
@@ -97,10 +99,10 @@ const Providers = () => {
     {
       title: 'Acciones',
       // eslint-disable-next-line react/prop-types
-      render: () => (
+      render: ({ id }) => (
         <ActionsContainer>
           <Tooltip title="Editar proveedor">
-            <Button icon={<EditOutlined />} size="small" />
+            <Button onClick={() => setProviderEditId(id)} icon={<EditOutlined />} size="small" />
           </Tooltip>
         </ActionsContainer>
       ),
@@ -149,6 +151,11 @@ const Providers = () => {
         visible={isOpenCreateProviderModal}
         onClose={() => toggleCreateProviderModal(false)}
         updateProviders={refetch}
+      />
+      <EditProviderModal
+        visible={!!providerEditId}
+        providerEditId={providerEditId}
+        onClose={() => setProviderEditId('')}
       />
     </>
   );
