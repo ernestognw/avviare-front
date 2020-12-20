@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
 import PropTypes from 'prop-types';
-import { developmentRoles, searchableFields } from '@config/constants/user';
+import { searchableFields } from '@config/constants/provider';
 import { Modal, Form, Select, Typography, message } from 'antd';
 import { useDevelopment } from '@providers/development';
-import { ADD_USER_TO_DEVELOPMENT, SEARCH_USERS } from './requests';
+import { ADD_PROVIDER_TO_DEVELOPMENT, SEARCH_PROVIDERS } from './requests';
 
 const { Item } = Form;
 const { Option } = Select;
@@ -16,7 +16,7 @@ const defaultParams = {
   pageSize: 20,
 };
 
-const AddUserModal = ({ visible, onCancel, reloadUsers }) => {
+const AddProviderModal = ({ visible, onCancel, reloadProviders }) => {
   const [params] = useState(defaultParams);
   const [search, setSearch] = useState('');
   const [adding, setAdding] = useState('');
@@ -24,9 +24,9 @@ const AddUserModal = ({ visible, onCancel, reloadUsers }) => {
   const { development } = useDevelopment();
   const [form] = Form.useForm();
 
-  const [addUserToDevelopment] = useMutation(ADD_USER_TO_DEVELOPMENT);
+  const [addProviderToDevelopment] = useMutation(ADD_PROVIDER_TO_DEVELOPMENT);
 
-  const { data, loading } = useQuery(SEARCH_USERS, {
+  const { data, loading } = useQuery(SEARCH_PROVIDERS, {
     variables: {
       params,
       search: searchableFields.reduce((acc, curr) => {
@@ -40,17 +40,17 @@ const AddUserModal = ({ visible, onCancel, reloadUsers }) => {
     skip: !visible,
   });
 
-  const addUser = async ({ user, role }) => {
+  const addUser = async ({ provider, role }) => {
     setAdding(true);
-    const { errors } = await addUserToDevelopment({
-      variables: { user, development: development.id, role },
+    const { errors } = await addProviderToDevelopment({
+      variables: { provider, development: development.id, role },
     });
 
     if (errors) {
       message.error(errors[0].message);
     } else {
-      message.success('El usuario ha sido añadido correctamente al desarrollo');
-      await reloadUsers();
+      message.success('El proveedor ha sido añadido correctamente al desarrollo');
+      await reloadProviders();
       onCancel();
       setSearch('');
       form.resetFields();
@@ -61,7 +61,7 @@ const AddUserModal = ({ visible, onCancel, reloadUsers }) => {
 
   return (
     <Modal
-      title={`Agrega a un usuario a ${development.name}`}
+      title={`Agrega a un proveedor a ${development.name}`}
       visible={visible}
       onOk={form.submit}
       onCancel={onCancel}
@@ -69,39 +69,24 @@ const AddUserModal = ({ visible, onCancel, reloadUsers }) => {
     >
       <Form layout="vertical" form={form} onFinish={addUser}>
         <Item
-          label="Selecciona un usuario"
-          name="user"
-          rules={[{ required: true, message: 'Ingresa el usuario' }]}
+          label="Selecciona un proveedor"
+          name="provider"
+          rules={[{ required: true, message: 'Ingresa el proveedor' }]}
         >
           <Select
             allowClear
-            placeholder="Selecciona un usuario"
+            placeholder="Selecciona un proveedor"
             onClear={() => setSearch('')}
             loading={loading}
             onSearch={setSearch}
             filterOption={false}
             showSearch
           >
-            {data?.users.results.map(({ id, firstName, lastName, email }) => (
+            {data?.providers.results.map(({ id, businessName, RFC }) => (
               <Option key={id} value={id}>
-                <Text strong>
-                  {firstName} {lastName}
-                </Text>
+                <Text strong>{businessName}</Text>
                 <br />
-                <Text>{email}</Text>
-              </Option>
-            ))}
-          </Select>
-        </Item>
-        <Item
-          label="Rol en el desarrollo"
-          name="role"
-          rules={[{ required: true, message: 'Ingresa el rol del usuario' }]}
-        >
-          <Select placeholder="Rol en el desarrollo">
-            {Object.keys(developmentRoles).map((developmentRole) => (
-              <Option key={developmentRole} value={developmentRole}>
-                {developmentRoles[developmentRole]}
+                <Text>{RFC}</Text>
               </Option>
             ))}
           </Select>
@@ -111,10 +96,10 @@ const AddUserModal = ({ visible, onCancel, reloadUsers }) => {
   );
 };
 
-AddUserModal.propTypes = {
+AddProviderModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
-  reloadUsers: PropTypes.func.isRequired,
+  reloadProviders: PropTypes.func.isRequired,
 };
 
-export default AddUserModal;
+export default AddProviderModal;

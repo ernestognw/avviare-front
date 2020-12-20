@@ -12,9 +12,11 @@ const providerInfo = `
   contactPhone
   creditDays
   worksAt {
-    id
-    logo
-    name
+    development {
+      id
+      logo
+      name
+    }
   }
   createdAt
   updatedAt

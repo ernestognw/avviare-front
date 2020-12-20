@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Drawer, Form, message } from 'antd';
+import { Drawer, Form, Alert, message } from 'antd';
 import { useMutation } from '@apollo/client';
 import ProviderForm from '@components/provider-form';
 import { CREATE_PROVIDER } from './requests';
@@ -34,6 +34,12 @@ const CreateProviderModal = ({ onClose, visible, updateProviders }) => {
       visible={visible}
       bodyStyle={{ paddingBottom: 80 }}
     >
+      <Alert
+        message="Nota"
+        description="Después de agregar el proveedor aquí, es necesario registrarlo en cada desarrollo donde esté trabajando"
+        type="info"
+        showIcon
+      />
       <ProviderForm form={form} onFinish={onFinish} loading={saving} />
     </Drawer>
   );

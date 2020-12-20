@@ -2,15 +2,13 @@ import { useState, useMemo } from 'react';
 import moment from 'moment';
 import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
-import { Card, Table, Tag, Button, Tooltip, Avatar } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
+import { Card, Table, Tag } from 'antd';
 import { searchableFields } from '@config/constants/provider';
-import theme from '@config/theme';
-import { Container, ActionsContainer } from './elements';
+import { useDevelopment } from '@providers/development';
+import { Container } from './elements';
 import { GET_PROVIDERS } from './requests';
 import Title from './title';
-import CreateProviderModal from './create-provider-modal';
-import EditProviderModal from './edit-provider-modal';
+import AddProviderModal from './add-provider-modal';
 
 const defaultParams = {
   page: 1,
@@ -20,9 +18,9 @@ const defaultParams = {
 const Providers = () => {
   const [params, setParams] = useState(defaultParams);
   const [search, setSearch] = useState('');
-  const [providerEditId, setProviderEditId] = useState('');
-  const [isOpenCreateProviderModal, toggleCreateProviderModal] = useState(false);
+  const [isOpenAddProviderModal, toggleAddProviderModal] = useState(false);
   const [debouncedSearch] = useDebounce(search, 500);
+  const { development } = useDevelopment();
 
   const variables = {
     params,
@@ -30,6 +28,9 @@ const Providers = () => {
       acc[curr] = debouncedSearch;
       return acc;
     }, {}),
+    worksAt: {
+      eq: development.id,
+    },
   };
 
   const { data, loading, refetch } = useQuery(GET_PROVIDERS, { variables });
@@ -44,20 +45,6 @@ const Providers = () => {
       title: 'RFC',
       dataIndex: 'RFC',
       key: 'RFC',
-    },
-    {
-      title: 'Trabaja en',
-      dataIndex: 'worksAt',
-      key: 'worksAt',
-      render: (worksAt) => (
-        <Avatar.Group maxCount={5} maxStyle={{ backgroundColor: theme.colors.primary }}>
-          {worksAt.map(({ development: { id: developmentId, name, logo } }) => (
-            <Tooltip key={developmentId} title={name} placement="top">
-              <Avatar src={logo} />
-            </Tooltip>
-          ))}
-        </Avatar.Group>
-      ),
     },
     {
       title: 'Nombre de Contacto',
@@ -85,27 +72,10 @@ const Providers = () => {
       key: 'creditDays',
     },
     {
-      title: 'Creado el',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      render: (createdAt) => <Tag>{moment(createdAt).format('lll')}</Tag>,
-    },
-    {
-      title: 'Última actualización',
-      dataIndex: 'updatedAt',
-      key: 'updatedAt',
-      render: (updatedAt) => <Tag>{moment(updatedAt).format('lll')}</Tag>,
-    },
-    {
-      title: 'Acciones',
-      // eslint-disable-next-line react/prop-types
-      render: ({ id }) => (
-        <ActionsContainer>
-          <Tooltip title="Editar proveedor">
-            <Button onClick={() => setProviderEditId(id)} icon={<EditOutlined />} size="small" />
-          </Tooltip>
-        </ActionsContainer>
-      ),
+      title: 'Trabaja desde el',
+      dataIndex: 'worksAt',
+      key: 'worksAt',
+      render: ([{ addedAt }]) => <Tag>{moment(addedAt).format('lll')}</Tag>,
     },
   ];
 
@@ -120,7 +90,7 @@ const Providers = () => {
             columns={memoizedColumns}
             title={() => (
               <Title
-                openCreateProviderModal={() => toggleCreateProviderModal(true)}
+                openAddProviderModal={() => toggleAddProviderModal(true)}
                 setSearch={setSearch}
               />
             )}
@@ -147,15 +117,10 @@ const Providers = () => {
           />
         </Card>
       </Container>
-      <CreateProviderModal
-        visible={isOpenCreateProviderModal}
-        onClose={() => toggleCreateProviderModal(false)}
-        updateProviders={refetch}
-      />
-      <EditProviderModal
-        visible={!!providerEditId}
-        providerEditId={providerEditId}
-        onClose={() => setProviderEditId('')}
+      <AddProviderModal
+        visible={isOpenAddProviderModal}
+        onCancel={() => toggleAddProviderModal(false)}
+        reloadProviders={refetch}
       />
     </>
   );

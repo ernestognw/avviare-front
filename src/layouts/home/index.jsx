@@ -4,6 +4,8 @@ import { useUser } from '@providers/user';
 import { BlockOutlined, AppstoreOutlined, UserOutlined, AuditOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 
+const { Item } = Menu;
+
 const HomeLayout = ({ children }) => {
   const { pathname } = useLocation();
   const { overallRole } = useUser();
@@ -12,22 +14,22 @@ const HomeLayout = ({ children }) => {
     <>
       <Menu mode="horizontal" selectedKeys={[pathname]}>
         {overallRole?.admin && (
-          <Menu.Item key="/all" icon={<AppstoreOutlined />}>
+          <Item key="/all" icon={<AppstoreOutlined />}>
             <Link to="/all">Todos los desarrollos</Link>
-          </Menu.Item>
+          </Item>
         )}
-        <Menu.Item key="/" icon={<BlockOutlined />}>
+        <Item key="/" icon={<BlockOutlined />}>
           <Link to="/">Mis desarrollos</Link>
-        </Menu.Item>
+        </Item>
         {overallRole?.admin && (
-          <Menu.Item key="/users" icon={<UserOutlined />}>
+          <Item key="/users" icon={<UserOutlined />}>
             <Link to="/users">Usuarios</Link>
-          </Menu.Item>
+          </Item>
         )}
         {overallRole?.admin && (
-          <Menu.Item key="/providers" icon={<AuditOutlined />}>
+          <Item key="/providers" icon={<AuditOutlined />}>
             <Link to="/providers">Proveedores</Link>
-          </Menu.Item>
+          </Item>
         )}
       </Menu>
       {children}

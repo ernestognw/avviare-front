@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useLocation, useParams, Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
-import { UserOutlined, EditOutlined } from '@ant-design/icons';
+import { UserOutlined, EditOutlined, AuditOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
 const { Item } = Menu;
@@ -18,6 +18,9 @@ const DevelopmentSettingsLayout = ({ children }) => {
         </Item>
         <Item icon={<UserOutlined />} key={`/development/${developmentId}/settings/members`}>
           <Link to={`/development/${developmentId}/settings/members`}>Miembros</Link>
+        </Item>
+        <Item icon={<AuditOutlined />} key={`/development/${developmentId}/settings/providers`}>
+          <Link to={`/development/${developmentId}/settings/providers`}>Proveedores</Link>
         </Item>
       </Menu>
       <Content>{children}</Content>

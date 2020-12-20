@@ -6,8 +6,11 @@ import DevelopmentSettingsLayout from '@layouts/development/settings';
 const DevelopmentGeneralSettings = lazy(() =>
   import(/* webpackChunkName: "DevelopmentGeneralSettings" */ './general')
 );
-const DevelopmentMemberslSettings = lazy(() =>
-  import(/* webpackChunkName: "DevelopmentMemberslSettings" */ './members')
+const DevelopmentMembersSettings = lazy(() =>
+  import(/* webpackChunkName: "DevelopmentMembersSettings" */ './members')
+);
+const DevelopmentProvidersSettings = lazy(() =>
+  import(/* webpackChunkName: "DevelopmentProvidersSettings" */ './providers')
 );
 
 const DevelopmentSettings = () => {
@@ -24,7 +27,11 @@ const DevelopmentSettings = () => {
           />
           <Route
             path="/development/:developmentId/settings/members"
-            component={DevelopmentMemberslSettings}
+            component={DevelopmentMembersSettings}
+          />
+          <Route
+            path="/development/:developmentId/settings/providers"
+            component={DevelopmentProvidersSettings}
           />
           <Redirect to={`/development/${developmentId}/settings`} />
         </Switch>
