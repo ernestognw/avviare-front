@@ -2,9 +2,10 @@ import { useState, useMemo } from 'react';
 import moment from 'moment';
 import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
-import { Card, Table, Tag, Button, Tooltip } from 'antd';
+import { Card, Table, Tag, Button, Tooltip, Avatar } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { searchableFields } from '@config/constants/provider';
+import theme from '@config/theme';
 import { Container, ActionsContainer } from './elements';
 import { GET_PROVIDERS } from './requests';
 import Title from './title';
@@ -39,6 +40,20 @@ const Providers = () => {
       title: 'RFC',
       dataIndex: 'RFC',
       key: 'RFC',
+    },
+    {
+      title: 'Trabaja en',
+      dataIndex: 'worksAt',
+      key: 'worksAt',
+      render: (worksAt) => (
+        <Avatar.Group maxCount={5} maxStyle={{ backgroundColor: theme.colors.primary }}>
+          {worksAt.map(({ id: developmentId, name, logo }) => (
+            <Tooltip key={developmentId} title={name} placement="top">
+              <Avatar src={logo} />
+            </Tooltip>
+          ))}
+        </Avatar.Group>
+      ),
     },
     {
       title: 'Nombre de Contacto',
@@ -99,6 +114,7 @@ const Providers = () => {
           loading={loading}
           columns={memoizedColumns}
           title={() => <Title setSearch={setSearch} />}
+          size="small"
           scroll={{
             x: true,
           }}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import moment from 'moment';
 import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
@@ -111,13 +111,15 @@ const Users = () => {
     },
   ];
 
+  const memoizedColumns = useMemo(() => columns.map((col) => ({ ...col, ellipsis: true })), []);
+
   return (
     <>
       <Container>
         <Card style={{ width: '100%' }}>
           <Table
             loading={loading}
-            columns={columns}
+            columns={memoizedColumns}
             title={() => (
               <Title
                 openCreateUserModal={() => toggleCreateUserModal(true)}
