@@ -12,6 +12,7 @@ const AllDevelopments = lazy(() =>
   import(/* webpackChunkName: "AllDevelopments" */ './all-developments')
 );
 const Users = lazy(() => import(/* webpackChunkName: "Users" */ './users'));
+const Providers = lazy(() => import(/* webpackChunkName: "Providers" */ './providers'));
 
 const Main = () => {
   const { overallRole } = useUser();
@@ -24,6 +25,7 @@ const Main = () => {
           <Route exact path="/" component={MyDevelopments} />
           {overallRole?.admin && <Route path="/all" component={AllDevelopments} />}
           {overallRole?.admin && <Route path="/users" component={Users} />}
+          {overallRole?.admin && <Route path="/providers" component={Providers} />}
           <Redirect to="/" />
         </Switch>
       </Suspense>
