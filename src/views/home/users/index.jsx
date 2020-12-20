@@ -141,6 +141,9 @@ const Users = () => {
               showSizeChanger: true,
               onChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
               onShowSizeChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
+              style: {
+                marginRight: 20,
+              },
             }}
             dataSource={data?.users.results}
           />

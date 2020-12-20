@@ -37,7 +37,8 @@
     "styled-system": "^5.1.5",
     "url-join": "^4.0.1",
     "use-debounce": "^5.0.1",
-    "use-upload": "1.0.3"
+    "use-upload": "1.0.3",
+    "validate-rfc": "^1.0.3"
   },
   "devDependencies": {
     "@rescripts/cli": "^0.0.14",

@@ -9,6 +9,7 @@ import theme from '@config/theme';
 import { Container, ActionsContainer } from './elements';
 import { GET_PROVIDERS } from './requests';
 import Title from './title';
+import CreateProviderModal from './create-provider-modal';
 
 const defaultParams = {
   page: 1,
@@ -18,6 +19,7 @@ const defaultParams = {
 const Providers = () => {
   const [params, setParams] = useState(defaultParams);
   const [search, setSearch] = useState('');
+  const [isOpenCreateProviderModal, toggleCreateProviderModal] = useState(false);
   const [debouncedSearch] = useDebounce(search, 500);
 
   const variables = {
@@ -28,7 +30,7 @@ const Providers = () => {
     }, {}),
   };
 
-  const { data, loading } = useQuery(GET_PROVIDERS, { variables });
+  const { data, loading, refetch } = useQuery(GET_PROVIDERS, { variables });
 
   const columns = [
     {
@@ -108,35 +110,47 @@ const Providers = () => {
   const memoizedColumns = useMemo(() => columns.map((col) => ({ ...col, ellipsis: true })), []);
 
   return (
-    <Container>
-      <Card style={{ width: '100%' }}>
-        <Table
-          loading={loading}
-          columns={memoizedColumns}
-          title={() => <Title setSearch={setSearch} />}
-          size="small"
-          scroll={{
-            x: true,
-          }}
-          rowKey="id"
-          pagination={{
-            current: params.page,
-            defaultCurrent: defaultParams.page,
-            pageSize: params.pageSize,
-            defaultPageSize: defaultParams.pageSize,
-            total: data?.providers.info.count,
-            showTotal: (total) => `${total} proveedores`,
-            showSizeChanger: true,
-            onChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
-            onShowSizeChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
-            style: {
-              marginRight: 20,
-            },
-          }}
-          dataSource={data?.providers.results}
-        />
-      </Card>
-    </Container>
+    <>
+      <Container>
+        <Card style={{ width: '100%' }}>
+          <Table
+            loading={loading}
+            columns={memoizedColumns}
+            title={() => (
+              <Title
+                openCreateProviderModal={() => toggleCreateProviderModal(true)}
+                setSearch={setSearch}
+              />
+            )}
+            size="small"
+            scroll={{
+              x: true,
+            }}
+            rowKey="id"
+            pagination={{
+              current: params.page,
+              defaultCurrent: defaultParams.page,
+              pageSize: params.pageSize,
+              defaultPageSize: defaultParams.pageSize,
+              total: data?.providers.info.count,
+              showTotal: (total) => `${total} proveedores`,
+              showSizeChanger: true,
+              onChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
+              onShowSizeChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
+              style: {
+                marginRight: 20,
+              },
+            }}
+            dataSource={data?.providers.results}
+          />
+        </Card>
+      </Container>
+      <CreateProviderModal
+        visible={isOpenCreateProviderModal}
+        onClose={() => toggleCreateProviderModal(false)}
+        updateProviders={refetch}
+      />
+    </>
   );
 };
 

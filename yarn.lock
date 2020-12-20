@@ -12579,6 +12579,11 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
+validate-rfc@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/validate-rfc/-/validate-rfc-1.0.3.tgz#1da2675a6f8f1141e6dd6fe915fde3d60dea9ca6"
+  integrity sha512-eRViX56Ux1PDUHzv32vOFxlSUd5jtvK0kaPPNdVoyK3YEoegXfBcHkHz6VLx/BYu2b09Pf3t4qZhwmxPeib9+A==
+
 value-equal@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/value-equal/-/value-equal-1.0.1.tgz#1e0b794c734c5c0cade179c437d356d931a34d6c"
