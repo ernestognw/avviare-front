@@ -24,4 +24,10 @@ const GET_PROVIDERS = gql`
   }
 `;
 
-export { GET_PROVIDERS };
+const REMOVE_PROVIDER_FROM_DEVELOPMENT = gql`
+  mutation providerRemoveFromDevelopment($provider: ID!, $development: ID!) {
+    providerRemoveFromDevelopment(provider: $provider, development: $development)
+  }
+`;
+
+export { GET_PROVIDERS, REMOVE_PROVIDER_FROM_DEVELOPMENT };

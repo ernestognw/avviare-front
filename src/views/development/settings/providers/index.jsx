@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
 import moment from 'moment';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
-import { Card, Table, Tag } from 'antd';
+import { Card, Table, Tag, Tooltip, Button, Modal, message } from 'antd';
 import { searchableFields } from '@config/constants/provider';
 import { useDevelopment } from '@providers/development';
-import { Container } from './elements';
-import { GET_PROVIDERS } from './requests';
+import { CloseOutlined } from '@ant-design/icons';
+import { Container, ActionsContainer } from './elements';
+import { GET_PROVIDERS, REMOVE_PROVIDER_FROM_DEVELOPMENT } from './requests';
 import Title from './title';
 import AddProviderModal from './add-provider-modal';
 
@@ -20,7 +21,7 @@ const Providers = () => {
   const [search, setSearch] = useState('');
   const [isOpenAddProviderModal, toggleAddProviderModal] = useState(false);
   const [debouncedSearch] = useDebounce(search, 500);
-  const { development } = useDevelopment();
+  const { development, developmentRole } = useDevelopment();
 
   const variables = {
     params,
@@ -34,6 +35,33 @@ const Providers = () => {
   };
 
   const { data, loading, refetch } = useQuery(GET_PROVIDERS, { variables });
+  const [removeProviderFromDevelopment] = useMutation(REMOVE_PROVIDER_FROM_DEVELOPMENT);
+
+  const removeProvider = async (provider) => {
+    const { errors } = await removeProviderFromDevelopment({
+      variables: {
+        provider,
+        development: development.id,
+      },
+    });
+
+    if (errors) {
+      message.error(errors[0].message);
+    } else {
+      await refetch();
+      message.success(`Proveedor removido de ${development.name}`);
+    }
+  };
+
+  const confirmRemoveProvider = (id) =>
+    Modal.confirm({
+      title: `Remover proveedor de ${development.name}`,
+      content:
+        'Estás a punto de remover a este proveedor del desarrollo. Esto significa que no aparecerá como una opción para adjudicar avances de subconcepto. Los subconceptos ya adjudicados anteriormente permanecerán intactos',
+      okText: 'Confirmar',
+      cancelText: 'Cancelar',
+      onOk: () => removeProvider(id),
+    });
 
   const columns = [
     {
@@ -76,6 +104,23 @@ const Providers = () => {
       dataIndex: 'worksAt',
       key: 'worksAt',
       render: ([{ addedAt }]) => <Tag>{moment(addedAt).format('lll')}</Tag>,
+    },
+    {
+      title: 'Acciones',
+      // eslint-disable-next-line react/prop-types
+      render: ({ id }) => (
+        <ActionsContainer>
+          <Tooltip title="Remover">
+            <Button
+              onClick={() => confirmRemoveProvider(id)}
+              icon={<CloseOutlined />}
+              disabled={!developmentRole.manager}
+              type="danger"
+              size="small"
+            />
+          </Tooltip>
+        </ActionsContainer>
+      ),
     },
   ];
 

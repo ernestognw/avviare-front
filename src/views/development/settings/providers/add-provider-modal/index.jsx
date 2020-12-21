@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
 import PropTypes from 'prop-types';
 import { searchableFields } from '@config/constants/provider';
-import { Modal, Form, Select, Typography, message } from 'antd';
+import { Modal, Form, Select, Typography, Alert, message } from 'antd';
 import { useDevelopment } from '@providers/development';
 import { ADD_PROVIDER_TO_DEVELOPMENT, SEARCH_PROVIDERS } from './requests';
 
@@ -67,6 +67,13 @@ const AddProviderModal = ({ visible, onCancel, reloadProviders }) => {
       onCancel={onCancel}
       confirmLoading={adding}
     >
+      <Alert
+        message="¿Qué hacer si no aparece el proveedor?"
+        description="Si el proveedor no aparece, es necesario que un administrador lo registre en la plataforma para que pueda ser añadido a los desarrollos"
+        type="info"
+        showIcon
+        style={{ marginBottom: 10 }}
+      />
       <Form layout="vertical" form={form} onFinish={addUser}>
         <Item
           label="Selecciona un proveedor"
