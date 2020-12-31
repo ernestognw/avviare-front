@@ -1,5 +1,14 @@
 import { gql } from '@apollo/client';
 
+// Used on edit allotment prototype modal.
+// Should fetch the same query so cache could allotment prototype user withouth refetching the entire list
+const allotmentPrototypeInfo = `
+  id
+  name
+  createdAt
+  updatedAt
+`;
+
 const GET_PROTOTYPES = gql`
   query allotmentPrototypes(
     $search: AllotmentPrototypeSearchInput
@@ -11,13 +20,10 @@ const GET_PROTOTYPES = gql`
         count
       }
       results {
-        id
-        name
-        createdAt
-        updatedAt
+        ${allotmentPrototypeInfo}
       }
     }
   }
 `;
 
-export { GET_PROTOTYPES };
+export { allotmentPrototypeInfo, GET_PROTOTYPES };

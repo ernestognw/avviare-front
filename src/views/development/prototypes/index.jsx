@@ -10,6 +10,7 @@ import { searchableFields } from '@config/constants/allotment-prototype';
 import { useLocation, Link } from 'react-router-dom';
 import Title from './title';
 import CreateAllotmentPrototypeModal from './create-allotment-prototype-modal';
+import EditAllotmentPrototypeModal from './edit-allotment-prototype-modal';
 import { Container, ActionsContainer } from './elements';
 import { GET_PROTOTYPES } from './requests';
 
@@ -21,6 +22,7 @@ const defaultParams = {
 const Prototypes = () => {
   const [params, setParams] = useState(defaultParams);
   const [search, setSearch] = useState('');
+  const [allotmentPrototypeEditId, setAllotmentPrototypeEditId] = useState('');
   const [debouncedSearch] = useDebounce(search, 500);
   const [isOpenCreateAllotmentPrototypeModal, toggleCreateAllotmentPrototypeModal] = useState(
     false
@@ -71,7 +73,10 @@ const Prototypes = () => {
               Ver
             </Button>
           </Link>
-          <Tooltip title="Editar prototipo">
+          <Tooltip
+            onClick={() => setAllotmentPrototypeEditId(allotmentPrototype.id)}
+            title="Editar prototipo"
+          >
             <Button style={{ marginLeft: 10 }} icon={<EditOutlined />} size="small" />
           </Tooltip>
         </ActionsContainer>
@@ -116,6 +121,11 @@ const Prototypes = () => {
         visible={isOpenCreateAllotmentPrototypeModal}
         onClose={() => toggleCreateAllotmentPrototypeModal(false)}
         updateAllotmentPrototypes={refetch}
+      />
+      <EditAllotmentPrototypeModal
+        visible={!!allotmentPrototypeEditId}
+        allotmentPrototypeEditId={allotmentPrototypeEditId}
+        onClose={() => setAllotmentPrototypeEditId('')}
       />
     </>
   );
