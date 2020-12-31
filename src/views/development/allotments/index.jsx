@@ -22,6 +22,8 @@ const defaultParams = {
 const Allotments = () => {
   const [params, setParams] = useState(defaultParams);
   const [search, setSearch] = useState('');
+  const [blocks, setBlocks] = useState('');
+  const [allotmentPrototypes, setAllotmentPrototypes] = useState('');
   const [allotmentEditId, setAllotmentEditId] = useState('');
   const [debouncedSearch] = useDebounce(search, 500);
   const [isOpenCreateAllotmentModal, toggleCreateAllotmentModal] = useState(false);
@@ -39,6 +41,18 @@ const Allotments = () => {
         acc[curr] = debouncedSearch;
         return acc;
       }, {}),
+      block:
+        blocks.length > 0
+          ? {
+              in: blocks,
+            }
+          : undefined,
+      allotmentPrototype:
+        allotmentPrototypes.length > 0
+          ? {
+              in: allotmentPrototypes,
+            }
+          : undefined,
     },
   });
 
@@ -102,6 +116,8 @@ const Allotments = () => {
               <Title
                 openCreateAllotmentModal={() => toggleCreateAllotmentModal(true)}
                 setSearch={setSearch}
+                setAllotmentPrototypes={setAllotmentPrototypes}
+                setBlocks={setBlocks}
               />
             )}
             scroll={{
