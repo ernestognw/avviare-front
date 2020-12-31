@@ -2,7 +2,7 @@ import { Card, Button, Avatar, Tooltip, Pagination, Typography, Divider, Tag } f
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import { documentCategories } from '@config/constants/document';
-import { join } from 'path';
+import urljoin from 'url-join';
 import Box from '@components/box';
 import moment from 'moment';
 import Loading from '@components/loading';
@@ -37,37 +37,6 @@ const DocumentsGrid = ({
   setDocumentEditId,
 }) => {
   const { pathname } = useLocation();
-
-  // const columns = [
-  //   {
-  //     title: 'Nombre',
-  //     dataIndex: 'name',
-  //     key: 'name',
-  //     fixed: 'left',
-  //   },
-  //   {
-  //     title: 'Descripción',
-  //     dataIndex: 'description',
-  //     key: 'description',
-  //   },
-  //   {
-  //     title: 'Categorías',
-  //     dataIndex: 'categories',
-  //     key: 'categories',
-  //     render: (innerCategories) =>
-  //       innerCategories.map((category) => (
-  //         <Tag color="green" key={category}>
-  //           {documentCategories[category]}
-  //         </Tag>
-  //       )),
-  //   },
-  //   {
-  //     title: 'Versiones',
-  //     dataIndex: 'versions',
-  //     key: 'versions',
-  //     render: (versions) => versions.info.count,
-  //   },
-  // ];
 
   return (
     <Box display="flex" flexDirection="column" width="100%">
@@ -125,7 +94,7 @@ const DocumentsGrid = ({
                     type="link"
                   />
                 </Tooltip>,
-                <Link to={join(pathname, id)}>
+                <Link to={urljoin(pathname, id)}>
                   <Button type="link" icon={<RightOutlined />} size="small">
                     Ver
                   </Button>

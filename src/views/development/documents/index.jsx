@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import axios from 'axios';

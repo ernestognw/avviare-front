@@ -1,7 +1,7 @@
 import { Card, Table, Tag, Button, Avatar, Tooltip, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
-import { join } from 'path';
+import urljoin from 'url-join';
 import { documentCategories } from '@config/constants/document';
 import theme from '@config/theme';
 import moment from 'moment';
@@ -109,7 +109,7 @@ const DocumentsTable = ({ loading, download, pagination, documents, title, setDo
       fixed: 'right',
       render: (document) => (
         <ActionsContainer>
-          <Link to={join(pathname, document.id)}>
+          <Link to={urljoin(pathname, document.id)}>
             <Button type="primary" icon={<RightOutlined />} size="small">
               Ver
             </Button>

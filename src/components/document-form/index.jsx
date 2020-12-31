@@ -26,7 +26,7 @@ const DocumentForm = ({ onFinish, loading, form, initialValues, ...props }) => {
         style={{ marginTop: 10 }}
         label="Nombre del documento"
         name="name"
-        rules={[{ required: true, message: 'Ingresa el nombre del document' }]}
+        rules={[{ required: true, message: 'Ingresa el nombre del documento' }]}
       >
         <Input prefix={<FileDoneOutlined />} placeholder="Nombre" />
       </Item>

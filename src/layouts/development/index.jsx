@@ -12,12 +12,15 @@ import {
   SettingOutlined,
   BuildOutlined,
   LayoutOutlined,
+  UserOutlined,
+  EditOutlined,
+  AuditOutlined,
 } from '@ant-design/icons';
 import { Menu, Layout, Skeleton } from 'antd';
 import { Cover, SkeletonImage, Avatar } from './elements';
 
 const { Sider, Content } = Layout;
-const { Item } = Menu;
+const { Item, SubMenu } = Menu;
 
 const DevelopmentLayout = ({ children }) => {
   const { pathname } = useLocation();
@@ -35,7 +38,6 @@ const DevelopmentLayout = ({ children }) => {
 
   const selectedKeys = [pathname];
 
-  if (pathname.includes('settings')) selectedKeys.push(`${commonPath}/settings`);
   if (pathname.includes('documents')) selectedKeys.push(`${commonPath}/documents`);
 
   return (
@@ -54,7 +56,7 @@ const DevelopmentLayout = ({ children }) => {
             <Avatar size={60} src={development?.logo} />
           </>
         )}
-        <Menu style={{ height: '100%' }} selectedKeys={selectedKeys}>
+        <Menu style={{ height: '100%' }} mode="inline" selectedKeys={selectedKeys}>
           {loadingDevelopment ? (
             new Array(5).fill().map(() => (
               <Item key={shortid.generate()}>
@@ -76,9 +78,21 @@ const DevelopmentLayout = ({ children }) => {
                 <Link to={`${commonPath}/allotments`}>Lotes</Link>
               </Item>
               {developmentRole.manager && (
-                <Item key={`${commonPath}/settings`} icon={<SettingOutlined />}>
-                  <Link to={`${commonPath}/settings`}>Configuración</Link>
-                </Item>
+                <SubMenu
+                  title="Configuración"
+                  key={`${commonPath}/settings`}
+                  icon={<SettingOutlined />}
+                >
+                  <Item key={`${commonPath}/settings`} icon={<EditOutlined />}>
+                    <Link to={`${commonPath}/settings`}>General</Link>
+                  </Item>
+                  <Item key={`${commonPath}/settings/members`} icon={<UserOutlined />}>
+                    <Link to={`${commonPath}/settings/members`}>Miembros</Link>
+                  </Item>
+                  <Item key={`${commonPath}/settings/providers`} icon={<AuditOutlined />}>
+                    <Link to={`${commonPath}/settings/providers`}>Proveedores</Link>
+                  </Item>
+                </SubMenu>
               )}
             </>
           )}
