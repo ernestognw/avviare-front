@@ -19,7 +19,6 @@ const AllotmentPrototypeForm = ({ onFinish, loading, form, initialValues, ...pro
       {...props}
     >
       <Item
-        style={{ marginTop: 10 }}
         label="Nombre del prototipo"
         name="name"
         rules={[{ required: true, message: 'Ingresa el nombre del prototipo' }]}
@@ -50,9 +49,7 @@ AllotmentPrototypeForm.propTypes = {
   loading: PropTypes.bool.isRequired,
   form: PropTypes.object,
   initialValues: PropTypes.shape({
-    categories: PropTypes.arrayOf(PropTypes.string),
     name: PropTypes.string,
-    description: PropTypes.string,
   }),
 };
 
