@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Typography, Select } from 'antd';
-import { UserAddOutlined } from '@ant-design/icons';
+import { PlusOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import { useDebounce } from 'use-debounce';
 import { useQuery } from '@apollo/client';
 import { useDevelopment } from '@providers/development';
@@ -20,7 +20,13 @@ const { Title } = Typography;
 const { Search } = Input;
 const { Option } = Select;
 
-const TableTitle = ({ setSearch, openCreateAllotmentModal, setBlocks, setAllotmentPrototypes }) => {
+const TableTitle = ({
+  setSearch,
+  openCreateAllotmentModal,
+  setBlocks,
+  setAllotmentPrototypes,
+  openBlocksModal,
+}) => {
   const [blockSearch, setBlockSearch] = useState('');
   const [allotmentPrototypeSearch, setAllotmentPrototypeSearch] = useState('');
 
@@ -77,31 +83,14 @@ const TableTitle = ({ setSearch, openCreateAllotmentModal, setBlocks, setAllotme
           type="primary"
           onClick={openCreateAllotmentModal}
           disabled={!developmentRole.manager}
-          icon={<UserAddOutlined />}
+          icon={<PlusOutlined />}
         >
           Añadir
         </Button>
       </Box>
       <Box mt={10} display="flex">
         <Select
-          style={{ width: 250, margin: 'auto 10px auto auto' }}
-          mode="multiple"
-          allowClear
-          loading={loadingBlocks}
-          onSearch={setBlockSearch}
-          filterOption={false}
-          showSearch
-          placeholder="Filtrar por manzanas"
-          onChange={setBlocks}
-        >
-          {blocksData?.blocks.results.map(({ id, number }) => (
-            <Option key={id} value={id}>
-              {number}
-            </Option>
-          ))}
-        </Select>
-        <Select
-          style={{ width: 200, margin: 'auto 10px auto 10px' }}
+          style={{ width: 200, margin: 'auto 10px auto auto' }}
           mode="multiple"
           allowClear
           loading={loadingAllotmentPrototypes}
@@ -117,6 +106,30 @@ const TableTitle = ({ setSearch, openCreateAllotmentModal, setBlocks, setAllotme
             </Option>
           ))}
         </Select>
+        <Select
+          style={{ width: 200, margin: 'auto 10px auto 10px' }}
+          mode="multiple"
+          allowClear
+          loading={loadingBlocks}
+          onSearch={setBlockSearch}
+          filterOption={false}
+          showSearch
+          placeholder="Filtrar por manzanas"
+          onChange={setBlocks}
+        >
+          {blocksData?.blocks.results.map(({ id, number }) => (
+            <Option key={id} value={id}>
+              {number}
+            </Option>
+          ))}
+        </Select>
+        <Button
+          onClick={openBlocksModal}
+          style={{ margin: 'auto 0 auto 10px' }}
+          icon={<MenuFoldOutlined />}
+        >
+          Manzanas
+        </Button>
       </Box>
     </TitleContainer>
   );
@@ -127,6 +140,7 @@ TableTitle.propTypes = {
   openCreateAllotmentModal: PropTypes.func.isRequired,
   setBlocks: PropTypes.func.isRequired,
   setAllotmentPrototypes: PropTypes.func.isRequired,
+  openBlocksModal: PropTypes.func.isRequired,
 };
 
 export default TableTitle;

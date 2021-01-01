@@ -11,6 +11,7 @@ import { useLocation, Link } from 'react-router-dom';
 import Title from './title';
 import CreateAllotmentModal from './create-allotment-modal';
 import EditAllotmentModal from './edit-allotment-modal';
+import BlocksModal from './blocks-modal';
 import { Container, ActionsContainer } from './elements';
 import { GET_ALLOTMENTS } from './requests';
 
@@ -27,8 +28,9 @@ const Allotments = () => {
   const [allotmentEditId, setAllotmentEditId] = useState('');
   const [debouncedSearch] = useDebounce(search, 500);
   const [isOpenCreateAllotmentModal, toggleCreateAllotmentModal] = useState(false);
+  const [isBlocksModalOpen, toggleBlocksModal] = useState(false);
 
-  const { development } = useDevelopment();
+  const { development, developmentRole } = useDevelopment();
   const { pathname } = useLocation();
 
   const { data, loading, refetch } = useQuery(GET_ALLOTMENTS, {
@@ -98,7 +100,12 @@ const Allotments = () => {
             </Button>
           </Link>
           <Tooltip onClick={() => setAllotmentEditId(allotment.id)} title="Editar lote">
-            <Button style={{ marginLeft: 10 }} icon={<EditOutlined />} size="small" />
+            <Button
+              disabled={!developmentRole.manager}
+              style={{ marginLeft: 10 }}
+              icon={<EditOutlined />}
+              size="small"
+            />
           </Tooltip>
         </ActionsContainer>
       ),
@@ -118,6 +125,7 @@ const Allotments = () => {
                 setSearch={setSearch}
                 setAllotmentPrototypes={setAllotmentPrototypes}
                 setBlocks={setBlocks}
+                openBlocksModal={() => toggleBlocksModal(true)}
               />
             )}
             scroll={{
@@ -150,6 +158,7 @@ const Allotments = () => {
         allotmentEditId={allotmentEditId}
         onClose={() => setAllotmentEditId('')}
       />
+      <BlocksModal visible={isBlocksModalOpen} onClose={() => toggleBlocksModal(false)} />
     </>
   );
 };

@@ -28,7 +28,7 @@ const Prototypes = () => {
     false
   );
 
-  const { development } = useDevelopment();
+  const { development, developmentRole } = useDevelopment();
   const { pathname } = useLocation();
 
   const { data, loading, refetch } = useQuery(GET_PROTOTYPES, {
@@ -77,7 +77,12 @@ const Prototypes = () => {
             onClick={() => setAllotmentPrototypeEditId(allotmentPrototype.id)}
             title="Editar prototipo"
           >
-            <Button style={{ marginLeft: 10 }} icon={<EditOutlined />} size="small" />
+            <Button
+              disabled={!developmentRole.manager}
+              style={{ marginLeft: 10 }}
+              icon={<EditOutlined />}
+              size="small"
+            />
           </Tooltip>
         </ActionsContainer>
       ),
