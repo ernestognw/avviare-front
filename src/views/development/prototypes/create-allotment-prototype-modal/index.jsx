@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Drawer, Form, Alert, message } from 'antd';
+import { Drawer, Form, Alert, Modal, message } from 'antd';
 import { useMutation } from '@apollo/client';
 import { useDevelopment } from '@providers/development';
 import AllotmentPrototypeForm from '@components/allotment-prototype-form';
@@ -12,7 +12,7 @@ const CreateAllotmentPrototypeModal = ({ onClose, visible, updateAllotmentProtot
   const [createAllotmentPrototype] = useMutation(CREATE_ALLOTMENT_PROTOTYPE);
   const { development } = useDevelopment();
 
-  const onFinish = async (allotmentPrototype) => {
+  const savePrototype = async (allotmentPrototype) => {
     setSaving(true);
 
     const { errors } = await createAllotmentPrototype({
@@ -29,6 +29,15 @@ const CreateAllotmentPrototypeModal = ({ onClose, visible, updateAllotmentProtot
 
     setSaving(false);
   };
+
+  const onFinish = (allotmentPrototype) =>
+    Modal.confirm({
+      title: '¿Quieres guardar este prototipo?',
+      content: 'Una vez creado, no se podrá eliminar.',
+      okText: 'Confirmar',
+      cancelText: 'Cancelar',
+      onOk: () => savePrototype(allotmentPrototype),
+    });
 
   return (
     <Drawer
