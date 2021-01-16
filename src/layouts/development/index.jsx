@@ -39,6 +39,8 @@ const DevelopmentLayout = ({ children }) => {
   const selectedKeys = [pathname];
 
   if (pathname.includes('documents')) selectedKeys.push(`${commonPath}/documents`);
+  if (pathname.includes('allotments')) selectedKeys.push(`${commonPath}/allotments`);
+  if (pathname.includes('prototypes')) selectedKeys.push(`${commonPath}/prototypes`);
 
   return (
     <Layout style={{ minHeight: '100%' }}>
