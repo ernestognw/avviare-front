@@ -22,6 +22,7 @@ import { GET_ALLOTMENT_PROTOTYPE, GET_CONCEPTS } from './requests';
 import { Container, ConceptsContainer, EmptyContainer } from './elements';
 import SubconceptsModal from './subconcepts-modal';
 import CreateConceptModal from './create-concept-modal';
+import EditConceptModal from './edit-concept-modal';
 
 const { Title, Text } = Typography;
 const { Meta } = Card;
@@ -38,6 +39,7 @@ const Prototype = () => {
   const { developmentRole } = useDevelopment();
   const [isCreateConceptModalOpen, toggleCreateConceptModal] = useState(false);
   const [search, setSearch] = useState('');
+  const [conceptEditId, setConceptEditId] = useState('');
   const [selectedConcept, setSelectedConcept] = useState(null);
   const [debouncedSearch] = useDebounce(search, 500);
 
@@ -124,6 +126,7 @@ const Prototype = () => {
                         icon={<EditOutlined />}
                         size="small"
                         type="link"
+                        onClick={() => setConceptEditId(id)}
                       />
                     </Tooltip>,
                     <Button
@@ -172,6 +175,11 @@ const Prototype = () => {
         visible={isCreateConceptModalOpen}
         onClose={() => toggleCreateConceptModal(false)}
         updateConcepts={refetchConcepts}
+      />
+      <EditConceptModal
+        visible={!!conceptEditId}
+        conceptEditId={conceptEditId}
+        onClose={() => setConceptEditId('')}
       />
     </>
   );

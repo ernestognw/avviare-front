@@ -1,5 +1,15 @@
 import { gql } from '@apollo/client';
 
+// Used on edit concept modal.
+// Should fetch the same query so cache could concept user withouth refetching the entire list
+const conceptInfo = `
+  id
+  code
+  name
+  description
+  subconceptsCount
+`;
+
 const GET_ALLOTMENT_PROTOTYPE = gql`
   query allotmentPrototype($id: ID!) {
     allotmentPrototype(id: $id) {
@@ -20,14 +30,10 @@ const GET_CONCEPTS = gql`
         count
       }
       results {
-        id
-        code
-        name
-        description
-        subconceptsCount
+        ${conceptInfo}
       }
     }
   }
 `;
 
-export { GET_ALLOTMENT_PROTOTYPE, GET_CONCEPTS };
+export { conceptInfo, GET_ALLOTMENT_PROTOTYPE, GET_CONCEPTS };
