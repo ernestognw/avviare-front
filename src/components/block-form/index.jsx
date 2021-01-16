@@ -24,7 +24,7 @@ const BlockForm = ({ onFinish, loading, form, initialValues, ...props }) => {
         rules={[
           { required: true, message: 'Ingresa el número de la manzana' },
           {
-            validator: (_, value) => (!value.includes(' ') ? Promise.resolve() : Promise.reject()),
+            validator: (_, value) => (!value?.includes(' ') ? Promise.resolve() : Promise.reject()),
             message: 'El número no puede tener espacios',
           },
         ]}

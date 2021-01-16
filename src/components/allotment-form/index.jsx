@@ -77,7 +77,7 @@ const AllotmentForm = ({ onFinish, loading, form, initialValues, disabled, ...pr
         rules={[
           { required: true, message: 'Ingresa el número de lote' },
           {
-            validator: (_, value) => (!value.includes(' ') ? Promise.resolve() : Promise.reject()),
+            validator: (_, value) => (!value?.includes(' ') ? Promise.resolve() : Promise.reject()),
             message: 'El número no puede tener espacios',
           },
         ]}

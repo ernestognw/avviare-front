@@ -32,12 +32,12 @@ const ConceptForm = ({ onFinish, loading, form, initialValues, ...props }) => {
         rules={[
           { required: true, message: 'Ingresa el código identificador del concepto' },
           {
-            validator: (_, value) => (!value.includes(' ') ? Promise.resolve() : Promise.reject()),
+            validator: (_, value) => (!value?.includes(' ') ? Promise.resolve() : Promise.reject()),
             message: 'El código no puede tener espacios',
           },
         ]}
       >
-        <Input prefix={<NumberOutlined />} placeholder="Número" />
+        <Input prefix={<NumberOutlined />} placeholder="Código" />
       </Item>
       <Item label="Descripción" name="description">
         <TextArea placeholder="Añade información extra sobre el concepto" rows={4} />
