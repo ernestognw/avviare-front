@@ -74,7 +74,13 @@ const AllotmentForm = ({ onFinish, loading, form, initialValues, disabled, ...pr
       <Item
         label="Número de lote"
         name="number"
-        rules={[{ required: true, message: 'Ingresa el nombre de lote' }]}
+        rules={[
+          { required: true, message: 'Ingresa el número de lote' },
+          {
+            validator: (_, value) => (!value.includes(' ') ? Promise.resolve() : Promise.reject()),
+            message: 'El número no puede tener espacios',
+          },
+        ]}
       >
         <Input prefix={<NumberOutlined />} placeholder="Número" disabled={disabled.number} />
       </Item>

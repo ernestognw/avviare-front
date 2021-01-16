@@ -21,6 +21,7 @@ import { EditOutlined, RightOutlined, PlusOutlined } from '@ant-design/icons';
 import { GET_ALLOTMENT_PROTOTYPE, GET_CONCEPTS } from './requests';
 import { Container, ConceptsContainer, EmptyContainer } from './elements';
 import SubconceptsModal from './subconcepts-modal';
+import CreateConceptModal from './create-concept-modal';
 
 const { Title, Text } = Typography;
 const { Meta } = Card;
@@ -35,6 +36,7 @@ const Prototype = () => {
   const [params, setParams] = useState(defaultParams);
   const { allotmentPrototypeId } = useParams();
   const { developmentRole } = useDevelopment();
+  const [isCreateConceptModalOpen, toggleCreateConceptModal] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedConcept, setSelectedConcept] = useState(null);
   const [debouncedSearch] = useDebounce(search, 500);
@@ -43,18 +45,21 @@ const Prototype = () => {
     variables: { id: allotmentPrototypeId },
   });
 
-  const { data: conceptsData, loading: loadingConcepts } = useQuery(GET_CONCEPTS, {
-    variables: {
-      search: searchableFields.reduce((acc, curr) => {
-        acc[curr] = debouncedSearch;
-        return acc;
-      }, {}),
-      params,
-      allotmentPrototype: {
-        eq: allotmentPrototypeId,
+  const { data: conceptsData, loading: loadingConcepts, refetch: refetchConcepts } = useQuery(
+    GET_CONCEPTS,
+    {
+      variables: {
+        search: searchableFields.reduce((acc, curr) => {
+          acc[curr] = debouncedSearch;
+          return acc;
+        }, {}),
+        params,
+        allotmentPrototype: {
+          eq: allotmentPrototypeId,
+        },
       },
-    },
-  });
+    }
+  );
 
   return (
     <>
@@ -82,6 +87,7 @@ const Prototype = () => {
               type="primary"
               icon={<PlusOutlined />}
               disabled={!developmentRole.manager}
+              onClick={() => toggleCreateConceptModal(true)}
             >
               Añadir
             </Button>
@@ -161,6 +167,11 @@ const Prototype = () => {
         concept={selectedConcept ?? {}}
         visible={!!selectedConcept}
         onClose={() => setSelectedConcept(null)}
+      />
+      <CreateConceptModal
+        visible={isCreateConceptModalOpen}
+        onClose={() => toggleCreateConceptModal(false)}
+        updateConcepts={refetchConcepts}
       />
     </>
   );

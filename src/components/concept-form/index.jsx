@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { NumberOutlined } from '@ant-design/icons';
+import { FileDoneOutlined, NumberOutlined } from '@ant-design/icons';
 import { Form, Input, Button } from 'antd';
 
 const { Item } = Form;
+const { TextArea } = Input;
 
-const BlockForm = ({ onFinish, loading, form, initialValues, ...props }) => {
+const ConceptForm = ({ onFinish, loading, form, initialValues, ...props }) => {
   useEffect(() => {
     form.resetFields();
   }, [form]);
@@ -19,17 +20,27 @@ const BlockForm = ({ onFinish, loading, form, initialValues, ...props }) => {
       {...props}
     >
       <Item
-        label="Número de la manzana"
-        name="number"
+        label="Nombre"
+        name="name"
+        rules={[{ required: true, message: 'Ingresa el nombre del concepto' }]}
+      >
+        <Input prefix={<FileDoneOutlined />} placeholder="Nombre" />
+      </Item>
+      <Item
+        label="Código"
+        name="code"
         rules={[
-          { required: true, message: 'Ingresa el número de la manzana' },
+          { required: true, message: 'Ingresa el código identificador del concepto' },
           {
             validator: (_, value) => (!value.includes(' ') ? Promise.resolve() : Promise.reject()),
-            message: 'El número no puede tener espacios',
+            message: 'El código no puede tener espacios',
           },
         ]}
       >
-        <Input prefix={<NumberOutlined />} placeholder="Nombre" />
+        <Input prefix={<NumberOutlined />} placeholder="Número" />
+      </Item>
+      <Item label="Descripción" name="description">
+        <TextArea placeholder="Añade información extra sobre el concepto" rows={4} />
       </Item>
       <Item style={{ marginTop: 20 }}>
         <Button
@@ -45,18 +56,20 @@ const BlockForm = ({ onFinish, loading, form, initialValues, ...props }) => {
   );
 };
 
-BlockForm.defaultProps = {
+ConceptForm.defaultProps = {
   form: null,
   initialValues: null,
 };
 
-BlockForm.propTypes = {
+ConceptForm.propTypes = {
   onFinish: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   form: PropTypes.object,
   initialValues: PropTypes.shape({
-    number: PropTypes.string,
+    code: PropTypes.string,
+    name: PropTypes.string,
+    description: PropTypes.string,
   }),
 };
 
-export default BlockForm;
+export default ConceptForm;
