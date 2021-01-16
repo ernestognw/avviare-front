@@ -8,6 +8,8 @@ import { useQuery } from '@apollo/client';
 import { PlusOutlined, EditOutlined } from '@ant-design/icons';
 import Box from '@components/box';
 import { GET_SUBCONCEPTS } from './requests';
+import CreateSubconceptModal from './create-subconcept-modal';
+import EditSubconceptModal from './edit-subconcept-modal';
 
 const defaultParams = {
   page: 1,
@@ -17,9 +19,11 @@ const defaultParams = {
 const { Search } = Input;
 const { Text, Paragraph } = Typography;
 
-const SubconceptsModal = ({ concept, onClose, visible }) => {
+const SubconceptsModal = ({ onSubconceptAdded, concept, onClose, visible }) => {
   const [params, setParams] = useState(defaultParams);
   const [search, setSearch] = useState('');
+  const [subconceptEditId, setSubconceptEditId] = useState('');
+  const [isCreateSubconceptModalOpen, toggleCreateSubconceptModal] = useState(false);
 
   const { developmentRole } = useDevelopment();
   const [debouncedSearch] = useDebounce(search, 500);
@@ -28,7 +32,7 @@ const SubconceptsModal = ({ concept, onClose, visible }) => {
     setParams(defaultParams);
   }, [visible]);
 
-  const { data, loading } = useQuery(GET_SUBCONCEPTS, {
+  const { data, loading, refetch } = useQuery(GET_SUBCONCEPTS, {
     variables: {
       concept: {
         eq: concept.id,
@@ -62,6 +66,7 @@ const SubconceptsModal = ({ concept, onClose, visible }) => {
             type="primary"
             disabled={!developmentRole.manager}
             icon={<PlusOutlined />}
+            onClick={() => toggleCreateSubconceptModal(true)}
           >
             Añadir
           </Button>
@@ -83,6 +88,7 @@ const SubconceptsModal = ({ concept, onClose, visible }) => {
             onShowSizeChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
           }}
           renderItem={({
+            id,
             subconceptInstancesCount,
             code,
             name,
@@ -93,7 +99,7 @@ const SubconceptsModal = ({ concept, onClose, visible }) => {
           }) => (
             <List.Item
               actions={[
-                <Button icon={<EditOutlined />} type="link">
+                <Button onClick={() => setSubconceptEditId(id)} icon={<EditOutlined />} type="link">
                   Editar
                 </Button>,
               ]}
@@ -131,11 +137,24 @@ const SubconceptsModal = ({ concept, onClose, visible }) => {
           )}
         />
       </Drawer>
+      <CreateSubconceptModal
+        conceptId={concept.id}
+        visible={isCreateSubconceptModalOpen}
+        onClose={() => toggleCreateSubconceptModal(false)}
+        updateSubconcepts={refetch}
+        onSubconceptAdded={onSubconceptAdded}
+      />
+      <EditSubconceptModal
+        visible={!!subconceptEditId}
+        subconceptEditId={subconceptEditId}
+        onClose={() => setSubconceptEditId('')}
+      />
     </>
   );
 };
 
 SubconceptsModal.propTypes = {
+  onSubconceptAdded: PropTypes.func.isRequired,
   concept: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string,

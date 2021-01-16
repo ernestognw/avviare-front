@@ -170,6 +170,7 @@ const Prototype = () => {
         concept={selectedConcept ?? {}}
         visible={!!selectedConcept}
         onClose={() => setSelectedConcept(null)}
+        onSubconceptAdded={refetchConcepts}
       />
       <CreateConceptModal
         visible={isCreateConceptModalOpen}
