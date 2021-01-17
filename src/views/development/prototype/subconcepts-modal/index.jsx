@@ -123,10 +123,10 @@ const SubconceptsModal = ({ onSubconceptAdded, concept, onClose, visible }) => {
                     <Paragraph style={{ marginBottom: 2 }} type="secondary">
                       {description}
                     </Paragraph>
-                    <Tag style={{}} color="blue">
+                    <Tag color="blue">
                       {quantity} {units[unit]}(s)
                     </Tag>
-                    <Tag style={{}} color="blue">
+                    <Tag color="blue">
                       ${unitPrice}MXN/
                       {units[unit]}
                     </Tag>

@@ -9,13 +9,14 @@ import {
   Tooltip,
   Avatar,
   Button,
+  Tag,
 } from 'antd';
 import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
+import shortid from 'shortid';
 import { useDebounce } from 'use-debounce';
 import { useDevelopment } from '@providers/development';
 import Box from '@components/box';
-import Loading from '@components/loading';
 import { searchableFields } from '@config/constants/concept';
 import { EditOutlined, RightOutlined, PlusOutlined } from '@ant-design/icons';
 import { GET_ALLOTMENT_PROTOTYPE, GET_CONCEPTS } from './requests';
@@ -67,12 +68,7 @@ const Prototype = () => {
     <>
       <Container>
         {loadingAllotment ? (
-          <Skeleton
-            avatar={{ size: 65 }}
-            paragraph={{ rows: 1, style: { width: 400 } }}
-            title={{ style: { width: 200 } }}
-            active
-          />
+          <Skeleton title={{ style: { width: 200 } }} active paragraph={false} />
         ) : (
           <Box display="flex">
             <Title style={{ margin: 0 }} level={3}>
@@ -96,9 +92,13 @@ const Prototype = () => {
           </Box>
         )}
         {loadingConcepts ? (
-          <Box display="flex" m={40} justifyContent="center" width="100%">
-            <Loading />
-          </Box>
+          <ConceptsContainer>
+            {new Array(10).fill().map(() => (
+              <Card key={shortid.generate()}>
+                <Skeleton active loading paragraph={{ rows: 1 }} />
+              </Card>
+            ))}
+          </ConceptsContainer>
         ) : conceptsData.concepts.results.length === 0 ? (
           <EmptyContainer>
             <Empty
@@ -116,40 +116,47 @@ const Prototype = () => {
         ) : (
           <>
             <ConceptsContainer>
-              {conceptsData.concepts.results.map(({ id, name, description, subconceptsCount }) => (
-                <Card
-                  key={id}
-                  actions={[
-                    <Tooltip title="Editar concepto">
+              {conceptsData.concepts.results.map(
+                ({ id, name, code, description, subconceptsCount }) => (
+                  <Card
+                    key={id}
+                    actions={[
+                      <Tooltip title="Editar concepto">
+                        <Button
+                          style={{ marginLeft: 10 }}
+                          icon={<EditOutlined />}
+                          size="small"
+                          type="link"
+                          onClick={() => setConceptEditId(id)}
+                        />
+                      </Tooltip>,
                       <Button
-                        style={{ marginLeft: 10 }}
-                        icon={<EditOutlined />}
-                        size="small"
+                        onClick={() => setSelectedConcept({ id, name })}
                         type="link"
-                        onClick={() => setConceptEditId(id)}
-                      />
-                    </Tooltip>,
-                    <Button
-                      onClick={() => setSelectedConcept({ id, name })}
-                      type="link"
-                      icon={<RightOutlined />}
-                      size="small"
-                    >
-                      Ver
-                    </Button>,
-                  ]}
-                >
-                  <Meta
-                    avatar={
-                      <Tooltip title={`${subconceptsCount} subconceptos`}>
-                        <Avatar size={40}>{subconceptsCount}</Avatar>
-                      </Tooltip>
-                    }
-                    title={name}
-                    description={description}
-                  />
-                </Card>
-              ))}
+                        icon={<RightOutlined />}
+                        size="small"
+                      >
+                        Ver
+                      </Button>,
+                    ]}
+                  >
+                    <Meta
+                      avatar={
+                        <Tooltip title={`${subconceptsCount} subconceptos`}>
+                          <Avatar size={40}>{subconceptsCount}</Avatar>
+                        </Tooltip>
+                      }
+                      title={
+                        <>
+                          <Title level={5}>{name}</Title>
+                          <Tag color="green">{code}</Tag>
+                        </>
+                      }
+                      description={description}
+                    />
+                  </Card>
+                )
+              )}
             </ConceptsContainer>
             <Pagination
               style={{ textAlign: 'center', marginTop: 20 }}

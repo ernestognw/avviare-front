@@ -43,6 +43,7 @@ const BlocksModal = ({ onClose, visible }) => {
         return acc;
       }, {}),
     },
+    skip: !visible,
   });
 
   return (

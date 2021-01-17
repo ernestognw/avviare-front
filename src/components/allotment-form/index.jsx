@@ -17,7 +17,7 @@ const params = {
 const { Item } = Form;
 const { Option } = Select;
 
-const AllotmentForm = ({ onFinish, loading, form, initialValues, disabled, ...props }) => {
+const AllotmentForm = ({ onFinish, loading, form, initialValues, disabled, after, ...props }) => {
   const [blockSearch, setBlockSearch] = useState('');
   const [allotmentPrototypeSearch, setAllotmentPrototypeSearch] = useState('');
 
@@ -124,6 +124,7 @@ const AllotmentForm = ({ onFinish, loading, form, initialValues, disabled, ...pr
           ))}
         </Select>
       </Item>
+      {after}
       <Item style={{ marginTop: 20 }}>
         <Button
           loading={loading}
@@ -146,11 +147,13 @@ AllotmentForm.defaultProps = {
     block: false,
     allotmentPrototype: false,
   },
+  after: undefined,
 };
 
 AllotmentForm.propTypes = {
   onFinish: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
+  after: PropTypes.node,
   form: PropTypes.object,
   initialValues: PropTypes.shape({
     number: PropTypes.string,
