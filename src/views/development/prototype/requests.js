@@ -7,7 +7,11 @@ const conceptInfo = `
   code
   name
   description
-  subconceptsCount
+  subconcepts {
+    info {
+      count
+    }
+  }
 `;
 
 const GET_ALLOTMENT_PROTOTYPE = gql`

@@ -10,7 +10,11 @@ const subconceptInfo = `
   quantity
   unit
   unitPrice
-  subconceptInstancesCount
+  subconceptInstances {
+    info {
+      count
+    }
+  }
 `;
 
 const GET_SUBCONCEPTS = gql`

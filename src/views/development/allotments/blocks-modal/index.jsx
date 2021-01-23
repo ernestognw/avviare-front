@@ -87,7 +87,7 @@ const BlocksModal = ({ onClose, visible }) => {
             onChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
             onShowSizeChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
           }}
-          renderItem={({ id, allotmentsCount, createdAt, number }) => (
+          renderItem={({ id, allotments, createdAt, number }) => (
             <List.Item
               actions={[
                 <Button onClick={() => setBlockEditId(id)} icon={<EditOutlined />} type="link">
@@ -97,8 +97,11 @@ const BlocksModal = ({ onClose, visible }) => {
             >
               <List.Item.Meta
                 avatar={
-                  <Tooltip placement="left" title={`${allotmentsCount} lotes en esta manzana`}>
-                    <Avatar size={40}>{allotmentsCount}</Avatar>
+                  <Tooltip
+                    placement="left"
+                    title={`${allotments.info.count} lotes en esta manzana`}
+                  >
+                    <Avatar size={40}>{allotments.info.count}</Avatar>
                   </Tooltip>
                 }
                 title={number}

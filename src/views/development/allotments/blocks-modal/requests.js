@@ -7,7 +7,11 @@ const blockInfo = `
   number
   createdAt
   updatedAt
-  allotmentsCount
+  allotments {
+    info {
+      count
+    }
+  }
 `;
 
 const GET_BLOCKS = gql`

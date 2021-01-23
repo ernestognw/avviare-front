@@ -116,47 +116,45 @@ const Prototype = () => {
         ) : (
           <>
             <ConceptsContainer>
-              {conceptsData.concepts.results.map(
-                ({ id, name, code, description, subconceptsCount }) => (
-                  <Card
-                    key={id}
-                    actions={[
-                      <Tooltip title="Editar concepto">
-                        <Button
-                          style={{ marginLeft: 10 }}
-                          icon={<EditOutlined />}
-                          size="small"
-                          type="link"
-                          onClick={() => setConceptEditId(id)}
-                        />
-                      </Tooltip>,
+              {conceptsData.concepts.results.map(({ id, name, code, description, subconcepts }) => (
+                <Card
+                  key={id}
+                  actions={[
+                    <Tooltip title="Editar concepto">
                       <Button
-                        onClick={() => setSelectedConcept({ id, name })}
-                        type="link"
-                        icon={<RightOutlined />}
+                        style={{ marginLeft: 10 }}
+                        icon={<EditOutlined />}
                         size="small"
-                      >
-                        Ver
-                      </Button>,
-                    ]}
-                  >
-                    <Meta
-                      avatar={
-                        <Tooltip title={`${subconceptsCount} subconceptos`}>
-                          <Avatar size={40}>{subconceptsCount}</Avatar>
-                        </Tooltip>
-                      }
-                      title={
-                        <>
-                          <Title level={5}>{name}</Title>
-                          <Tag color="green">{code}</Tag>
-                        </>
-                      }
-                      description={description}
-                    />
-                  </Card>
-                )
-              )}
+                        type="link"
+                        onClick={() => setConceptEditId(id)}
+                      />
+                    </Tooltip>,
+                    <Button
+                      onClick={() => setSelectedConcept({ id, name })}
+                      type="link"
+                      icon={<RightOutlined />}
+                      size="small"
+                    >
+                      Ver
+                    </Button>,
+                  ]}
+                >
+                  <Meta
+                    avatar={
+                      <Tooltip title={`${subconcepts.info.count} subconceptos`}>
+                        <Avatar size={40}>{subconcepts.info.count}</Avatar>
+                      </Tooltip>
+                    }
+                    title={
+                      <>
+                        <Title level={5}>{name}</Title>
+                        <Tag color="green">{code}</Tag>
+                      </>
+                    }
+                    description={description}
+                  />
+                </Card>
+              ))}
             </ConceptsContainer>
             <Pagination
               style={{ textAlign: 'center', marginTop: 20 }}

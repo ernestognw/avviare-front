@@ -89,7 +89,7 @@ const SubconceptsModal = ({ onSubconceptAdded, concept, onClose, visible }) => {
           }}
           renderItem={({
             id,
-            subconceptInstancesCount,
+            subconceptInstances,
             code,
             name,
             description,
@@ -106,8 +106,8 @@ const SubconceptsModal = ({ onSubconceptAdded, concept, onClose, visible }) => {
             >
               <List.Item.Meta
                 avatar={
-                  <Tooltip placement="left" title={`${subconceptInstancesCount} instancias`}>
-                    <Avatar size={40}>{subconceptInstancesCount}</Avatar>
+                  <Tooltip placement="left" title={`${subconceptInstances.info.count} instancias`}>
+                    <Avatar size={40}>{subconceptInstances.info.count}</Avatar>
                   </Tooltip>
                 }
                 title={

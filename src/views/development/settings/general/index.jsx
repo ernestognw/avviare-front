@@ -48,7 +48,7 @@ const General = () => {
     if (errors) {
       message.error(errors[0].message);
     } else {
-      message.success('El desarrollo se ha creado correctamente');
+      message.success('El desarrollo se ha actualizado correctamente');
       await reloadDevelopment();
     }
 
