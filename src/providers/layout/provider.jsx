@@ -9,6 +9,9 @@ const initialDisplayValues = {
 
 const LayoutProvider = ({ children }) => {
   const [title, setTitle] = useState('');
+  const [developmentSidebarOpen, setDevelopmentSidebarOpen] = useState(
+    localStorage.getItem('developmentSidebarOpen') === 'true'
+  );
   const [layoutDisplays, setLayoutDisplays] = useState(
     JSON.parse(localStorage.getItem('displays')) ?? initialDisplayValues
   );
@@ -19,6 +22,11 @@ const LayoutProvider = ({ children }) => {
     setLayoutDisplays(newLayoutsDisplay);
   };
 
+  const toggleDevelopmentSidebar = (open) => {
+    localStorage.setItem('developmentSidebarOpen', open ? 'true' : 'false');
+    setDevelopmentSidebarOpen(open);
+  };
+
   return (
     <layoutContext.Provider
       value={{
@@ -26,6 +34,8 @@ const LayoutProvider = ({ children }) => {
         setTitle,
         displays: layoutDisplays,
         setDisplays,
+        developmentSidebarOpen,
+        toggleDevelopmentSidebar,
       }}
     >
       {children}

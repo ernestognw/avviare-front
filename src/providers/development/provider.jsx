@@ -29,6 +29,7 @@ const DevelopmentProvider = ({ children }) => {
           urbanization: data?.userDevelopmentRoleByToken === 'URBANIZATION',
           sales: data?.userDevelopmentRoleByToken === 'SALES',
         },
+        rawDevelopmentRole: overallRole.admin ? 'MANAGER' : data?.userDevelopmentRoleByToken,
       }}
     >
       {children}

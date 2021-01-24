@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation, useHistory } from 'react-router-dom';
-import { useTitle } from '@providers/layout';
+import { useLayout, useTitle } from '@providers/layout';
 import shortid from 'shortid';
 import { useDevelopment } from '@providers/development';
 import Box from '@components/box';
@@ -24,7 +24,7 @@ const { Item, SubMenu } = Menu;
 
 const DevelopmentLayout = ({ children }) => {
   const { pathname } = useLocation();
-  const [collapsed, toggleCollapsed] = useState(false);
+  const { developmentSidebarOpen, toggleDevelopmentSidebar } = useLayout();
   const { development, loadingDevelopment, developmentRole, userHasAccess } = useDevelopment();
   const { push } = useHistory();
 
@@ -46,9 +46,9 @@ const DevelopmentLayout = ({ children }) => {
     <Layout style={{ minHeight: '100%' }}>
       <Sider
         theme="light"
-        collapsed={collapsed}
+        collapsed={developmentSidebarOpen}
         collapsible
-        onCollapse={() => toggleCollapsed(!collapsed)}
+        onCollapse={() => toggleDevelopmentSidebar(!developmentSidebarOpen)}
       >
         {loadingDevelopment ? (
           <SkeletonImage active={loadingDevelopment} loading={loadingDevelopment} />
