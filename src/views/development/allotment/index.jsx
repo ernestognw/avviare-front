@@ -11,15 +11,16 @@ import {
   Button,
   Tag,
   Progress,
+  Breadcrumb,
 } from 'antd';
 import { useQuery } from '@apollo/client';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import shortid from 'shortid';
 import { useDebounce } from 'use-debounce';
 import { useDevelopment } from '@providers/development';
 import Box from '@components/box';
 import { searchableFields } from '@config/constants/concept';
-import { RightOutlined, PlusOutlined } from '@ant-design/icons';
+import { RightOutlined, PlusOutlined, BlockOutlined } from '@ant-design/icons';
 import { GET_ALLOTMENT, GET_CONCEPTS } from './requests';
 import { Container, ConceptsContainer, EmptyContainer } from './elements';
 import SubconceptInstancesModal from './subconcept-instances-modal';
@@ -37,7 +38,7 @@ const defaultParams = {
 const Allotment = () => {
   const [params, setParams] = useState(defaultParams);
   const { allotmentId } = useParams();
-  const { developmentRole } = useDevelopment();
+  const { developmentRole, development } = useDevelopment();
   const [search, setSearch] = useState('');
   const [selectedConcept, setSelectedConcept] = useState(null);
   const [isAddSubconceptInstanceModalOpen, toggleAddSubconceptInstanceModal] = useState(false);
@@ -75,6 +76,20 @@ const Allotment = () => {
 
   return (
     <>
+      <Box px={20} pt={20}>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <Link to={`/development/${development.id}`}>
+              <BlockOutlined style={{ marginRight: 5 }} />
+              {development.name}
+            </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <Link to={`/development/${development.id}/allotments`}>Lotes</Link>
+          </Breadcrumb.Item>
+          {!loadingAllotment && <Breadcrumb.Item>{allotmentData.allotment.number}</Breadcrumb.Item>}
+        </Breadcrumb>
+      </Box>
       <Container>
         {loadingAllotment ? (
           <Skeleton title={{ style: { width: 200 } }} active paragraph={false} />

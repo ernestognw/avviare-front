@@ -10,15 +10,16 @@ import {
   Avatar,
   Button,
   Tag,
+  Breadcrumb,
 } from 'antd';
 import { useQuery } from '@apollo/client';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import shortid from 'shortid';
 import { useDebounce } from 'use-debounce';
 import { useDevelopment } from '@providers/development';
 import Box from '@components/box';
 import { searchableFields } from '@config/constants/concept';
-import { EditOutlined, RightOutlined, PlusOutlined } from '@ant-design/icons';
+import { EditOutlined, RightOutlined, PlusOutlined, BlockOutlined } from '@ant-design/icons';
 import { GET_ALLOTMENT_PROTOTYPE, GET_CONCEPTS } from './requests';
 import { Container, ConceptsContainer, EmptyContainer } from './elements';
 import SubconceptsModal from './subconcepts-modal';
@@ -37,7 +38,7 @@ const defaultParams = {
 const Prototype = () => {
   const [params, setParams] = useState(defaultParams);
   const { allotmentPrototypeId } = useParams();
-  const { developmentRole } = useDevelopment();
+  const { developmentRole, development } = useDevelopment();
   const [isCreateConceptModalOpen, toggleCreateConceptModal] = useState(false);
   const [search, setSearch] = useState('');
   const [conceptEditId, setConceptEditId] = useState('');
@@ -66,6 +67,22 @@ const Prototype = () => {
 
   return (
     <>
+      <Box px={20} pt={20}>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <Link to={`/development/${development.id}`}>
+              <BlockOutlined style={{ marginRight: 5 }} />
+              {development.name}
+            </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <Link to={`/development/${development.id}/prototypes`}>Prototipos</Link>
+          </Breadcrumb.Item>
+          {!loadingAllotment && (
+            <Breadcrumb.Item>{allotmentData.allotmentPrototype.name}</Breadcrumb.Item>
+          )}
+        </Breadcrumb>
+      </Box>
       <Container>
         {loadingAllotment ? (
           <Skeleton title={{ style: { width: 200 } }} active paragraph={false} />

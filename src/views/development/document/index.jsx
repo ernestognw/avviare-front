@@ -9,12 +9,24 @@ import {
   FlagOutlined,
   CheckOutlined,
   CloudDownloadOutlined,
+  BlockOutlined,
 } from '@ant-design/icons';
 import moment from 'moment';
 import { useDevelopment } from '@providers/development';
 import { downloadFile } from '@config/utils/files';
 import { useUser } from '@providers/user';
-import { Card, Typography, Select, Avatar, Tag, Divider, Button, Empty, message } from 'antd';
+import {
+  Card,
+  Typography,
+  Select,
+  Avatar,
+  Tag,
+  Divider,
+  Button,
+  Empty,
+  Breadcrumb,
+  message,
+} from 'antd';
 import Loading from '@components/loading';
 import { GET_DOCUMENT, UPDATE_DOCUMENT } from './requests';
 import CreateDocumentVersionModal from './create-document-version-modal';
@@ -29,7 +41,7 @@ const Document = () => {
   const [isOpenCreateDocumentVersionModal, toggleCreateDocumentVersionModal] = useState(false);
   const [settingFinalVersion, setSettingFinalVersion] = useState(false);
   const { documentId } = useParams();
-  const { developmentRole } = useDevelopment();
+  const { developmentRole, development } = useDevelopment();
   const { user } = useUser();
   const { data, loading, refetch } = useQuery(GET_DOCUMENT, { variables: { id: documentId } });
   const [setFinalVersion] = useMutation(UPDATE_DOCUMENT);
@@ -90,6 +102,20 @@ const Document = () => {
 
   return (
     <>
+      <Box px={20} pt={20}>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <Link to={`/development/${development.id}`}>
+              <BlockOutlined style={{ marginRight: 5 }} />
+              {development.name}
+            </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <Link to={`/development/${development.id}/documents`}>Documentos</Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>{data.document.name}</Breadcrumb.Item>
+        </Breadcrumb>
+      </Box>
       <ApproveModal
         visible={isOpenApproveModal}
         onCancel={() => toggleApproveModal(false)}
