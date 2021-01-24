@@ -5,6 +5,7 @@ import { gql } from '@apollo/client';
 const allotmentPrototypeInfo = `
   id
   name
+  progress
   createdAt
   updatedAt
 `;

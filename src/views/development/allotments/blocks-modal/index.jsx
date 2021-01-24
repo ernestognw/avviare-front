@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Drawer, List, Input, Button, Tooltip, Avatar } from 'antd';
+import { Drawer, List, Input, Button, Tooltip, Avatar, Typography, Progress } from 'antd';
 import { useDebounce } from 'use-debounce';
 import { searchableFields } from '@config/constants/block';
 import { useDevelopment } from '@providers/development';
@@ -18,6 +18,7 @@ const defaultParams = {
 };
 
 const { Search } = Input;
+const { Paragraph } = Typography;
 
 const BlocksModal = ({ onClose, visible }) => {
   const [params, setParams] = useState(defaultParams);
@@ -87,7 +88,7 @@ const BlocksModal = ({ onClose, visible }) => {
             onChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
             onShowSizeChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
           }}
-          renderItem={({ id, allotments, createdAt, number }) => (
+          renderItem={({ id, allotments, createdAt, number, progress }) => (
             <List.Item
               actions={[
                 <Button onClick={() => setBlockEditId(id)} icon={<EditOutlined />} type="link">
@@ -105,7 +106,14 @@ const BlocksModal = ({ onClose, visible }) => {
                   </Tooltip>
                 }
                 title={number}
-                description={`Creado el ${moment(createdAt).format('lll')}`}
+                description={
+                  <>
+                    <Progress size="small" percent={progress} />
+                    <Paragraph type="secondary">
+                      Creado el {moment(createdAt).format('lll')}
+                    </Paragraph>
+                  </>
+                }
               />
             </List.Item>
           )}

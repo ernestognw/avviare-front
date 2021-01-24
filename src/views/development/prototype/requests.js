@@ -7,6 +7,7 @@ const conceptInfo = `
   code
   name
   description
+  progress
   subconcepts {
     info {
       count

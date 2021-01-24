@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Table, Tooltip, Button, Tag } from 'antd';
+import { Card, Table, Tooltip, Button, Tag, Progress } from 'antd';
 import { useDevelopment } from '@providers/development';
 import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
@@ -62,6 +62,12 @@ const Prototypes = () => {
       dataIndex: 'updatedAt',
       key: 'updatedAt',
       render: (updatedAt) => <Tag>{moment(updatedAt).format('lll')}</Tag>,
+    },
+    {
+      title: 'Progreso',
+      dataIndex: 'progress',
+      key: 'progress',
+      render: (progress) => <Progress size="small" percent={progress} />,
     },
     {
       title: 'Acciones',

@@ -5,6 +5,7 @@ import { gql } from '@apollo/client';
 const blockInfo = `
   id
   number
+  progress
   createdAt
   updatedAt
   allotments {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Drawer, List, Input, Button, Tooltip, Avatar, Typography, Tag } from 'antd';
+import { Drawer, List, Input, Button, Tooltip, Avatar, Typography, Tag, Progress } from 'antd';
 import { useDebounce } from 'use-debounce';
 import { searchableFields, units } from '@config/constants/subconcept';
 import { useDevelopment } from '@providers/development';
@@ -96,6 +96,7 @@ const SubconceptsModal = ({ onSubconceptAdded, concept, onClose, visible }) => {
             quantity,
             unit,
             unitPrice,
+            progress,
           }) => (
             <List.Item
               actions={[
@@ -120,6 +121,7 @@ const SubconceptsModal = ({ onSubconceptAdded, concept, onClose, visible }) => {
                 }
                 description={
                   <>
+                    <Progress size="small" percent={progress} />
                     <Paragraph style={{ marginBottom: 2 }} type="secondary">
                       {description}
                     </Paragraph>

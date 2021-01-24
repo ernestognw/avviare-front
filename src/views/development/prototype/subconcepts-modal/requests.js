@@ -10,6 +10,7 @@ const subconceptInfo = `
   quantity
   unit
   unitPrice
+  progress
   subconceptInstances {
     info {
       count
