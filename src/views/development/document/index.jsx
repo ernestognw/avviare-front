@@ -13,7 +13,7 @@ import {
 } from '@ant-design/icons';
 import moment from 'moment';
 import { useDevelopment } from '@providers/development';
-import { downloadFile } from '@config/utils/files';
+import { downloadFile } from '@utils/files';
 import { useUser } from '@providers/user';
 import {
   Card,

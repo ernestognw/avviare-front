@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import axios from 'axios';
 import { useDebounce } from 'use-debounce';
 import { useDevelopment } from '@providers/development';
-import { downloadFile } from '@config/utils/files';
+import { downloadFile } from '@utils/files';
 import { useLayout } from '@providers/layout';
 import { searchableFields } from '@config/constants/document';
 import { GET_DOCUMENTS } from './requests';

@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
 import { Form, Input, Button, Alert, message } from 'antd';
 import { UserOutlined, LoginOutlined } from '@ant-design/icons';
-import { authUrl } from '@config/environment';
+import { client } from '@utils/auth';
 
 const { Item } = Form;
 
@@ -15,7 +14,7 @@ const Recover = () => {
   const onFinish = async (values) => {
     setSending(true);
     try {
-      await axios.post(`${authUrl}/recover`, { ...values });
+      await client.post('/recover', { ...values });
       message.info('Si tu correo es correcto, recibirás un correo con un link de recuperación');
       push('/login');
     } catch (err) {

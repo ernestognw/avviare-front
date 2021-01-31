@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Form, Input, Button, Alert, message } from 'antd';
 import { passwordRegex } from '@config/constants';
 import { LockOutlined, LoginOutlined } from '@ant-design/icons';
-import { authUrl } from '@config/environment';
+import { client } from '@utils/auth';
 import Box from '@components/box';
 import Loading from '@components/loading';
 
@@ -20,7 +19,7 @@ const Reset = () => {
     setSending(true);
 
     try {
-      await axios.post(`${authUrl}/reset`, { passwordRecoveryToken: token, password });
+      await client.post('/reset', { passwordRecoveryToken: token, password });
       message.info('Tu contraseña ha sido reseteada correctamente. Intenta acceder con ella');
       push('/login');
     } catch (err) {
@@ -40,7 +39,7 @@ const Reset = () => {
       }
 
       try {
-        await axios.post(`${authUrl}/validate`, { passwordRecoveryToken });
+        await client.post('/validate', { passwordRecoveryToken });
         setToken(passwordRecoveryToken);
       } catch (err) {
         push('/recover');

@@ -1,4 +1,4 @@
-import { list } from '@config/utils';
+import { list } from '@utils';
 import { message } from 'antd';
 
 const validateImageTypes = async (file, types = ['png', 'jpeg'], mbLimit = 2) => {

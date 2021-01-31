@@ -7,6 +7,7 @@ module.exports = (config) => {
   config.resolve.alias['@layouts'] = path.join(__dirname, './src/layouts');
   config.resolve.alias['@components'] = path.join(__dirname, './src/components');
   config.resolve.alias['@config'] = path.join(__dirname, './src/config');
+  config.resolve.alias['@utils'] = path.join(__dirname, './src/utils');
   config.resolve.alias['@views'] = path.join(__dirname, './src/views');
   config.resolve.alias['@graphql'] = path.join(__dirname, './src/graphql');
   config.resolve.alias['@providers'] = path.join(__dirname, './src/providers');

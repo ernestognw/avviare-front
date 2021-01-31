@@ -8,13 +8,22 @@ import Development from '@views/development';
 import Profile from '@views/profile';
 import Settings from '@views/settings';
 import Home from '@views/home';
+import Loading from '@components/loading';
+import Box from '@components/box';
 
 const New = lazy(() => import(/* webpackChunkName: "New" */ '@views/new'));
 
 const App = () => {
-  const { token, overallRole } = useUser();
+  const { isLogged, overallRole, token } = useUser();
 
-  if (!token) return <Auth />;
+  if (!isLogged) return <Auth />;
+
+  if (!token)
+    return (
+      <Box height="100vh" width="100%" display="flex" alignItems="center" justifyContent="center">
+        <Loading />
+      </Box>
+    );
 
   return (
     <MainLayout>

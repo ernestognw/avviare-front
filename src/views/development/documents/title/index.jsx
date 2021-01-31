@@ -2,7 +2,7 @@ import { useState } from 'react';
 import JSZip from 'jszip';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { downloadFile } from '@config/utils/files';
+import { downloadFile } from '@utils/files';
 import { useApolloClient } from '@apollo/client';
 import { Button, Input, Typography, Select, Popconfirm, Radio, message } from 'antd';
 import { documentCategories } from '@config/constants/document';

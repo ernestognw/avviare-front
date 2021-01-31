@@ -1,9 +1,11 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client';
-import { apiUrl } from '@config/environment';
+import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client';
+import authLink from './links/auth';
+import httpLink from './links/http';
+
+const link = ApolloLink.from([authLink, httpLink]);
 
 const client = new ApolloClient({
-  uri: apiUrl,
-  credentials: 'include',
+  link,
   cache: new InMemoryCache({
     typePolicies: {
       Document: {

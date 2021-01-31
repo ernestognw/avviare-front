@@ -1,26 +1,22 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Form, Input, Button, message } from 'antd';
+import { useUser } from '@providers/user';
+import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined, LoginOutlined } from '@ant-design/icons';
-import { authUrl } from '@config/environment';
+import Box from '@components/box';
+import { client } from '@utils/auth';
 
 const { Item } = Form;
 
 const Login = () => {
+  const { setIsLogged } = useUser();
   const [logging, setLogging] = useState(false);
 
   const onFinish = async (values) => {
     setLogging(true);
     try {
-      await axios.post(
-        `${authUrl}/login`,
-        { ...values },
-        {
-          withCredentials: true,
-        }
-      );
-      window.location.reload();
+      await client.post('/login', { ...values, expires: !values.remember });
+      setIsLogged(true);
     } catch (err) {
       message.error('Cuenta no reconocida. Verifica tu correo y contraseña');
       setLogging(false);
@@ -42,7 +38,17 @@ const Login = () => {
       >
         <Input size="large" prefix={<LockOutlined />} type="password" placeholder="Contraseña" />
       </Item>
-      <Item style={{ marginTop: 20 }}>
+      <Box display="flex">
+        <Item name="remember" valuePropName="checked" style={{ flexGrow: 1 }}>
+          <Checkbox>Recuérdame</Checkbox>
+        </Item>
+        <Link to="/recover">
+          <Button htmlType="button" style={{ padding: 0 }} type="link" block>
+            Recuperar contraseña
+          </Button>
+        </Link>
+      </Box>
+      <Item>
         <Button
           icon={<LoginOutlined />}
           size="large"
@@ -54,11 +60,6 @@ const Login = () => {
           Log in
         </Button>
       </Item>
-      <Link to="/recover">
-        <Button type="link" block>
-          ¿Olvidaste tu contraseña?
-        </Button>
-      </Link>
     </Form>
   );
 };

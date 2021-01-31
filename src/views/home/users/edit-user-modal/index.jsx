@@ -2,6 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Drawer, Form, message } from 'antd';
 import { useMutation, useQuery } from '@apollo/client';
+import { useUser } from '@providers/user';
 import UserForm from '@components/user-form';
 import Box from '@components/box';
 import Loading from '@components/loading';
@@ -11,6 +12,7 @@ const EditUserModal = ({ onClose, userEditId, visible }) => {
   const [saving, setSaving] = useState(false);
   const [form] = Form.useForm();
   const [updateUser] = useMutation(UPDATE_USER);
+  const { user: sessionUser, reloadUser } = useUser();
   const { loading, data } = useQuery(GET_USER, {
     variables: {
       id: userEditId,
@@ -23,6 +25,8 @@ const EditUserModal = ({ onClose, userEditId, visible }) => {
     const { errors } = await updateUser({
       variables: { id: userEditId, user },
     });
+
+    if (userEditId === sessionUser.id) await reloadUser();
 
     if (errors) {
       message.error(errors[0].message);

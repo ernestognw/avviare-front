@@ -1,7 +1,6 @@
 import { PageHeader, Avatar, Dropdown, Menu, Typography } from 'antd';
 import { useLayout } from '@providers/layout';
 import { useUser } from '@providers/user';
-import { env } from '@config/environment';
 import { useHistory } from 'react-router-dom';
 import { UserOutlined, DownOutlined, LogoutOutlined, SettingOutlined } from '@ant-design/icons';
 import { NavbarContainer, NameContainer, ProfileButton } from './elements';
@@ -11,18 +10,8 @@ const { Text } = Typography;
 
 const NavBar = () => {
   const { title } = useLayout();
-  const { user } = useUser();
+  const { user, logout } = useUser();
   const { push } = useHistory();
-
-  const handleLogout = () => {
-    if (env.development) {
-      document.cookie = 'token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT;path=/';
-    } else {
-      document.cookie =
-        'token= ; domain=.avviare.site ; expires = Thu, 01 Jan 1970 00:00:00 GMT;path=/';
-    }
-    window.location.reload();
-  };
 
   return (
     <NavbarContainer>
@@ -44,7 +33,7 @@ const NavBar = () => {
               </Item>
             </ItemGroup>
             <ItemGroup title="Sesión">
-              <Item onClick={handleLogout} icon={<LogoutOutlined />}>
+              <Item onClick={logout} icon={<LogoutOutlined />}>
                 Salir
               </Item>
             </ItemGroup>

@@ -12,13 +12,13 @@ import App from './App';
 ReactDOM.render(
   <ApolloProvider client={client}>
     <ThemeProvider theme={theme}>
-      <UserProvider>
-        <LayoutProvider>
-          <Router basename="/">
+      <Router basename="/">
+        <UserProvider>
+          <LayoutProvider>
             <App />
-          </Router>
-        </LayoutProvider>
-      </UserProvider>
+          </LayoutProvider>
+        </UserProvider>
+      </Router>
     </ThemeProvider>
   </ApolloProvider>,
   document.getElementById('root')

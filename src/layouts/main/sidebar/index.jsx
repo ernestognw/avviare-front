@@ -10,12 +10,12 @@ import { Container, Sider, Avatar, SubtitleContainer } from './elements';
 const { Paragraph } = Typography;
 
 const Sidebar = () => {
-  const { user, loadingUser, overallRole } = useUser();
+  const { user, token, loadingUser, overallRole } = useUser();
   const { pathname } = useLocation();
 
   let content;
 
-  if (loadingUser) {
+  if (!token || loadingUser) {
     content = new Array(5).fill().map(() => (
       <Container key={shortid.generate()}>
         <Skeleton.Avatar size={50} active style={{ opacity: 0.3 }} />

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import PlaceSearchInput from '@components/place-search-input';
 import Map, { Marker } from '@components/map';
 import Loading from '@components/loading';
-import { validateImageTypes } from '@config/utils/files';
+import { validateImageTypes } from '@utils/files';
 import useUpload from '@hooks/use-upload';
 import moment from 'moment';
 import { PlusOutlined, HomeOutlined } from '@ant-design/icons';

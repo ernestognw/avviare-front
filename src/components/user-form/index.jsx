@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ImgCrop from 'antd-img-crop';
 import { overallRoles } from '@config/constants/user';
-import { validateImageTypes } from '@config/utils/files';
+import { validateImageTypes } from '@utils/files';
 import { useApolloClient } from '@apollo/client';
 import moment from 'moment';
 import useUpload from '@hooks/use-upload';
