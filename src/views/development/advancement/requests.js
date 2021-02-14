@@ -41,6 +41,9 @@ const GET_ADVANCEMENT = gql`
         logo
         startDate
         workers {
+          info {
+            count
+          }
           results {
             id
             firstName
