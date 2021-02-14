@@ -15,6 +15,7 @@ import {
   UserOutlined,
   EditOutlined,
   AuditOutlined,
+  RiseOutlined,
 } from '@ant-design/icons';
 import { Menu, Layout, Skeleton } from 'antd';
 import { Cover, SkeletonImage, Avatar } from './elements';
@@ -78,6 +79,9 @@ const DevelopmentLayout = ({ children }) => {
               </Item>
               <Item key={`${commonPath}/allotments`} icon={<LayoutOutlined />}>
                 <Link to={`${commonPath}/allotments`}>Lotes</Link>
+              </Item>
+              <Item key={`${commonPath}/advancements`} icon={<RiseOutlined />}>
+                <Link to={`${commonPath}/advancements`}>Avances</Link>
               </Item>
               {developmentRole.manager && (
                 <SubMenu

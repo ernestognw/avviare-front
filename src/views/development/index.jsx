@@ -11,6 +11,8 @@ const Prototype = lazy(() => import(/* webpackChunkName: "Prototype" */ './proto
 const Prototypes = lazy(() => import(/* webpackChunkName: "Prototypes" */ './prototypes'));
 const Allotment = lazy(() => import(/* webpackChunkName: "Allotment" */ './allotment'));
 const Allotments = lazy(() => import(/* webpackChunkName: "Allotments" */ './allotments'));
+const Advancement = lazy(() => import(/* webpackChunkName: "Advancement" */ './advancement'));
+const Advancements = lazy(() => import(/* webpackChunkName: "Advancements" */ './advancements'));
 const Settings = lazy(() => import(/* webpackChunkName: "Settings" */ './settings'));
 
 const DevelopmentWithContext = () => {
@@ -30,6 +32,11 @@ const DevelopmentWithContext = () => {
           <Route path="/development/:developmentId/prototypes" component={Prototypes} />
           <Route path="/development/:developmentId/allotments/:allotmentId" component={Allotment} />
           <Route path="/development/:developmentId/allotments" component={Allotments} />
+          <Route
+            path="/development/:developmentId/advancements/:advancementId"
+            component={Advancement}
+          />
+          <Route path="/development/:developmentId/advancements" component={Advancements} />
           {developmentRole?.manager && (
             <Route path="/development/:developmentId/settings" component={Settings} />
           )}
