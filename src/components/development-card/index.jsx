@@ -3,15 +3,16 @@ import moment from 'moment';
 import theme from '@config/theme';
 import { Link } from 'react-router-dom';
 import { Typography, Tag, Tooltip } from 'antd';
+import Box from '@components/box';
 import { Avatar, Card, Image } from './elements';
 
 const { Meta } = Card;
 const { Text, Title } = Typography;
 
-const DevelopmentCard = ({ id, name, active, cover, logo, startDate, workers }) => {
+const DevelopmentCard = ({ id, name, active, cover, logo, startDate, workers, ...props }) => {
   return (
     <Link to={`/development/${id}`}>
-      <Card cover={<Image src={cover} />}>
+      <Box as={Card} cover={<Image src={cover} />} {...props}>
         <Meta
           avatar={<Avatar size={60} src={logo} />}
           title={
@@ -46,7 +47,7 @@ const DevelopmentCard = ({ id, name, active, cover, logo, startDate, workers }) 
             ))}
           </Avatar.Group>
         )}
-      </Card>
+      </Box>
     </Link>
   );
 };

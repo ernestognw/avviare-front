@@ -31,6 +31,7 @@
     "react-places-autocomplete": "^7.3.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
+    "react-simple-image-viewer": "^0.0.8",
     "react-topbar-progress-indicator": "^4.1.0",
     "shortid": "^2.2.16",
     "styled-components": "^5.2.0",
