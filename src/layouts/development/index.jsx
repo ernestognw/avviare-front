@@ -16,6 +16,7 @@ import {
   EditOutlined,
   AuditOutlined,
   RiseOutlined,
+  GroupOutlined,
 } from '@ant-design/icons';
 import { Menu, Layout, Skeleton } from 'antd';
 import { Cover, SkeletonImage, Avatar } from './elements';
@@ -83,6 +84,9 @@ const DevelopmentLayout = ({ children }) => {
               </Item>
               <Item key={`${commonPath}/advancements`} icon={<RiseOutlined />}>
                 <Link to={`${commonPath}/advancements`}>Avances</Link>
+              </Item>
+              <Item key={`${commonPath}/workloads`} icon={<GroupOutlined />}>
+                <Link to={`${commonPath}/workloads`}>Cargas de trabajo</Link>
               </Item>
               {developmentRole.manager && (
                 <SubMenu

@@ -7,10 +7,9 @@ import { datePresets } from '@utils';
 import { useDevelopment } from '@providers/development';
 import { searchableFields as userSearchableFields } from '@config/constants/user';
 import { searchableFields as providerSearchableFields } from '@config/constants/provider';
-import { searchableFields as allotmentSearchableFields } from '@config/constants/allotment';
 import Box from '@components/box';
 import TitleContainer from './elements';
-import { GET_USERS, GET_PROVIDERS, GET_ALLOTMENTS } from './requests';
+import { GET_USERS, GET_PROVIDERS } from './requests';
 
 const params = {
   page: 1,
@@ -21,14 +20,19 @@ const { Title, Paragraph } = Typography;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-const TableTitle = ({ setCreatedBys, setProviders, setAllotments, setCreatedAt, setUpdatedAt }) => {
+const TableTitle = ({
+  setCreatedBys,
+  setProviders,
+  setCreatedAt,
+  setStart,
+  setEnd,
+  setUpdatedAt,
+}) => {
   const [userSearch, setUserSearch] = useState('');
   const [providerSearch, setProviderSearch] = useState('');
-  const [allotmentSearch, setAllotmentSearch] = useState('');
 
   const [debouncedUserSearch] = useDebounce(userSearch, 500);
   const [debouncedProviderSearch] = useDebounce(providerSearch, 500);
-  const [debouncedAllotmentSearch] = useDebounce(allotmentSearch, 500);
 
   const { development } = useDevelopment();
 
@@ -60,50 +64,12 @@ const TableTitle = ({ setCreatedBys, setProviders, setAllotments, setCreatedAt, 
     skip: !development.id,
   });
 
-  const { data: allotmentsData, loading: loadingAllotments } = useQuery(GET_ALLOTMENTS, {
-    variables: {
-      development: {
-        eq: development.id,
-      },
-      params,
-      search: allotmentSearchableFields.reduce((acc, curr) => {
-        acc[curr] = debouncedAllotmentSearch;
-        return acc;
-      }, {}),
-    },
-    skip: !development.id,
-  });
-
   return (
     <TitleContainer>
       <Box display="flex">
-        <Title style={{ margin: 'auto 10px' }} level={3}>
-          Avances de {development.name}
+        <Title style={{ margin: 'auto 10px', marginLeft: 0 }} level={4}>
+          Cargas de trabajo de {development.name}
         </Title>
-        <Box style={{ marginLeft: 'auto' }}>
-          <Paragraph style={{ margin: 0 }} type="secondary">
-            Creado entre:
-          </Paragraph>
-          <RangePicker
-            allowEmpty
-            ranges={datePresets}
-            placeholder={['Inicio', 'Fin']}
-            onCalendarChange={(dates) => setCreatedAt({ gte: dates?.[0], lte: dates?.[1] })}
-          />
-        </Box>
-        <Box style={{ marginLeft: 10 }}>
-          <Paragraph style={{ margin: 0 }} type="secondary">
-            Actualizado entre:
-          </Paragraph>
-          <RangePicker
-            allowEmpty
-            ranges={datePresets}
-            placeholder={['Inicio', 'Fin']}
-            onCalendarChange={(dates) => setUpdatedAt({ gte: dates?.[0], lte: dates?.[1] })}
-          />
-        </Box>
-      </Box>
-      <Box mt={10} display="flex">
         <Select
           style={{ width: 300, margin: 'auto 10px auto auto' }}
           mode="multiple"
@@ -152,23 +118,52 @@ const TableTitle = ({ setCreatedBys, setProviders, setAllotments, setCreatedAt, 
             </Option>
           ))}
         </Select>
-        <Select
-          style={{ width: 200, margin: 'auto 0px auto 10px' }}
-          mode="multiple"
-          allowClear
-          loading={loadingAllotments}
-          onSearch={setAllotmentSearch}
-          filterOption={false}
-          showSearch
-          placeholder="Filtrar por lote"
-          onChange={setAllotments}
-        >
-          {allotmentsData?.allotments.results.map(({ id, number }) => (
-            <Option key={id} value={id}>
-              {number}
-            </Option>
-          ))}
-        </Select>
+      </Box>
+      <Box mt={10} display="flex">
+        <Box style={{ marginLeft: 'auto' }}>
+          <Paragraph style={{ margin: 0 }} type="secondary">
+            Creado entre:
+          </Paragraph>
+          <RangePicker
+            allowEmpty
+            ranges={datePresets}
+            placeholder={['Inicio', 'Fin']}
+            onCalendarChange={(dates) => setCreatedAt({ gte: dates?.[0], lte: dates?.[1] })}
+          />
+        </Box>
+        <Box style={{ marginLeft: 10 }}>
+          <Paragraph style={{ margin: 0 }} type="secondary">
+            Actualizado entre:
+          </Paragraph>
+          <RangePicker
+            allowEmpty
+            ranges={datePresets}
+            placeholder={['Inicio', 'Fin']}
+            onCalendarChange={(dates) => setUpdatedAt({ gte: dates?.[0], lte: dates?.[1] })}
+          />
+        </Box>
+        <Box style={{ marginLeft: 10 }}>
+          <Paragraph style={{ margin: 0 }} type="secondary">
+            Inició entre:
+          </Paragraph>
+          <RangePicker
+            allowEmpty
+            ranges={datePresets}
+            placeholder={['Inicio', 'Fin']}
+            onCalendarChange={(dates) => setStart({ gte: dates?.[0], lte: dates?.[1] })}
+          />
+        </Box>
+        <Box style={{ marginLeft: 10 }}>
+          <Paragraph style={{ margin: 0 }} type="secondary">
+            Finalizó entre:
+          </Paragraph>
+          <RangePicker
+            allowEmpty
+            ranges={datePresets}
+            placeholder={['Inicio', 'Fin']}
+            onCalendarChange={(dates) => setEnd({ gte: dates?.[0], lte: dates?.[1] })}
+          />
+        </Box>
       </Box>
     </TitleContainer>
   );
@@ -177,9 +172,10 @@ const TableTitle = ({ setCreatedBys, setProviders, setAllotments, setCreatedAt, 
 TableTitle.propTypes = {
   setCreatedAt: PropTypes.func.isRequired,
   setUpdatedAt: PropTypes.func.isRequired,
+  setStart: PropTypes.func.isRequired,
+  setEnd: PropTypes.func.isRequired,
   setCreatedBys: PropTypes.func.isRequired,
   setProviders: PropTypes.func.isRequired,
-  setAllotments: PropTypes.func.isRequired,
 };
 
 export default TableTitle;

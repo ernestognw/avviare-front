@@ -13,6 +13,7 @@ const Allotment = lazy(() => import(/* webpackChunkName: "Allotment" */ './allot
 const Allotments = lazy(() => import(/* webpackChunkName: "Allotments" */ './allotments'));
 const Advancement = lazy(() => import(/* webpackChunkName: "Advancement" */ './advancement'));
 const Advancements = lazy(() => import(/* webpackChunkName: "Advancements" */ './advancements'));
+const Workload = lazy(() => import(/* webpackChunkName: "Workload" */ './workloads'));
 const Settings = lazy(() => import(/* webpackChunkName: "Settings" */ './settings'));
 
 const DevelopmentWithContext = () => {
@@ -37,6 +38,7 @@ const DevelopmentWithContext = () => {
             component={Advancement}
           />
           <Route path="/development/:developmentId/advancements" component={Advancements} />
+          <Route path="/development/:developmentId/workloads" component={Workload} />
           {developmentRole?.manager && (
             <Route path="/development/:developmentId/settings" component={Settings} />
           )}
