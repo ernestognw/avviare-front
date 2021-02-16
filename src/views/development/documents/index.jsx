@@ -6,6 +6,7 @@ import { useDevelopment } from '@providers/development';
 import { downloadFile } from '@utils/files';
 import { useLayout } from '@providers/layout';
 import { searchableFields } from '@config/constants/document';
+import useQueryParam from '@hooks/use-query-param';
 import { GET_DOCUMENTS } from './requests';
 import { Container } from './elements';
 import Title from './title';
@@ -20,18 +21,21 @@ const defaultParams = {
 };
 
 const Documents = () => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useQueryParam('search', '');
   const [documentEditId, setDocumentEditId] = useState('');
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useQueryParam('categories', []);
   const [isOpenCreateDocumentModal, toggleCreateDocumentModal] = useState(false);
-  const [params, setParams] = useState(defaultParams);
+  const [params, setParams] = useQueryParam('params', defaultParams);
   const { development } = useDevelopment();
   const [debouncedSearch] = useDebounce(search, 500);
   const { displays } = useLayout();
 
   const { data, loading, refetch } = useQuery(GET_DOCUMENTS, {
     variables: {
-      params,
+      params: {
+        page: Number(params.page),
+        pageSize: Number(params.pageSize),
+      },
       search: searchableFields.reduce((acc, curr) => {
         acc[curr] = debouncedSearch;
         return acc;
@@ -60,9 +64,9 @@ const Documents = () => {
     download,
     loading,
     pagination: {
-      current: params.page,
+      current: Number(params.page),
       defaultCurrent: defaultParams.page,
-      pageSize: params.pageSize,
+      pageSize: Number(params.pageSize),
       defaultPageSize: defaultParams.pageSize,
       total: data?.documents.info.count,
       showTotal: (total) => `${total} documentos`,
@@ -74,7 +78,9 @@ const Documents = () => {
     setDocumentEditId,
     title: () => (
       <Title
+        categories={categories}
         setCategories={setCategories}
+        search={search}
         setSearch={setSearch}
         openCreateDocumentModal={() => toggleCreateDocumentModal(true)}
       />

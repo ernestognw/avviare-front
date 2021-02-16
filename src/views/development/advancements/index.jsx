@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { Card, Table, Button, Tag, Avatar, Typography } from 'antd';
 import { useDevelopment } from '@providers/development';
 import { useQuery } from '@apollo/client';
 import urljoin from 'url-join';
 import moment from 'moment';
+import useQueryParam from '@hooks/use-query-param';
 import { RightOutlined } from '@ant-design/icons';
 import { useLocation, Link } from 'react-router-dom';
 import Box from '@components/box';
@@ -19,16 +19,17 @@ const defaultParams = {
 const { Paragraph, Title: TypographyTitle } = Typography;
 
 const Advancements = () => {
-  const [params, setParams] = useState(defaultParams);
-  const [createdBys, setCreatedBys] = useState([]);
-  const [providers, setProviders] = useState([]);
-  const [allotments, setAllotments] = useState([]);
-  const [sortBy, setSortBy] = useState();
-  const [createdAt, setCreatedAt] = useState({
+  const [params, setParams] = useQueryParam('params', defaultParams);
+  const [createdBys, setCreatedBys] = useQueryParam('createdBys', []);
+  const [providers, setProviders] = useQueryParam('providers', []);
+  const [allotments, setAllotments] = useQueryParam('allotments', []);
+  const [sortBy, setSortBy] = useQueryParam('sortBy');
+  const [workload] = useQueryParam('workload');
+  const [createdAt, setCreatedAt] = useQueryParam('createdAt', {
     gte: undefined,
     lte: undefined,
   });
-  const [updatedAt, setUpdatedAt] = useState({
+  const [updatedAt, setUpdatedAt] = useQueryParam('updatedAt', {
     gte: undefined,
     lte: undefined,
   });
@@ -41,10 +42,14 @@ const Advancements = () => {
       development: {
         eq: development.id,
       },
-      params,
+      params: {
+        page: Number(params.page),
+        pageSize: Number(params.pageSize),
+      },
       createdAt,
       updatedAt,
       sortBy,
+      workload,
       createdBy:
         createdBys.length > 0
           ? {
@@ -171,10 +176,15 @@ const Advancements = () => {
             }}
             title={() => (
               <Title
+                updatedAt={updatedAt}
                 setUpdatedAt={setUpdatedAt}
+                createdAt={createdAt}
                 setCreatedAt={setCreatedAt}
+                createdBys={createdBys}
                 setCreatedBys={setCreatedBys}
+                providers={providers}
                 setProviders={setProviders}
+                allotments={allotments}
                 setAllotments={setAllotments}
               />
             )}
@@ -183,9 +193,9 @@ const Advancements = () => {
             }}
             rowKey="id"
             pagination={{
-              current: params.page,
+              current: Number(params.page),
               defaultCurrent: defaultParams.page,
-              pageSize: params.pageSize,
+              pageSize: Number(params.pageSize),
               defaultPageSize: defaultParams.pageSize,
               total: data?.advancements.info.count,
               showTotal: (total) => `${total} avances`,

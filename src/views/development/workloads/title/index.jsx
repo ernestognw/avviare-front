@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Typography, Select, Avatar, DatePicker } from 'antd';
+import { Typography, Select, Avatar, DatePicker, Button } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { useDebounce } from 'use-debounce';
 import { useQuery } from '@apollo/client';
+import moment from 'moment';
 import { datePresets } from '@utils';
 import { useDevelopment } from '@providers/development';
 import { searchableFields as userSearchableFields } from '@config/constants/user';
@@ -21,11 +23,17 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const TableTitle = ({
+  createdBys,
   setCreatedBys,
+  providers,
   setProviders,
+  createdAt,
   setCreatedAt,
+  start,
   setStart,
+  end,
   setEnd,
+  updatedAt,
   setUpdatedAt,
 }) => {
   const [userSearch, setUserSearch] = useState('');
@@ -34,7 +42,7 @@ const TableTitle = ({
   const [debouncedUserSearch] = useDebounce(userSearch, 500);
   const [debouncedProviderSearch] = useDebounce(providerSearch, 500);
 
-  const { development } = useDevelopment();
+  const { development, developmentRole } = useDevelopment();
 
   const { data: usersData, loading: loadingUsers } = useQuery(GET_USERS, {
     variables: {
@@ -67,13 +75,24 @@ const TableTitle = ({
   return (
     <TitleContainer>
       <Box display="flex">
-        <Title style={{ margin: 'auto 10px', marginLeft: 0 }} level={4}>
+        <Title style={{ margin: 'auto 10px', marginLeft: 0 }} level={3}>
           Cargas de trabajo de {development.name}
         </Title>
+        <Button
+          style={{ marginLeft: 'auto' }}
+          type="primary"
+          disabled={!developmentRole.manager}
+          icon={<PlusOutlined />}
+        >
+          Añadir
+        </Button>
+      </Box>
+      <Box mt={10} display="flex">
         <Select
           style={{ width: 300, margin: 'auto 10px auto auto' }}
           mode="multiple"
           allowClear
+          value={providers}
           loading={loadingProviders}
           onSearch={setProviderSearch}
           filterOption={false}
@@ -94,6 +113,7 @@ const TableTitle = ({
           style={{ width: 200, margin: 'auto 0px auto 10px' }}
           mode="multiple"
           allowClear
+          value={createdBys}
           loading={loadingUsers}
           onSearch={setUserSearch}
           filterOption={false}
@@ -126,6 +146,10 @@ const TableTitle = ({
           </Paragraph>
           <RangePicker
             allowEmpty
+            value={[
+              createdAt.gte ? moment(createdAt.gte) : undefined,
+              createdAt.lte ? moment(createdAt.lte) : undefined,
+            ]}
             ranges={datePresets}
             placeholder={['Inicio', 'Fin']}
             onCalendarChange={(dates) => setCreatedAt({ gte: dates?.[0], lte: dates?.[1] })}
@@ -137,6 +161,10 @@ const TableTitle = ({
           </Paragraph>
           <RangePicker
             allowEmpty
+            value={[
+              updatedAt.gte ? moment(updatedAt.gte) : undefined,
+              updatedAt.lte ? moment(updatedAt.lte) : undefined,
+            ]}
             ranges={datePresets}
             placeholder={['Inicio', 'Fin']}
             onCalendarChange={(dates) => setUpdatedAt({ gte: dates?.[0], lte: dates?.[1] })}
@@ -148,6 +176,10 @@ const TableTitle = ({
           </Paragraph>
           <RangePicker
             allowEmpty
+            value={[
+              start.gte ? moment(start.gte) : undefined,
+              start.lte ? moment(start.lte) : undefined,
+            ]}
             ranges={datePresets}
             placeholder={['Inicio', 'Fin']}
             onCalendarChange={(dates) => setStart({ gte: dates?.[0], lte: dates?.[1] })}
@@ -159,6 +191,7 @@ const TableTitle = ({
           </Paragraph>
           <RangePicker
             allowEmpty
+            value={[end.gte ? moment(end.gte) : undefined, end.lte ? moment(end.lte) : undefined]}
             ranges={datePresets}
             placeholder={['Inicio', 'Fin']}
             onCalendarChange={(dates) => setEnd({ gte: dates?.[0], lte: dates?.[1] })}
@@ -169,12 +202,27 @@ const TableTitle = ({
   );
 };
 
+TableTitle.defaultProps = {
+  createdAt: {},
+  updatedAt: {},
+  start: {},
+  end: {},
+  createdBys: [],
+  providers: [],
+};
+
 TableTitle.propTypes = {
+  createdAt: PropTypes.object,
   setCreatedAt: PropTypes.func.isRequired,
+  updatedAt: PropTypes.object,
   setUpdatedAt: PropTypes.func.isRequired,
+  start: PropTypes.object,
   setStart: PropTypes.func.isRequired,
+  end: PropTypes.object,
   setEnd: PropTypes.func.isRequired,
+  createdBys: PropTypes.arrayOf(PropTypes.string),
   setCreatedBys: PropTypes.func.isRequired,
+  providers: PropTypes.arrayOf(PropTypes.string),
   setProviders: PropTypes.func.isRequired,
 };
 

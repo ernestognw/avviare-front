@@ -1,8 +1,10 @@
-import { useState } from 'react';
 import { Card, Table, Button, Tag, Avatar, Typography } from 'antd';
 import { useDevelopment } from '@providers/development';
 import { useQuery } from '@apollo/client';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
+import useQueryParam from '@hooks/use-query-param';
+import { stringify } from 'qs';
 import { RightOutlined, CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
 import theme from '@config/theme';
 import Box from '@components/box';
@@ -18,23 +20,23 @@ const defaultParams = {
 const { Paragraph, Title: TypographyTitle } = Typography;
 
 const Workloads = () => {
-  const [params, setParams] = useState(defaultParams);
-  const [createdBys, setCreatedBys] = useState([]);
-  const [providers, setProviders] = useState([]);
-  const [sortBy, setSortBy] = useState();
-  const [createdAt, setCreatedAt] = useState({
+  const [params, setParams] = useQueryParam('params', defaultParams);
+  const [createdBys, setCreatedBys] = useQueryParam('createdBys', []);
+  const [providers, setProviders] = useQueryParam('providers', []);
+  const [sortBy, setSortBy] = useQueryParam('sortBy');
+  const [createdAt, setCreatedAt] = useQueryParam('createdAt', {
     gte: undefined,
     lte: undefined,
   });
-  const [updatedAt, setUpdatedAt] = useState({
+  const [updatedAt, setUpdatedAt] = useQueryParam('updatedAt', {
     gte: undefined,
     lte: undefined,
   });
-  const [start, setStart] = useState({
+  const [start, setStart] = useQueryParam('start', {
     gte: undefined,
     lte: undefined,
   });
-  const [end, setEnd] = useState({
+  const [end, setEnd] = useQueryParam('end', {
     gte: undefined,
     lte: undefined,
   });
@@ -46,7 +48,10 @@ const Workloads = () => {
       development: {
         eq: development.id,
       },
-      params,
+      params: {
+        page: Number(params.page),
+        pageSize: Number(params.pageSize),
+      },
       createdAt,
       updatedAt,
       start,
@@ -148,11 +153,17 @@ const Workloads = () => {
     {
       title: 'Acciones',
       fixed: 'right',
-      render: () => (
+      render: (workload) => (
         <ActionsContainer>
-          <Button type="primary" icon={<RightOutlined />} size="small">
-            Ver avances
-          </Button>
+          <Link
+            to={`/development/${development.id}/advancements?${stringify({
+              workload: { eq: workload.id },
+            })}`}
+          >
+            <Button type="primary" icon={<RightOutlined />} size="small">
+              Ver avances
+            </Button>
+          </Link>
         </ActionsContainer>
       ),
     },
@@ -174,11 +185,17 @@ const Workloads = () => {
             }}
             title={() => (
               <Title
+                updatedAt={updatedAt}
                 setUpdatedAt={setUpdatedAt}
+                createdAt={createdAt}
                 setCreatedAt={setCreatedAt}
+                createdBys={createdBys}
                 setCreatedBys={setCreatedBys}
+                start={start}
                 setStart={setStart}
+                end={end}
                 setEnd={setEnd}
+                providers={providers}
                 setProviders={setProviders}
               />
             )}
@@ -187,9 +204,9 @@ const Workloads = () => {
             }}
             rowKey="id"
             pagination={{
-              current: params.page,
+              current: Number(params.page),
               defaultCurrent: defaultParams.page,
-              pageSize: params.pageSize,
+              pageSize: Number(params.pageSize),
               defaultPageSize: defaultParams.pageSize,
               total: data?.workloads.info.count,
               showTotal: (total) => `${total} cargas de trabajo`,

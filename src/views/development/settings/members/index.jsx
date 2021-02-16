@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
 import { Link } from 'react-router-dom';
+import useQueryParam from '@hooks/use-query-param';
 import { Card, Table, Avatar, Button, Select, Tooltip, Modal, message } from 'antd';
 import { useDevelopment } from '@providers/development';
 import { overallRoles, developmentRoles, searchableFields } from '@config/constants/user';
@@ -19,15 +20,18 @@ const defaultParams = {
 const { Option } = Select;
 
 const Members = () => {
-  const [params, setParams] = useState(defaultParams);
-  const [search, setSearch] = useState('');
+  const [params, setParams] = useQueryParam('params', defaultParams);
+  const [search, setSearch] = useQueryParam('search', '');
   const [isOpenAddUserModal, toggleAddUserModal] = useState(false);
   const [debouncedSearch] = useDebounce(search, 500);
 
   const { development, developmentRole } = useDevelopment();
 
   const variables = {
-    params,
+    params: {
+      page: Number(params.page),
+      pageSize: Number(params.pageSize),
+    },
     search: searchableFields.reduce((acc, curr) => {
       acc[curr] = debouncedSearch;
       return acc;
@@ -182,9 +186,9 @@ const Members = () => {
             }}
             rowKey="id"
             pagination={{
-              current: params.page,
+              current: Number(params.page),
               defaultCurrent: defaultParams.page,
-              pageSize: params.pageSize,
+              pageSize: Number(params.pageSize),
               defaultPageSize: defaultParams.pageSize,
               total: data?.users.info.count,
               showTotal: (total) => `${total} usuarios`,

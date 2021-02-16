@@ -4,6 +4,7 @@ import { Typography, Select, Avatar, DatePicker } from 'antd';
 import { useDebounce } from 'use-debounce';
 import { useQuery } from '@apollo/client';
 import { datePresets } from '@utils';
+import moment from 'moment';
 import { useDevelopment } from '@providers/development';
 import { searchableFields as userSearchableFields } from '@config/constants/user';
 import { searchableFields as providerSearchableFields } from '@config/constants/provider';
@@ -21,7 +22,18 @@ const { Title, Paragraph } = Typography;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-const TableTitle = ({ setCreatedBys, setProviders, setAllotments, setCreatedAt, setUpdatedAt }) => {
+const TableTitle = ({
+  createdBys,
+  setCreatedBys,
+  providers,
+  setProviders,
+  allotments,
+  setAllotments,
+  createdAt,
+  setCreatedAt,
+  updatedAt,
+  setUpdatedAt,
+}) => {
   const [userSearch, setUserSearch] = useState('');
   const [providerSearch, setProviderSearch] = useState('');
   const [allotmentSearch, setAllotmentSearch] = useState('');
@@ -86,9 +98,15 @@ const TableTitle = ({ setCreatedBys, setProviders, setAllotments, setCreatedAt, 
           </Paragraph>
           <RangePicker
             allowEmpty
+            value={[
+              createdAt.gte ? moment(createdAt.gte) : undefined,
+              createdAt.lte ? moment(createdAt.lte) : undefined,
+            ]}
             ranges={datePresets}
             placeholder={['Inicio', 'Fin']}
-            onCalendarChange={(dates) => setCreatedAt({ gte: dates?.[0], lte: dates?.[1] })}
+            onCalendarChange={(dates) =>
+              setCreatedAt({ gte: dates?.[0]?.toISOString(), lte: dates?.[1]?.toISOString() })
+            }
           />
         </Box>
         <Box style={{ marginLeft: 10 }}>
@@ -97,9 +115,15 @@ const TableTitle = ({ setCreatedBys, setProviders, setAllotments, setCreatedAt, 
           </Paragraph>
           <RangePicker
             allowEmpty
+            value={[
+              updatedAt.gte ? moment(updatedAt.gte) : undefined,
+              updatedAt.lte ? moment(updatedAt.lte) : undefined,
+            ]}
             ranges={datePresets}
             placeholder={['Inicio', 'Fin']}
-            onCalendarChange={(dates) => setUpdatedAt({ gte: dates?.[0], lte: dates?.[1] })}
+            onCalendarChange={(dates) =>
+              setUpdatedAt({ gte: dates?.[0]?.toISOString(), lte: dates?.[1]?.toISOString() })
+            }
           />
         </Box>
       </Box>
@@ -108,6 +132,7 @@ const TableTitle = ({ setCreatedBys, setProviders, setAllotments, setCreatedAt, 
           style={{ width: 300, margin: 'auto 10px auto auto' }}
           mode="multiple"
           allowClear
+          value={providers}
           loading={loadingProviders}
           onSearch={setProviderSearch}
           filterOption={false}
@@ -128,6 +153,7 @@ const TableTitle = ({ setCreatedBys, setProviders, setAllotments, setCreatedAt, 
           style={{ width: 200, margin: 'auto 0px auto 10px' }}
           mode="multiple"
           allowClear
+          value={createdBys}
           loading={loadingUsers}
           onSearch={setUserSearch}
           filterOption={false}
@@ -156,6 +182,7 @@ const TableTitle = ({ setCreatedBys, setProviders, setAllotments, setCreatedAt, 
           style={{ width: 200, margin: 'auto 0px auto 10px' }}
           mode="multiple"
           allowClear
+          value={allotments}
           loading={loadingAllotments}
           onSearch={setAllotmentSearch}
           filterOption={false}
@@ -174,11 +201,24 @@ const TableTitle = ({ setCreatedBys, setProviders, setAllotments, setCreatedAt, 
   );
 };
 
+TableTitle.defaultProps = {
+  createdAt: {},
+  updatedAt: {},
+  createdBys: [],
+  providers: [],
+  allotments: [],
+};
+
 TableTitle.propTypes = {
+  createdAt: PropTypes.object,
   setCreatedAt: PropTypes.func.isRequired,
+  updatedAt: PropTypes.object,
   setUpdatedAt: PropTypes.func.isRequired,
+  createdBys: PropTypes.arrayOf(PropTypes.string),
   setCreatedBys: PropTypes.func.isRequired,
+  providers: PropTypes.arrayOf(PropTypes.string),
   setProviders: PropTypes.func.isRequired,
+  allotments: PropTypes.arrayOf(PropTypes.string),
   setAllotments: PropTypes.func.isRequired,
 };
 

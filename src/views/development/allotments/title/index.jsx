@@ -21,10 +21,13 @@ const { Search } = Input;
 const { Option } = Select;
 
 const TableTitle = ({
+  search,
   setSearch,
   openCreateAllotmentModal,
+  blocks,
   setBlocks,
   setAllotmentPrototypes,
+  allotmentPrototypes,
   openBlocksModal,
 }) => {
   const [blockSearch, setBlockSearch] = useState('');
@@ -75,6 +78,7 @@ const TableTitle = ({
         <Search
           style={{ width: 200, margin: 'auto 10px auto auto' }}
           allowClear
+          value={search}
           placeholder="Buscar lotes"
           onChange={({ target: { value } }) => setSearch(value)}
         />
@@ -93,6 +97,7 @@ const TableTitle = ({
           style={{ width: 200, margin: 'auto 10px auto auto' }}
           mode="multiple"
           allowClear
+          value={allotmentPrototypes}
           loading={loadingAllotmentPrototypes}
           onSearch={setAllotmentPrototypeSearch}
           filterOption={false}
@@ -110,6 +115,7 @@ const TableTitle = ({
           style={{ width: 200, margin: 'auto 10px auto 10px' }}
           mode="multiple"
           allowClear
+          value={blocks}
           loading={loadingBlocks}
           onSearch={setBlockSearch}
           filterOption={false}
@@ -135,10 +141,19 @@ const TableTitle = ({
   );
 };
 
+TableTitle.defaultProps = {
+  search: '',
+  blocks: [],
+  allotmentPrototypes: [],
+};
+
 TableTitle.propTypes = {
+  search: PropTypes.string,
   setSearch: PropTypes.func.isRequired,
   openCreateAllotmentModal: PropTypes.func.isRequired,
+  blocks: PropTypes.arrayOf(PropTypes.string),
   setBlocks: PropTypes.func.isRequired,
+  allotmentPrototypes: PropTypes.arrayOf(PropTypes.string),
   setAllotmentPrototypes: PropTypes.func.isRequired,
   openBlocksModal: PropTypes.func.isRequired,
 };

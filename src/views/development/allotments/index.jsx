@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
 import urljoin from 'url-join';
 import moment from 'moment';
+import useQueryParam from '@hooks/use-query-param';
 import { RightOutlined, EditOutlined } from '@ant-design/icons';
 import { searchableFields } from '@config/constants/allotment';
 import { useLocation, Link } from 'react-router-dom';
@@ -21,10 +22,10 @@ const defaultParams = {
 };
 
 const Allotments = () => {
-  const [params, setParams] = useState(defaultParams);
-  const [search, setSearch] = useState('');
-  const [blocks, setBlocks] = useState('');
-  const [allotmentPrototypes, setAllotmentPrototypes] = useState('');
+  const [params, setParams] = useQueryParam('params', defaultParams);
+  const [search, setSearch] = useQueryParam('search', '');
+  const [blocks, setBlocks] = useQueryParam('blocks', []);
+  const [allotmentPrototypes, setAllotmentPrototypes] = useQueryParam('allotmentPrototypes', []);
   const [allotmentEditId, setAllotmentEditId] = useState('');
   const [debouncedSearch] = useDebounce(search, 500);
   const [isOpenCreateAllotmentModal, toggleCreateAllotmentModal] = useState(false);
@@ -38,7 +39,10 @@ const Allotments = () => {
       development: {
         eq: development.id,
       },
-      params,
+      params: {
+        page: Number(params.page),
+        pageSize: Number(params.pageSize),
+      },
       search: searchableFields.reduce((acc, curr) => {
         acc[curr] = debouncedSearch;
         return acc;
@@ -128,8 +132,11 @@ const Allotments = () => {
             title={() => (
               <Title
                 openCreateAllotmentModal={() => toggleCreateAllotmentModal(true)}
+                search={search}
                 setSearch={setSearch}
+                allotmentPrototypes={allotmentPrototypes}
                 setAllotmentPrototypes={setAllotmentPrototypes}
+                blocks={blocks}
                 setBlocks={setBlocks}
                 openBlocksModal={() => toggleBlocksModal(true)}
               />
@@ -139,9 +146,9 @@ const Allotments = () => {
             }}
             rowKey="id"
             pagination={{
-              current: params.page,
+              current: Number(params.page),
               defaultCurrent: defaultParams.page,
-              pageSize: params.pageSize,
+              pageSize: Number(params.pageSize),
               defaultPageSize: defaultParams.pageSize,
               total: data?.allotments.info.count,
               showTotal: (total) => `${total} lotes`,

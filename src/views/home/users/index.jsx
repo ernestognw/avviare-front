@@ -5,6 +5,7 @@ import { useDebounce } from 'use-debounce';
 import { Link } from 'react-router-dom';
 import { Card, Table, Avatar, Tag, Button, Tooltip } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
+import useQueryParam from '@hooks/use-query-param';
 import { overallRoles, searchableFields } from '@config/constants/user';
 import { Container, ActionsContainer } from './elements';
 import { GET_USERS } from './requests';
@@ -18,14 +19,17 @@ const defaultParams = {
 };
 
 const Users = () => {
-  const [params, setParams] = useState(defaultParams);
-  const [search, setSearch] = useState('');
+  const [params, setParams] = useQueryParam('params', defaultParams);
+  const [search, setSearch] = useQueryParam('search', '');
   const [isOpenCreateUserModal, toggleCreateUserModal] = useState(false);
   const [userEditId, setUserEditId] = useState('');
   const [debouncedSearch] = useDebounce(search, 500);
 
   const variables = {
-    params,
+    params: {
+      page: Number(params.page),
+      pageSize: Number(params.pageSize),
+    },
     search: searchableFields.reduce((acc, curr) => {
       acc[curr] = debouncedSearch;
       return acc;
@@ -122,6 +126,7 @@ const Users = () => {
             columns={memoizedColumns}
             title={() => (
               <Title
+                search={search}
                 openCreateUserModal={() => toggleCreateUserModal(true)}
                 setSearch={setSearch}
               />
@@ -132,9 +137,9 @@ const Users = () => {
             }}
             rowKey="id"
             pagination={{
-              current: params.page,
+              current: Number(params.page),
               defaultCurrent: defaultParams.page,
-              pageSize: params.pageSize,
+              pageSize: Number(params.pageSize),
               defaultPageSize: defaultParams.pageSize,
               total: data?.users.info.count,
               showTotal: (total) => `${total} usuarios`,

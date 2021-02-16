@@ -23,6 +23,7 @@
     "less": "^3.12.2",
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
+    "qs": "^6.9.6",
     "react": "^17.0.1",
     "react-cookies": "^0.1.1",
     "react-doc-viewer": "^0.1.5",

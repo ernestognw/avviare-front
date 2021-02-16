@@ -8,6 +8,7 @@ const GET_ADVANCEMENTS = gql`
     $provider: QueryOperators
     $development: QueryOperators
     $allotment: QueryOperators
+    $workload: QueryOperators
     $createdAt: DateRange
     $updatedAt: DateRange
   ) {
@@ -18,6 +19,7 @@ const GET_ADVANCEMENTS = gql`
       provider: $provider
       development: $development
       allotment: $allotment
+      workload: $workload
       createdAt: $createdAt
       updatedAt: $updatedAt
     ) {

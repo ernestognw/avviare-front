@@ -4,6 +4,7 @@ import { useDevelopment } from '@providers/development';
 import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
 import urljoin from 'url-join';
+import useQueryParam from '@hooks/use-query-param';
 import moment from 'moment';
 import { RightOutlined, EditOutlined } from '@ant-design/icons';
 import { searchableFields } from '@config/constants/allotment-prototype';
@@ -20,8 +21,8 @@ const defaultParams = {
 };
 
 const Prototypes = () => {
-  const [params, setParams] = useState(defaultParams);
-  const [search, setSearch] = useState('');
+  const [params, setParams] = useQueryParam('params', defaultParams);
+  const [search, setSearch] = useQueryParam('search', '');
   const [allotmentPrototypeEditId, setAllotmentPrototypeEditId] = useState('');
   const [debouncedSearch] = useDebounce(search, 500);
   const [isOpenCreateAllotmentPrototypeModal, toggleCreateAllotmentPrototypeModal] = useState(
@@ -36,7 +37,10 @@ const Prototypes = () => {
       development: {
         eq: development.id,
       },
-      params,
+      params: {
+        page: Number(params.page),
+        pageSize: Number(params.pageSize),
+      },
       search: searchableFields.reduce((acc, curr) => {
         acc[curr] = debouncedSearch;
         return acc;
@@ -105,6 +109,7 @@ const Prototypes = () => {
             title={() => (
               <Title
                 openCreateAllotmentPrototypeModal={() => toggleCreateAllotmentPrototypeModal(true)}
+                search={search}
                 setSearch={setSearch}
               />
             )}
@@ -113,9 +118,9 @@ const Prototypes = () => {
             }}
             rowKey="id"
             pagination={{
-              current: params.page,
+              current: Number(params.page),
               defaultCurrent: defaultParams.page,
-              pageSize: params.pageSize,
+              pageSize: Number(params.pageSize),
               defaultPageSize: defaultParams.pageSize,
               total: data?.allotmentPrototypes.info.count,
               showTotal: (total) => `${total} prototipos`,

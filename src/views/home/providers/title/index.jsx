@@ -6,7 +6,7 @@ import TitleContainer from './elements';
 const { Title } = Typography;
 const { Search } = Input;
 
-const TableTitle = ({ setSearch, openCreateProviderModal }) => {
+const TableTitle = ({ search, setSearch, openCreateProviderModal }) => {
   return (
     <TitleContainer>
       <Title style={{ margin: 'auto 10px' }} level={3}>
@@ -15,6 +15,7 @@ const TableTitle = ({ setSearch, openCreateProviderModal }) => {
       <Search
         style={{ width: 250, margin: 'auto 10px auto auto' }}
         allowClear
+        value={search}
         placeholder="Buscar proveedores"
         onChange={({ target: { value } }) => setSearch(value)}
       />
@@ -30,8 +31,13 @@ const TableTitle = ({ setSearch, openCreateProviderModal }) => {
   );
 };
 
+TableTitle.defaultProps = {
+  search: '',
+};
+
 TableTitle.propTypes = {
   openCreateProviderModal: PropTypes.func.isRequired,
+  search: PropTypes.string,
   setSearch: PropTypes.func.isRequired,
 };
 

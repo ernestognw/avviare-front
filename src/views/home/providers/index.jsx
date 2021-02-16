@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import moment from 'moment';
 import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
+import useQueryParam from '@hooks/use-query-param';
 import { Card, Table, Tag, Button, Tooltip, Avatar } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { searchableFields } from '@config/constants/provider';
@@ -18,14 +19,17 @@ const defaultParams = {
 };
 
 const Providers = () => {
-  const [params, setParams] = useState(defaultParams);
-  const [search, setSearch] = useState('');
+  const [params, setParams] = useQueryParam('params', defaultParams);
+  const [search, setSearch] = useQueryParam('search', '');
   const [providerEditId, setProviderEditId] = useState('');
   const [isOpenCreateProviderModal, toggleCreateProviderModal] = useState(false);
   const [debouncedSearch] = useDebounce(search, 500);
 
   const variables = {
-    params,
+    params: {
+      page: Number(params.page),
+      pageSize: Number(params.pageSize),
+    },
     search: searchableFields.reduce((acc, curr) => {
       acc[curr] = debouncedSearch;
       return acc;
@@ -130,9 +134,9 @@ const Providers = () => {
             }}
             rowKey="id"
             pagination={{
-              current: params.page,
+              current: Number(params.page),
               defaultCurrent: defaultParams.page,
-              pageSize: params.pageSize,
+              pageSize: Number(params.pageSize),
               defaultPageSize: defaultParams.pageSize,
               total: data?.providers.info.count,
               showTotal: (total) => `${total} proveedores`,

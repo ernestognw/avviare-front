@@ -7,7 +7,7 @@ import TitleContainer from './elements';
 const { Title } = Typography;
 const { Search } = Input;
 
-const TableTitle = ({ setSearch, openCreateAllotmentPrototypeModal }) => {
+const TableTitle = ({ search, setSearch, openCreateAllotmentPrototypeModal }) => {
   const { development, developmentRole } = useDevelopment();
   return (
     <TitleContainer>
@@ -15,6 +15,7 @@ const TableTitle = ({ setSearch, openCreateAllotmentPrototypeModal }) => {
         Prototipos de {development.name}
       </Title>
       <Search
+        value={search}
         style={{ width: 250, margin: 'auto 10px auto auto' }}
         allowClear
         placeholder="Buscar prototipos"
@@ -33,7 +34,12 @@ const TableTitle = ({ setSearch, openCreateAllotmentPrototypeModal }) => {
   );
 };
 
+TableTitle.defaultProps = {
+  search: '',
+};
+
 TableTitle.propTypes = {
+  search: PropTypes.string,
   setSearch: PropTypes.func.isRequired,
   openCreateAllotmentPrototypeModal: PropTypes.func.isRequired,
 };

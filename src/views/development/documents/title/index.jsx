@@ -22,7 +22,7 @@ const { Title } = Typography;
 const { Search } = Input;
 const { Option } = Select;
 
-const TableTitle = ({ setCategories, setSearch, openCreateDocumentModal }) => {
+const TableTitle = ({ categories, setCategories, search, setSearch, openCreateDocumentModal }) => {
   const [downloading, setDownloading] = useState();
   const { development, developmentRole } = useDevelopment();
   const { query } = useApolloClient();
@@ -142,6 +142,7 @@ const TableTitle = ({ setCategories, setSearch, openCreateDocumentModal }) => {
           style={{ width: 250, margin: 'auto 10px auto auto' }}
           mode="multiple"
           allowClear
+          value={categories}
           placeholder="Filtrar por categorías"
           onChange={setCategories}
         >
@@ -154,6 +155,7 @@ const TableTitle = ({ setCategories, setSearch, openCreateDocumentModal }) => {
         <Search
           style={{ width: 250, margin: 'auto 0 auto 10px' }}
           allowClear
+          value={search}
           placeholder="Buscar documentos"
           onChange={({ target: { value } }) => setSearch(value)}
         />
@@ -177,8 +179,15 @@ const TableTitle = ({ setCategories, setSearch, openCreateDocumentModal }) => {
   );
 };
 
+TableTitle.defaultProps = {
+  categories: [],
+  search: '',
+};
+
 TableTitle.propTypes = {
+  categories: PropTypes.arrayOf(PropTypes.oneOf(Object.keys(documentCategories))),
   setCategories: PropTypes.func.isRequired,
+  search: PropTypes.string,
   setSearch: PropTypes.func.isRequired,
   openCreateDocumentModal: PropTypes.func.isRequired,
 };
