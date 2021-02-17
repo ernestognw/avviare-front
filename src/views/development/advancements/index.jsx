@@ -23,6 +23,7 @@ const Advancements = () => {
   const [createdBys, setCreatedBys] = useQueryParam('createdBys', []);
   const [providers, setProviders] = useQueryParam('providers', []);
   const [allotments, setAllotments] = useQueryParam('allotments', []);
+  const [blocks, setBlocks] = useQueryParam('blocks', []);
   const [sortBy, setSortBy] = useQueryParam('sortBy');
   const [workload] = useQueryParam('workload');
   const [createdAt, setCreatedAt] = useQueryParam('createdAt', {
@@ -66,6 +67,12 @@ const Advancements = () => {
         allotments.length > 0
           ? {
               in: allotments,
+            }
+          : undefined,
+      block:
+        blocks.length > 0
+          ? {
+              in: blocks,
             }
           : undefined,
     },
@@ -186,6 +193,8 @@ const Advancements = () => {
                 setProviders={setProviders}
                 allotments={allotments}
                 setAllotments={setAllotments}
+                blocks={blocks}
+                setBlocks={setBlocks}
               />
             )}
             scroll={{

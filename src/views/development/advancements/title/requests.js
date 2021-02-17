@@ -41,4 +41,15 @@ const GET_ALLOTMENTS = gql`
   }
 `;
 
-export { GET_PROVIDERS, GET_USERS, GET_ALLOTMENTS };
+const GET_BLOCKS = gql`
+  query blocks($search: BlockSearchInput, $params: QueryParams, $development: QueryOperators) {
+    blocks(search: $search, params: $params, development: $development) {
+      results {
+        id
+        number
+      }
+    }
+  }
+`;
+
+export { GET_PROVIDERS, GET_USERS, GET_ALLOTMENTS, GET_BLOCKS };

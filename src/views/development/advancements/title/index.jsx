@@ -9,9 +9,10 @@ import { useDevelopment } from '@providers/development';
 import { searchableFields as userSearchableFields } from '@config/constants/user';
 import { searchableFields as providerSearchableFields } from '@config/constants/provider';
 import { searchableFields as allotmentSearchableFields } from '@config/constants/allotment';
+import { searchableFields as blockSearchableFields } from '@config/constants/block';
 import Box from '@components/box';
 import TitleContainer from './elements';
-import { GET_USERS, GET_PROVIDERS, GET_ALLOTMENTS } from './requests';
+import { GET_USERS, GET_PROVIDERS, GET_ALLOTMENTS, GET_BLOCKS } from './requests';
 
 const params = {
   page: 1,
@@ -29,6 +30,8 @@ const TableTitle = ({
   setProviders,
   allotments,
   setAllotments,
+  blocks,
+  setBlocks,
   createdAt,
   setCreatedAt,
   updatedAt,
@@ -37,10 +40,12 @@ const TableTitle = ({
   const [userSearch, setUserSearch] = useState('');
   const [providerSearch, setProviderSearch] = useState('');
   const [allotmentSearch, setAllotmentSearch] = useState('');
+  const [blockSearch, setBlockSearch] = useState('');
 
   const [debouncedUserSearch] = useDebounce(userSearch, 500);
   const [debouncedProviderSearch] = useDebounce(providerSearch, 500);
   const [debouncedAllotmentSearch] = useDebounce(allotmentSearch, 500);
+  const [debouncedBlocksearch] = useDebounce(blockSearch, 500);
 
   const { development } = useDevelopment();
 
@@ -80,6 +85,20 @@ const TableTitle = ({
       params,
       search: allotmentSearchableFields.reduce((acc, curr) => {
         acc[curr] = debouncedAllotmentSearch;
+        return acc;
+      }, {}),
+    },
+    skip: !development.id,
+  });
+
+  const { data: blocksData, loading: loadingBlocks } = useQuery(GET_BLOCKS, {
+    variables: {
+      development: {
+        eq: development.id,
+      },
+      params,
+      search: blockSearchableFields.reduce((acc, curr) => {
+        acc[curr] = debouncedBlocksearch;
         return acc;
       }, {}),
     },
@@ -196,6 +215,24 @@ const TableTitle = ({
             </Option>
           ))}
         </Select>
+        <Select
+          style={{ width: 200, margin: 'auto 0px auto 10px' }}
+          mode="multiple"
+          allowClear
+          value={blocks}
+          loading={loadingBlocks}
+          onSearch={setBlockSearch}
+          filterOption={false}
+          showSearch
+          placeholder="Filtrar por manzana"
+          onChange={setBlocks}
+        >
+          {blocksData?.blocks.results.map(({ id, number }) => (
+            <Option key={id} value={id}>
+              {number}
+            </Option>
+          ))}
+        </Select>
       </Box>
     </TitleContainer>
   );
@@ -207,6 +244,7 @@ TableTitle.defaultProps = {
   createdBys: [],
   providers: [],
   allotments: [],
+  blocks: [],
 };
 
 TableTitle.propTypes = {
@@ -220,6 +258,8 @@ TableTitle.propTypes = {
   setProviders: PropTypes.func.isRequired,
   allotments: PropTypes.arrayOf(PropTypes.string),
   setAllotments: PropTypes.func.isRequired,
+  blocks: PropTypes.arrayOf(PropTypes.string),
+  setBlocks: PropTypes.func.isRequired,
 };
 
 export default TableTitle;
