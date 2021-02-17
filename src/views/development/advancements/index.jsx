@@ -1,10 +1,12 @@
+import { useMemo } from 'react';
 import { Card, Table, Button, Tag, Avatar, Typography } from 'antd';
 import { useDevelopment } from '@providers/development';
 import { useQuery } from '@apollo/client';
 import urljoin from 'url-join';
 import moment from 'moment';
+import theme from '@config/theme';
 import useQueryParam from '@hooks/use-query-param';
-import { RightOutlined } from '@ant-design/icons';
+import { RightOutlined, CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
 import { useLocation, Link } from 'react-router-dom';
 import Box from '@components/box';
 import Title from './title';
@@ -23,9 +25,10 @@ const Advancements = () => {
   const [createdBys, setCreatedBys] = useQueryParam('createdBys', []);
   const [providers, setProviders] = useQueryParam('providers', []);
   const [allotments, setAllotments] = useQueryParam('allotments', []);
+  const [workloadExists, setWorkloadExists] = useQueryParam('workloadExists');
   const [blocks, setBlocks] = useQueryParam('blocks', []);
   const [sortBy, setSortBy] = useQueryParam('sortBy');
-  const [workload] = useQueryParam('workload');
+  const [workloads] = useQueryParam('workloads', []);
   const [createdAt, setCreatedAt] = useQueryParam('createdAt', {
     gte: undefined,
     lte: undefined,
@@ -37,6 +40,22 @@ const Advancements = () => {
 
   const { development } = useDevelopment();
   const { pathname } = useLocation();
+
+  const workloadQuery = useMemo(() => {
+    if (workloads.length > 0 || typeof workloadExists === 'boolean') {
+      return {
+        exists: workloadExists,
+        in:
+          workloads.length > 0
+            ? {
+                in: workloads,
+              }
+            : undefined,
+      };
+    }
+
+    return undefined;
+  }, [workloads, workloadExists]);
 
   const { data, loading } = useQuery(GET_ADVANCEMENTS, {
     variables: {
@@ -50,7 +69,7 @@ const Advancements = () => {
       createdAt,
       updatedAt,
       sortBy,
-      workload,
+      workload: workloadQuery,
       createdBy:
         createdBys.length > 0
           ? {
@@ -130,6 +149,17 @@ const Advancements = () => {
       ),
     },
     {
+      title: 'Estimado',
+      dataIndex: 'workload',
+      key: 'workload',
+      render: (workload) =>
+        workload ? (
+          <CheckCircleTwoTone twoToneColor={theme.colors.primary} />
+        ) : (
+          <CloseCircleTwoTone twoToneColor="red" />
+        ),
+    },
+    {
       title: 'Porcentaje de Avance',
       dataIndex: 'percentageAdvanced',
       key: 'percentageAdvanced',
@@ -195,6 +225,8 @@ const Advancements = () => {
                 setAllotments={setAllotments}
                 blocks={blocks}
                 setBlocks={setBlocks}
+                workloadExists={workloadExists}
+                setWorkloadExists={setWorkloadExists}
               />
             )}
             scroll={{

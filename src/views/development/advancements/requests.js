@@ -54,6 +54,9 @@ const GET_ADVANCEMENTS = gql`
           businessName
           RFC
         }
+        workload {
+          id
+        }
         percentageAdvanced
         createdAt
         updatedAt

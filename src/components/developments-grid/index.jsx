@@ -4,6 +4,7 @@ import { orders } from '@config/constants';
 import { sortableFields } from '@config/constants/development';
 import DevelopmentCard from '@components/development-card';
 import Loading from '@components/loading';
+import Box from '@components/box';
 import {
   Container,
   TitleSection,
@@ -35,7 +36,7 @@ const DevelopmentsGrid = ({
         <Title style={{ marginRight: 'auto' }} level={3}>
           {title}
         </Title>
-        <div>
+        <Box>
           <Paragraph style={{ margin: 0 }} type="secondary">
             Buscar desarrollo
           </Paragraph>
@@ -46,8 +47,8 @@ const DevelopmentsGrid = ({
             value={search}
             onChange={({ target: { value } }) => setSearch(value)}
           />
-        </div>
-        <div>
+        </Box>
+        <Box>
           <Paragraph style={{ margin: 0 }} type="secondary">
             Ordenar por
           </Paragraph>
@@ -63,8 +64,8 @@ const DevelopmentsGrid = ({
               </Option>
             ))}
           </Select>
-        </div>
-        <div>
+        </Box>
+        <Box>
           <Paragraph style={{ margin: 0 }} type="secondary">
             Orden
           </Paragraph>
@@ -74,7 +75,7 @@ const DevelopmentsGrid = ({
             onChange={({ target: { value } }) => setSortBy({ ...sortBy, order: value })}
             defaultValue={defaultSortBy.order}
           />
-        </div>
+        </Box>
       </TitleSection>
       {loading ? (
         <EmptyAndLoaderContainer>

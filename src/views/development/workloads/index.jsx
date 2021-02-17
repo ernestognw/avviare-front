@@ -157,7 +157,7 @@ const Workloads = () => {
         <ActionsContainer>
           <Link
             to={`/development/${development.id}/advancements?${stringify({
-              workload: { eq: workload.id },
+              workloads: [workload.id],
             })}`}
           >
             <Button type="primary" icon={<RightOutlined />} size="small">

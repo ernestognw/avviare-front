@@ -36,6 +36,8 @@ const TableTitle = ({
   setCreatedAt,
   updatedAt,
   setUpdatedAt,
+  workloadExists,
+  setWorkloadExists,
 }) => {
   const [userSearch, setUserSearch] = useState('');
   const [providerSearch, setProviderSearch] = useState('');
@@ -148,7 +150,7 @@ const TableTitle = ({
       </Box>
       <Box mt={10} display="flex">
         <Select
-          style={{ width: 300, margin: 'auto 10px auto auto' }}
+          style={{ width: 300, margin: 'auto 0px auto auto' }}
           mode="multiple"
           allowClear
           value={providers}
@@ -197,8 +199,10 @@ const TableTitle = ({
             </Option>
           ))}
         </Select>
+      </Box>
+      <Box mt={10} display="flex">
         <Select
-          style={{ width: 200, margin: 'auto 0px auto 10px' }}
+          style={{ width: 200, margin: 'auto 0px auto auto' }}
           mode="multiple"
           allowClear
           value={allotments}
@@ -233,6 +237,16 @@ const TableTitle = ({
             </Option>
           ))}
         </Select>
+        <Select
+          style={{ width: 200, margin: 'auto 0px auto 10px' }}
+          value={String(workloadExists)}
+          placeholder="Estimados"
+          onChange={(value) => setWorkloadExists(eval(value))}
+        >
+          <Option value="undefined">Todos</Option>
+          <Option value="true">Estimados</Option>
+          <Option value="false">No estimados</Option>
+        </Select>
       </Box>
     </TitleContainer>
   );
@@ -245,6 +259,7 @@ TableTitle.defaultProps = {
   providers: [],
   allotments: [],
   blocks: [],
+  workloadExists: undefined,
 };
 
 TableTitle.propTypes = {
@@ -260,6 +275,8 @@ TableTitle.propTypes = {
   setAllotments: PropTypes.func.isRequired,
   blocks: PropTypes.arrayOf(PropTypes.string),
   setBlocks: PropTypes.func.isRequired,
+  workloadExists: PropTypes.bool,
+  setWorkloadExists: PropTypes.func.isRequired,
 };
 
 export default TableTitle;

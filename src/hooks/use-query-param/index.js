@@ -13,8 +13,8 @@ const useQueryParam = (key, initialValue) => {
       ...parse(search.substring(1)),
     };
 
-    if (newValue) mergedNewValue[key] = newValue;
-    else delete mergedNewValue[key]; // Remove param when no value
+    if (newValue || typeof newValue === 'boolean') mergedNewValue[key] = newValue;
+    else delete mergedNewValue[key]; // Remove param when no value excepto for explicit falses
 
     const newSearch = stringify(mergedNewValue);
     replace(`${pathname}?${newSearch}`);
