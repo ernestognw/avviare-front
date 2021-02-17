@@ -209,7 +209,7 @@ const Workloads = () => {
               pageSize: Number(params.pageSize),
               defaultPageSize: defaultParams.pageSize,
               total: data?.workloads.info.count,
-              showTotal: (total) => `${total} cargas de trabajo`,
+              showTotal: (total) => `${total} estimaciones`,
               showSizeChanger: true,
               onChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
               onShowSizeChange: (page, pageSize) => setParams({ ...params, page, pageSize }),

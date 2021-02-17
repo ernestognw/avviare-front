@@ -86,7 +86,7 @@ const DevelopmentLayout = ({ children }) => {
                 <Link to={`${commonPath}/advancements`}>Avances</Link>
               </Item>
               <Item key={`${commonPath}/workloads`} icon={<GroupOutlined />}>
-                <Link to={`${commonPath}/workloads`}>Cargas de trabajo</Link>
+                <Link to={`${commonPath}/workloads`}>Estimaciones</Link>
               </Item>
               {developmentRole.manager && (
                 <SubMenu

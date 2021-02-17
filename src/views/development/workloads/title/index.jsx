@@ -76,7 +76,7 @@ const TableTitle = ({
     <TitleContainer>
       <Box display="flex">
         <Title style={{ margin: 'auto 10px', marginLeft: 0 }} level={3}>
-          Cargas de trabajo de {development.name}
+          Estimaciones de {development.name}
         </Title>
         <Button
           style={{ marginLeft: 'auto' }}
@@ -152,7 +152,9 @@ const TableTitle = ({
             ]}
             ranges={datePresets}
             placeholder={['Inicio', 'Fin']}
-            onCalendarChange={(dates) => setCreatedAt({ gte: dates?.[0], lte: dates?.[1] })}
+            onCalendarChange={(dates) =>
+              setCreatedAt({ gte: dates?.[0]?.toISOString(), lte: dates?.[1]?.toISOString() })
+            }
           />
         </Box>
         <Box style={{ marginLeft: 10 }}>
@@ -167,7 +169,9 @@ const TableTitle = ({
             ]}
             ranges={datePresets}
             placeholder={['Inicio', 'Fin']}
-            onCalendarChange={(dates) => setUpdatedAt({ gte: dates?.[0], lte: dates?.[1] })}
+            onCalendarChange={(dates) =>
+              setUpdatedAt({ gte: dates?.[0]?.toISOString(), lte: dates?.[1]?.toISOString() })
+            }
           />
         </Box>
         <Box style={{ marginLeft: 10 }}>
@@ -182,7 +186,9 @@ const TableTitle = ({
             ]}
             ranges={datePresets}
             placeholder={['Inicio', 'Fin']}
-            onCalendarChange={(dates) => setStart({ gte: dates?.[0], lte: dates?.[1] })}
+            onCalendarChange={(dates) =>
+              setStart({ gte: dates?.[0]?.toISOString(), lte: dates?.[1]?.toISOString() })
+            }
           />
         </Box>
         <Box style={{ marginLeft: 10 }}>
@@ -194,7 +200,9 @@ const TableTitle = ({
             value={[end.gte ? moment(end.gte) : undefined, end.lte ? moment(end.lte) : undefined]}
             ranges={datePresets}
             placeholder={['Inicio', 'Fin']}
-            onCalendarChange={(dates) => setEnd({ gte: dates?.[0], lte: dates?.[1] })}
+            onCalendarChange={(dates) =>
+              setEnd({ gte: dates?.[0]?.toISOString(), lte: dates?.[1]?.toISOString() })
+            }
           />
         </Box>
       </Box>

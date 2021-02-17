@@ -124,6 +124,7 @@ const Providers = () => {
             columns={memoizedColumns}
             title={() => (
               <Title
+                search={search}
                 openCreateProviderModal={() => toggleCreateProviderModal(true)}
                 setSearch={setSearch}
               />
