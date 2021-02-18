@@ -1,10 +1,13 @@
 import { useState, useMemo } from 'react';
-import { Card, Typography, Breadcrumb, Tag, Avatar } from 'antd';
+import { Card, Typography, Breadcrumb, Tag, Avatar, Button } from 'antd';
 import { useParams, Link } from 'react-router-dom';
+import { downloadFile } from '@utils/files';
 import { useQuery } from '@apollo/client';
 import { useDevelopment } from '@providers/development';
 import { BlockOutlined } from '@ant-design/icons';
 import Box from '@components/box';
+import JSZip from 'jszip';
+import axios from 'axios';
 import Loading from '@components/loading';
 import DevelopmentCard from '@components/development-card';
 import ImageViewer from 'react-simple-image-viewer';
@@ -16,6 +19,7 @@ const { Title, Paragraph } = Typography;
 const Advancement = () => {
   const [imageIndex, setImageindex] = useState(0);
   const [viewerOpen, toggleViewer] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const { advancementId } = useParams();
 
   const { development } = useDevelopment();
@@ -32,6 +36,32 @@ const Advancement = () => {
   const photos = useMemo(() => data?.advancement.photos.map(({ fileSource }) => fileSource) ?? [], [
     data,
   ]);
+
+  const zipPhotos = async () => {
+    const files = await Promise.all(
+      photos.map((url) => axios.get(url, { responseType: 'arraybuffer' }))
+    );
+
+    const zip = new JSZip();
+
+    files.forEach(({ data: res }, index) => {
+      const pointIndex = photos[index].lastIndexOf('.');
+      const extension = photos[index].slice(pointIndex);
+      zip.file(`photo-${index}${extension}`, res);
+    });
+
+    return zip.generateAsync({ type: 'base64' });
+  };
+
+  const downloadPhotos = async () => {
+    setDownloading(true);
+    const name = `${data.advancement.subconceptInstance.subconcept.name}${
+      data.advancement.subconceptInstance.allotment.number
+    }${new Date().toISOString()}.zip`;
+    const zipFileBase64 = await zipPhotos();
+    downloadFile(`data:application/zip;base64,${zipFileBase64}`, name.replace(/ /g, ''));
+    setDownloading(false);
+  };
 
   if (loading)
     return (
@@ -94,7 +124,14 @@ const Advancement = () => {
         <Col basis="80">
           {photos.length > 0 && (
             <>
-              <Title level={3}>Fotos</Title>
+              <Box display="flex">
+                <Title level={3} style={{ marginRight: 'auto' }}>
+                  Fotos
+                </Title>
+                <Button loading={downloading} onClick={downloadPhotos}>
+                  Descargar
+                </Button>
+              </Box>
               <GalleryContainer>
                 {photos.map((src, index) => (
                   <GalleryItem
