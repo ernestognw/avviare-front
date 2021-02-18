@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Typography, Select, Avatar, DatePicker, Input } from 'antd';
 import { useDebounce } from 'use-debounce';
@@ -10,13 +10,14 @@ import { searchableFields as userSearchableFields } from '@config/constants/user
 import { searchableFields as providerSearchableFields } from '@config/constants/provider';
 import { searchableFields as allotmentSearchableFields } from '@config/constants/allotment';
 import { searchableFields as blockSearchableFields } from '@config/constants/block';
+import { searchableFields as workloadSearchableFields } from '@config/constants/workload';
 import Box from '@components/box';
 import TitleContainer from './elements';
-import { GET_USERS, GET_PROVIDERS, GET_ALLOTMENTS, GET_BLOCKS } from './requests';
+import { GET_USERS, GET_PROVIDERS, GET_ALLOTMENTS, GET_BLOCKS, GET_WORKLOADS } from './requests';
 
 const params = {
   page: 1,
-  pageSize: 5,
+  pageSize: 1,
 };
 
 const { Title, Paragraph } = Typography;
@@ -39,6 +40,7 @@ const TableTitle = ({
   setCreatedAt,
   updatedAt,
   setUpdatedAt,
+  workloads,
   workloadExists,
   setWorkloadExists,
 }) => {
@@ -54,61 +56,56 @@ const TableTitle = ({
 
   const { development } = useDevelopment();
 
-  const { data: usersData, loading: loadingUsers } = useQuery(GET_USERS, {
-    variables: {
-      worksAt: {
-        eq: development.id,
-      },
-      params,
-      search: userSearchableFields.reduce((acc, curr) => {
-        acc[curr] = debouncedUserSearch;
-        return acc;
-      }, {}),
-    },
-    skip: !development.id,
-  });
+  const memoizedQueryOptions = (searchableFields, debouncedSearch, selected = [], options = {}) =>
+    useMemo(
+      () => ({
+        variables: {
+          worksAt: {
+            eq: development.id,
+          },
+          params,
+          search: debouncedSearch
+            ? searchableFields.reduce((acc, curr) => {
+                acc[curr] = debouncedSearch;
+                return acc;
+              }, {})
+            : undefined,
+          id:
+            selected.length > 0 // If pre selected wanted
+              ? {
+                  in: selected,
+                }
+              : undefined,
+        },
+        skip: !development.id || options.skip,
+      }),
+      [debouncedSearch]
+    );
 
-  const { data: providersData, loading: loadingProviders } = useQuery(GET_PROVIDERS, {
-    variables: {
-      worksAt: {
-        eq: development.id,
-      },
-      params,
-      search: providerSearchableFields.reduce((acc, curr) => {
-        acc[curr] = debouncedProviderSearch;
-        return acc;
-      }, {}),
-    },
-    skip: !development.id,
-  });
-
-  const { data: allotmentsData, loading: loadingAllotments } = useQuery(GET_ALLOTMENTS, {
-    variables: {
-      development: {
-        eq: development.id,
-      },
-      params,
-      search: allotmentSearchableFields.reduce((acc, curr) => {
-        acc[curr] = debouncedAllotmentSearch;
-        return acc;
-      }, {}),
-    },
-    skip: !development.id,
-  });
-
-  const { data: blocksData, loading: loadingBlocks } = useQuery(GET_BLOCKS, {
-    variables: {
-      development: {
-        eq: development.id,
-      },
-      params,
-      search: blockSearchableFields.reduce((acc, curr) => {
-        acc[curr] = debouncedBlocksearch;
-        return acc;
-      }, {}),
-    },
-    skip: !development.id,
-  });
+  const [
+    { data: usersData, loading: loadingUsers },
+    { data: providersData, loading: loadingProviders },
+    { data: allotmentsData, loading: loadingAllotments },
+    { data: blocksData, loading: loadingBlocks },
+    { data: workloadsData, loading: loadingWorkloads },
+  ] = [
+    useQuery(GET_USERS, memoizedQueryOptions(userSearchableFields, debouncedUserSearch)),
+    useQuery(
+      GET_PROVIDERS,
+      memoizedQueryOptions(providerSearchableFields, debouncedProviderSearch)
+    ),
+    useQuery(
+      GET_ALLOTMENTS,
+      memoizedQueryOptions(allotmentSearchableFields, debouncedAllotmentSearch)
+    ),
+    useQuery(GET_BLOCKS, memoizedQueryOptions(blockSearchableFields, debouncedBlocksearch)),
+    useQuery(
+      GET_WORKLOADS,
+      memoizedQueryOptions(workloadSearchableFields, '', workloads, {
+        skip: workloads.length === 0,
+      })
+    ),
+  ];
 
   return (
     <TitleContainer>
@@ -282,6 +279,30 @@ const TableTitle = ({
             <Option value="false">No estimados</Option>
           </Select>
         </Box>
+        {workloads.length > 0 && ( // Only show when passed by param
+          <Box style={{ marginLeft: 10 }}>
+            <Paragraph style={{ margin: 0 }} type="secondary">
+              Estimaciones
+            </Paragraph>
+            <Select
+              style={{ width: 200, margin: 'auto 0px auto 10px' }}
+              mode="multiple"
+              allowClear
+              value={workloads}
+              loading={loadingWorkloads}
+              filterOption={false}
+              showSearch
+              placeholder="Filtrar por estimación"
+              disabled
+            >
+              {workloadsData?.workloads.results.map(({ id, folio }) => (
+                <Option key={id} value={id}>
+                  {folio}
+                </Option>
+              ))}
+            </Select>
+          </Box>
+        )}
       </Box>
     </TitleContainer>
   );
@@ -296,6 +317,7 @@ TableTitle.defaultProps = {
   allotments: [],
   blocks: [],
   workloadExists: undefined,
+  workloads: [],
 };
 
 TableTitle.propTypes = {
@@ -315,6 +337,7 @@ TableTitle.propTypes = {
   setBlocks: PropTypes.func.isRequired,
   workloadExists: PropTypes.bool,
   setWorkloadExists: PropTypes.func.isRequired,
+  workloads: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default TableTitle;

@@ -52,4 +52,15 @@ const GET_BLOCKS = gql`
   }
 `;
 
-export { GET_PROVIDERS, GET_USERS, GET_ALLOTMENTS, GET_BLOCKS };
+const GET_WORKLOADS = gql`
+  query workloads($id: QueryOperators, $params: QueryParams, $development: QueryOperators) {
+    workloads(id: $id, params: $params, development: $development) {
+      results {
+        id
+        folio
+      }
+    }
+  }
+`;
+
+export { GET_PROVIDERS, GET_USERS, GET_ALLOTMENTS, GET_BLOCKS, GET_WORKLOADS };

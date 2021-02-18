@@ -31,7 +31,7 @@ const Advancements = () => {
   const [workloadExists, setWorkloadExists] = useQueryParam('workloadExists', false);
   const [blocks, setBlocks] = useQueryParam('blocks', []);
   const [sortBy, setSortBy] = useQueryParam('sortBy');
-  const [workloads] = useQueryParam('workloads', []);
+  const [workloads] = useQueryParam('workloads', []); // Only settable via query params!
   const [createdAt, setCreatedAt] = useQueryParam('createdAt', {
     gte: undefined,
     lte: undefined,
@@ -50,12 +50,7 @@ const Advancements = () => {
     if (workloads.length > 0 || typeof workloadExists === 'boolean') {
       return {
         exists: workloadExists,
-        in:
-          workloads.length > 0
-            ? {
-                in: workloads,
-              }
-            : undefined,
+        in: workloads.length > 0 ? workloads : undefined,
       };
     }
 
@@ -244,6 +239,7 @@ const Advancements = () => {
                 setBlocks={setBlocks}
                 workloadExists={workloadExists}
                 setWorkloadExists={setWorkloadExists}
+                workloads={workloads}
               />
             )}
             scroll={{
