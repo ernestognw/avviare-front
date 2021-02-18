@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Typography, Select, Avatar, DatePicker, Button } from 'antd';
+import { Typography, Select, Avatar, DatePicker, Button, Input } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useDebounce } from 'use-debounce';
 import { useQuery } from '@apollo/client';
@@ -20,9 +20,12 @@ const params = {
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
+const { Search } = Input;
 const { RangePicker } = DatePicker;
 
 const TableTitle = ({
+  search,
+  setSearch,
   createdBys,
   setCreatedBys,
   providers,
@@ -78,8 +81,15 @@ const TableTitle = ({
         <Title style={{ margin: 'auto 10px', marginLeft: 0 }} level={3}>
           Estimaciones de {development.name}
         </Title>
+        <Search
+          style={{ width: 350, margin: 'auto 10px auto auto' }}
+          allowClear
+          value={search}
+          placeholder="Buscar estimaciones"
+          onChange={({ target: { value } }) => setSearch(value)}
+        />
         <Button
-          style={{ marginLeft: 'auto' }}
+          style={{ marginLeft: 10 }}
           type="primary"
           disabled={!developmentRole.manager}
           icon={<PlusOutlined />}
@@ -88,56 +98,66 @@ const TableTitle = ({
         </Button>
       </Box>
       <Box mt={10} display="flex">
-        <Select
-          style={{ width: 300, margin: 'auto 10px auto auto' }}
-          mode="multiple"
-          allowClear
-          value={providers}
-          loading={loadingProviders}
-          onSearch={setProviderSearch}
-          filterOption={false}
-          showSearch
-          placeholder="Filtrar por proveedor"
-          onChange={setProviders}
-        >
-          {providersData?.providers.results.map(({ id, businessName, RFC }) => (
-            <Option key={id} value={id}>
-              <Paragraph style={{ margin: 0 }}>{businessName}</Paragraph>
-              <Paragraph style={{ margin: 0 }} type="secondary">
-                {RFC}
-              </Paragraph>
-            </Option>
-          ))}
-        </Select>
-        <Select
-          style={{ width: 200, margin: 'auto 0px auto 10px' }}
-          mode="multiple"
-          allowClear
-          value={createdBys}
-          loading={loadingUsers}
-          onSearch={setUserSearch}
-          filterOption={false}
-          showSearch
-          placeholder="Filtrar por creador"
-          onChange={setCreatedBys}
-          optionLabelProp="label"
-        >
-          {usersData?.users.results.map(({ id, firstName, lastName, profileImg, username }) => (
-            <Option key={id} value={id} label={`${firstName} ${lastName}`}>
-              <Box display="flex" alignItems="center">
-                <Avatar src={profileImg} />
-                <Box ml={12}>
-                  <Paragraph style={{ margin: 0 }}>
-                    {firstName} {lastName}
-                  </Paragraph>
-                  <Paragraph style={{ margin: 0 }} type="secondary">
-                    {username}
-                  </Paragraph>
+        <Box style={{ marginLeft: 'auto' }}>
+          <Paragraph style={{ margin: 0 }} type="secondary">
+            Proveedores
+          </Paragraph>
+          <Select
+            style={{ width: 300, margin: 'auto 10px auto auto' }}
+            mode="multiple"
+            allowClear
+            value={providers}
+            loading={loadingProviders}
+            onSearch={setProviderSearch}
+            filterOption={false}
+            showSearch
+            placeholder="Filtrar por proveedor"
+            onChange={setProviders}
+          >
+            {providersData?.providers.results.map(({ id, businessName, RFC }) => (
+              <Option key={id} value={id}>
+                <Paragraph style={{ margin: 0 }}>{businessName}</Paragraph>
+                <Paragraph style={{ margin: 0 }} type="secondary">
+                  {RFC}
+                </Paragraph>
+              </Option>
+            ))}
+          </Select>
+        </Box>
+        <Box style={{ marginLeft: 10 }}>
+          <Paragraph style={{ margin: 0 }} type="secondary">
+            Creadores
+          </Paragraph>
+          <Select
+            style={{ width: 200, margin: 'auto 0px auto 10px' }}
+            mode="multiple"
+            allowClear
+            value={createdBys}
+            loading={loadingUsers}
+            onSearch={setUserSearch}
+            filterOption={false}
+            showSearch
+            placeholder="Filtrar por creador"
+            onChange={setCreatedBys}
+            optionLabelProp="label"
+          >
+            {usersData?.users.results.map(({ id, firstName, lastName, profileImg, username }) => (
+              <Option key={id} value={id} label={`${firstName} ${lastName}`}>
+                <Box display="flex" alignItems="center">
+                  <Avatar src={profileImg} />
+                  <Box ml={12}>
+                    <Paragraph style={{ margin: 0 }}>
+                      {firstName} {lastName}
+                    </Paragraph>
+                    <Paragraph style={{ margin: 0 }} type="secondary">
+                      {username}
+                    </Paragraph>
+                  </Box>
                 </Box>
-              </Box>
-            </Option>
-          ))}
-        </Select>
+              </Option>
+            ))}
+          </Select>
+        </Box>
       </Box>
       <Box mt={10} display="flex">
         <Box style={{ marginLeft: 'auto' }}>
@@ -211,6 +231,7 @@ const TableTitle = ({
 };
 
 TableTitle.defaultProps = {
+  search: '',
   createdAt: {},
   updatedAt: {},
   start: {},
@@ -220,6 +241,8 @@ TableTitle.defaultProps = {
 };
 
 TableTitle.propTypes = {
+  search: PropTypes.string,
+  setSearch: PropTypes.func.isRequired,
   createdAt: PropTypes.object,
   setCreatedAt: PropTypes.func.isRequired,
   updatedAt: PropTypes.object,

@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import useQueryParam from '@hooks/use-query-param';
 import { stringify } from 'qs';
+import { useDebounce } from 'use-debounce';
+import { searchableFields } from '@config/constants/advancement';
 import { RightOutlined, CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
 import theme from '@config/theme';
 import Box from '@components/box';
@@ -20,6 +22,8 @@ const defaultParams = {
 const { Paragraph, Title: TypographyTitle } = Typography;
 
 const Workloads = () => {
+  const [search, setSearch] = useQueryParam('search', '');
+
   const [params, setParams] = useQueryParam('params', defaultParams);
   const [createdBys, setCreatedBys] = useQueryParam('createdBys', []);
   const [providers, setProviders] = useQueryParam('providers', []);
@@ -43,8 +47,14 @@ const Workloads = () => {
 
   const { development } = useDevelopment();
 
+  const [debouncedSearch] = useDebounce(search, 500);
+
   const { data, loading } = useQuery(GET_WORKLOADS, {
     variables: {
+      search: searchableFields.reduce((acc, curr) => {
+        acc[curr] = debouncedSearch;
+        return acc;
+      }, {}),
       development: {
         eq: development.id,
       },
@@ -73,6 +83,12 @@ const Workloads = () => {
   });
 
   const columns = [
+    {
+      title: 'Folio',
+      dataIndex: 'folio',
+      key: 'folio',
+      render: (folio) => <Tag>{folio}</Tag>,
+    },
     {
       title: 'Creado por',
       dataIndex: 'createdBy',
@@ -185,6 +201,8 @@ const Workloads = () => {
             }}
             title={() => (
               <Title
+                search={search}
+                setSearch={setSearch}
                 updatedAt={updatedAt}
                 setUpdatedAt={setUpdatedAt}
                 createdAt={createdAt}

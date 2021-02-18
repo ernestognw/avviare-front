@@ -2,6 +2,7 @@ import { gql } from '@apollo/client';
 
 const GET_ADVANCEMENTS = gql`
   query advancements(
+    $search: AdvancementSearchInput
     $params: QueryParams
     $sortBy: AdvancementSortInput
     $createdBy: QueryOperators
@@ -14,6 +15,7 @@ const GET_ADVANCEMENTS = gql`
     $updatedAt: DateRange
   ) {
     advancements(
+      search: $search
       params: $params
       sortBy: $sortBy
       createdBy: $createdBy
@@ -30,6 +32,7 @@ const GET_ADVANCEMENTS = gql`
       }
       results {
         id
+        folio
         createdBy {
           id
           username

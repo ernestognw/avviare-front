@@ -2,6 +2,7 @@ import { gql } from '@apollo/client';
 
 const GET_WORKLOADS = gql`
   query workloads(
+    $search: WorkloadSearchInput
     $params: QueryParams
     $sortBy: WorkloadSortInput
     $createdBy: QueryOperators
@@ -13,6 +14,7 @@ const GET_WORKLOADS = gql`
     $end: DateRange
   ) {
     workloads(
+      search: $search
       params: $params
       sortBy: $sortBy
       createdBy: $createdBy
@@ -28,6 +30,7 @@ const GET_WORKLOADS = gql`
       }
       results {
         id
+        folio
         start
         end
         paid

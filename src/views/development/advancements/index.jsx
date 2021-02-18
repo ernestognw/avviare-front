@@ -7,6 +7,8 @@ import moment from 'moment';
 import theme from '@config/theme';
 import useQueryParam from '@hooks/use-query-param';
 import { RightOutlined, CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
+import { useDebounce } from 'use-debounce';
+import { searchableFields } from '@config/constants/advancement';
 import { useLocation, Link } from 'react-router-dom';
 import Box from '@components/box';
 import Title from './title';
@@ -21,11 +23,12 @@ const defaultParams = {
 const { Paragraph, Title: TypographyTitle } = Typography;
 
 const Advancements = () => {
+  const [search, setSearch] = useQueryParam('search', '');
   const [params, setParams] = useQueryParam('params', defaultParams);
   const [createdBys, setCreatedBys] = useQueryParam('createdBys', []);
   const [providers, setProviders] = useQueryParam('providers', []);
   const [allotments, setAllotments] = useQueryParam('allotments', []);
-  const [workloadExists, setWorkloadExists] = useQueryParam('workloadExists');
+  const [workloadExists, setWorkloadExists] = useQueryParam('workloadExists', false);
   const [blocks, setBlocks] = useQueryParam('blocks', []);
   const [sortBy, setSortBy] = useQueryParam('sortBy');
   const [workloads] = useQueryParam('workloads', []);
@@ -37,6 +40,8 @@ const Advancements = () => {
     gte: undefined,
     lte: undefined,
   });
+
+  const [debouncedSearch] = useDebounce(search, 500);
 
   const { development } = useDevelopment();
   const { pathname } = useLocation();
@@ -59,6 +64,10 @@ const Advancements = () => {
 
   const { data, loading } = useQuery(GET_ADVANCEMENTS, {
     variables: {
+      search: searchableFields.reduce((acc, curr) => {
+        acc[curr] = debouncedSearch;
+        return acc;
+      }, {}),
       development: {
         eq: development.id,
       },
@@ -98,6 +107,12 @@ const Advancements = () => {
   });
 
   const columns = [
+    {
+      title: 'Folio',
+      dataIndex: 'folio',
+      key: 'folio',
+      render: (folio) => <Tag>{folio}</Tag>,
+    },
     {
       title: 'Creado por',
       dataIndex: 'createdBy',
@@ -213,6 +228,8 @@ const Advancements = () => {
             }}
             title={() => (
               <Title
+                search={search}
+                setSearch={setSearch}
                 updatedAt={updatedAt}
                 setUpdatedAt={setUpdatedAt}
                 createdAt={createdAt}
