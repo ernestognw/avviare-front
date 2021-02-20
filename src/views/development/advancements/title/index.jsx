@@ -17,7 +17,7 @@ import { GET_USERS, GET_PROVIDERS, GET_ALLOTMENTS, GET_BLOCKS, GET_WORKLOADS } f
 
 const params = {
   page: 1,
-  pageSize: 1,
+  pageSize: 5,
 };
 
 const { Title, Paragraph } = Typography;
