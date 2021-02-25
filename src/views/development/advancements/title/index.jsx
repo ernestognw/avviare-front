@@ -60,7 +60,7 @@ const TableTitle = ({
     useMemo(
       () => ({
         variables: {
-          worksAt: {
+          [options.useWorksAtInstedOfDevelopment ? 'worksAt' : 'development']: {
             eq: development.id,
           },
           params,
@@ -89,10 +89,17 @@ const TableTitle = ({
     { data: blocksData, loading: loadingBlocks },
     { data: workloadsData, loading: loadingWorkloads },
   ] = [
-    useQuery(GET_USERS, memoizedQueryOptions(userSearchableFields, debouncedUserSearch)),
+    useQuery(
+      GET_USERS,
+      memoizedQueryOptions(userSearchableFields, debouncedUserSearch, '', {
+        useWorksAtInstedOfDevelopment: true,
+      })
+    ),
     useQuery(
       GET_PROVIDERS,
-      memoizedQueryOptions(providerSearchableFields, debouncedProviderSearch)
+      memoizedQueryOptions(providerSearchableFields, debouncedProviderSearch, '', {
+        useWorksAtInstedOfDevelopment: true,
+      })
     ),
     useQuery(
       GET_ALLOTMENTS,
