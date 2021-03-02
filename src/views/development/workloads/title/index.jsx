@@ -38,6 +38,7 @@ const TableTitle = ({
   setEnd,
   updatedAt,
   setUpdatedAt,
+  openCreateWorkloadModal,
 }) => {
   const [userSearch, setUserSearch] = useState('');
   const [providerSearch, setProviderSearch] = useState('');
@@ -93,6 +94,7 @@ const TableTitle = ({
           type="primary"
           disabled={!developmentRole.manager}
           icon={<PlusOutlined />}
+          onClick={openCreateWorkloadModal}
         >
           Añadir
         </Button>
@@ -255,6 +257,7 @@ TableTitle.propTypes = {
   setCreatedBys: PropTypes.func.isRequired,
   providers: PropTypes.arrayOf(PropTypes.string),
   setProviders: PropTypes.func.isRequired,
+  openCreateWorkloadModal: PropTypes.func.isRequired,
 };
 
 export default TableTitle;

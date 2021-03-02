@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Card, Table, Button, Tag, Avatar, Typography } from 'antd';
 import { useDevelopment } from '@providers/development';
 import { useQuery } from '@apollo/client';
@@ -13,6 +14,7 @@ import Box from '@components/box';
 import Title from './title';
 import { Container, ActionsContainer } from './elements';
 import { GET_WORKLOADS } from './requests';
+import CreateWorkloadModal from './create-workload-modal';
 
 const defaultParams = {
   page: 1,
@@ -22,8 +24,9 @@ const defaultParams = {
 const { Paragraph, Title: TypographyTitle } = Typography;
 
 const Workloads = () => {
-  const [search, setSearch] = useQueryParam('search', '');
+  const [isCreateWorkloadModal, toggleCreateWorkloadModal] = useState(false);
 
+  const [search, setSearch] = useQueryParam('search', '');
   const [params, setParams] = useQueryParam('params', defaultParams);
   const [createdBys, setCreatedBys] = useQueryParam('createdBys', []);
   const [providers, setProviders] = useQueryParam('providers', []);
@@ -49,7 +52,7 @@ const Workloads = () => {
 
   const [debouncedSearch] = useDebounce(search, 500);
 
-  const { data, loading } = useQuery(GET_WORKLOADS, {
+  const { data, loading, refetch } = useQuery(GET_WORKLOADS, {
     variables: {
       search: searchableFields.reduce((acc, curr) => {
         acc[curr] = debouncedSearch;
@@ -215,6 +218,7 @@ const Workloads = () => {
                 setEnd={setEnd}
                 providers={providers}
                 setProviders={setProviders}
+                openCreateWorkloadModal={() => toggleCreateWorkloadModal(true)}
               />
             )}
             scroll={{
@@ -237,6 +241,11 @@ const Workloads = () => {
           />
         </Card>
       </Container>
+      <CreateWorkloadModal
+        visible={isCreateWorkloadModal}
+        onClose={() => toggleCreateWorkloadModal(false)}
+        reloadWorkloads={refetch}
+      />
     </>
   );
 };
