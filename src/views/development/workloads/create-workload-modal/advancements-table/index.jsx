@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Table, Tag, Typography, Button } from 'antd';
 import moment from 'moment';
 import Box from '@components/box';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { searchableFields } from '@config/constants/advancement';
 import { useDebounce } from 'use-debounce';
 import { useQuery } from '@apollo/client';
@@ -155,11 +155,15 @@ const AdvancementsTable = ({ provider, title, id, extraAction: ExtraAction, ...p
       fixed: 'right',
       render: (advancement) => (
         <ActionsContainer>
-          <Link to={urljoin(pathname, advancement.id)}>
+          <a
+            href={urljoin(pathname.replace('workloads', 'advancements'), advancement.id)}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             <Button type="primary" icon={<RightOutlined />} size="small">
               Ver
             </Button>
-          </Link>
+          </a>
           {ExtraAction && <ExtraAction advancement={advancement} />}
         </ActionsContainer>
       ),
