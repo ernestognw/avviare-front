@@ -41,7 +41,7 @@ const CreateWorkloadModal = ({ onClose, visible, reloadWorkloads }) => {
     } else {
       await reloadWorkloads();
       onClose();
-      message.success('La estiumación ha sido creada correctamente');
+      message.success('La estimación ha sido creada correctamente');
       resetFields();
     }
 
