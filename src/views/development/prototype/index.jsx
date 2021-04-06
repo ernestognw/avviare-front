@@ -20,11 +20,18 @@ import { useDebounce } from 'use-debounce';
 import { useDevelopment } from '@providers/development';
 import Box from '@components/box';
 import { searchableFields } from '@config/constants/concept';
-import { EditOutlined, RightOutlined, PlusOutlined, BlockOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  RightOutlined,
+  PlusOutlined,
+  BlockOutlined,
+  FileAddOutlined,
+} from '@ant-design/icons';
 import { GET_ALLOTMENT_PROTOTYPE, GET_CONCEPTS } from './requests';
 import { Container, ConceptsContainer, EmptyContainer } from './elements';
 import SubconceptsModal from './subconcepts-modal';
 import CreateConceptModal from './create-concept-modal';
+import CreateBulkConceptsModal from './create-bulk-concepts-modal';
 import EditConceptModal from './edit-concept-modal';
 
 const { Title, Text } = Typography;
@@ -41,6 +48,7 @@ const Prototype = () => {
   const { allotmentPrototypeId } = useParams();
   const { developmentRole, development } = useDevelopment();
   const [isCreateConceptModalOpen, toggleCreateConceptModal] = useState(false);
+  const [isCreateBulkConceptsModalOpen, toggleCreateBulkConceptsModal] = useState(false);
   const [search, setSearch] = useState('');
   const [conceptEditId, setConceptEditId] = useState('');
   const [selectedConcept, setSelectedConcept] = useState(null);
@@ -98,6 +106,14 @@ const Prototype = () => {
               placeholder="Buscar conceptos"
               onChange={({ target: { value } }) => setSearch(value)}
             />
+            <Button
+              style={{ margin: '10px' }}
+              icon={<FileAddOutlined />}
+              disabled={!developmentRole.manager}
+              onClick={() => toggleCreateBulkConceptsModal(true)}
+            >
+              Añadir en batch
+            </Button>
             <Button
               style={{ margin: 'auto 10px' }}
               type="primary"
@@ -203,6 +219,11 @@ const Prototype = () => {
       <CreateConceptModal
         visible={isCreateConceptModalOpen}
         onClose={() => toggleCreateConceptModal(false)}
+        updateConcepts={refetchConcepts}
+      />
+      <CreateBulkConceptsModal
+        visible={isCreateBulkConceptsModalOpen}
+        onCancel={() => toggleCreateBulkConceptsModal(false)}
         updateConcepts={refetchConcepts}
       />
       <EditConceptModal
