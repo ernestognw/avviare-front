@@ -16,9 +16,13 @@ const HomeLayout = ({ children }) => {
   const { pathname } = useLocation();
   const { overallRole } = useUser();
 
+  const selectedKeys = [pathname];
+
+  if (pathname.includes('credits')) selectedKeys.push('/credits');
+
   return (
     <>
-      <Menu mode="horizontal" selectedKeys={[pathname]}>
+      <Menu mode="horizontal" selectedKeys={selectedKeys}>
         {overallRole?.admin && (
           <Item key="/all" icon={<AppstoreOutlined />}>
             <Link to="/all">Todos los desarrollos</Link>

@@ -2,10 +2,17 @@ import { useMemo } from 'react';
 import moment from 'moment';
 import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
+import urljoin from 'url-join';
 import theme from '@config/theme';
+import { useLocation, Link } from 'react-router-dom';
 import useQueryParam from '@hooks/use-query-param';
 import { Card, Table, Tag, Button, Tooltip } from 'antd';
-import { EditOutlined, CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
+import {
+  EditOutlined,
+  CheckCircleTwoTone,
+  CloseCircleTwoTone,
+  RightOutlined,
+} from '@ant-design/icons';
 import { searchableFields, banks as creditBanks } from '@config/constants/credit';
 import { Container, ActionsContainer } from './elements';
 import { GET_CREDITS } from './requests';
@@ -17,6 +24,8 @@ const defaultParams = {
 };
 
 const Credits = () => {
+  const { pathname } = useLocation();
+
   const [params, setParams] = useQueryParam('params', defaultParams);
   const [search, setSearch] = useQueryParam('search', '');
   const [debouncedSearch] = useDebounce(search, 500);
@@ -134,10 +143,20 @@ const Credits = () => {
     {
       title: 'Acciones',
       // eslint-disable-next-line react/prop-types
-      render: () => (
+      render: ({ id }) => (
         <ActionsContainer>
+          <Link to={urljoin(pathname, id)}>
+            <Button type="primary" icon={<RightOutlined />} size="small">
+              Ver
+            </Button>
+          </Link>
           <Tooltip title="Editar crédito">
-            <Button onClick={() => {}} icon={<EditOutlined />} size="small" />
+            <Button
+              style={{ marginLeft: 10 }}
+              onClick={() => {}}
+              icon={<EditOutlined />}
+              size="small"
+            />
           </Tooltip>
         </ActionsContainer>
       ),
