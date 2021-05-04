@@ -1,7 +1,13 @@
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import { useUser } from '@providers/user';
-import { BlockOutlined, AppstoreOutlined, UserOutlined, AuditOutlined } from '@ant-design/icons';
+import {
+  BlockOutlined,
+  AppstoreOutlined,
+  UserOutlined,
+  AuditOutlined,
+  PercentageOutlined,
+} from '@ant-design/icons';
 import { Menu } from 'antd';
 
 const { Item } = Menu;
@@ -29,6 +35,11 @@ const HomeLayout = ({ children }) => {
         {overallRole?.admin && (
           <Item key="/providers" icon={<AuditOutlined />}>
             <Link to="/providers">Proveedores</Link>
+          </Item>
+        )}
+        {overallRole?.admin && (
+          <Item key="/credits" icon={<PercentageOutlined />}>
+            <Link to="/credits">Créditos</Link>
           </Item>
         )}
       </Menu>
