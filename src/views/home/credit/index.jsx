@@ -16,9 +16,15 @@ const defaultParams = {
   pageSize: 20,
 };
 
+const defaultSortBy = {
+  field: 'date',
+  order: 'asc',
+};
+
 const CreditMovements = () => {
   const [params, setParams] = useQueryParam('params', defaultParams);
   const [type, setType] = useQueryParam('type', '');
+  const [sortBy, setSortBy] = useQueryParam('sortBy', defaultSortBy);
   const [date, setDate] = useQueryParam('date', {
     gte: undefined,
     lte: undefined,
@@ -45,6 +51,7 @@ const CreditMovements = () => {
     date,
     createdAt,
     updatedAt,
+    sortBy,
   };
 
   if (type) variables.type = type;
@@ -56,6 +63,7 @@ const CreditMovements = () => {
       title: 'Fecha',
       dataIndex: 'date',
       key: 'date',
+      sorter: true,
       render: (dateToShow) => <Tag>{moment(dateToShow).format('ll')}</Tag>,
     },
     {
@@ -69,6 +77,7 @@ const CreditMovements = () => {
       dataIndex: 'amount',
       key: 'amount',
       align: 'center',
+      sorter: true,
       render: (amount) => amount?.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' }),
     },
     {
@@ -165,6 +174,12 @@ const CreditMovements = () => {
         <Table
           loading={loading}
           columns={memoizedColumns}
+          onChange={(_, __, { columnKey, order }, { action }) => {
+            if (action === 'sort') {
+              if (!order) setSortBy();
+              else setSortBy({ field: columnKey, order: order === 'ascend' ? 'asc' : 'desc' });
+            }
+          }}
           title={() => (
             <Title
               openCreateCreditMovementModal={() => {}}

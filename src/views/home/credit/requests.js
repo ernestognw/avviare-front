@@ -30,6 +30,7 @@ const GET_CREDIT_MOVEMENTS = gql`
     $credit: QueryOperators
     $type: CreditMovementType,
     $date: DateRange,
+    $sortBy: CreditMovementSortInput
     $createdAt: DateRange,
     $updatedAt: DateRange,
   ) {
@@ -38,6 +39,7 @@ const GET_CREDIT_MOVEMENTS = gql`
       credit: $credit
       type: $type
       date: $date
+      sortBy: $sortBy
       createdAt: $createdAt
       updatedAt: $updatedAt
     ) {

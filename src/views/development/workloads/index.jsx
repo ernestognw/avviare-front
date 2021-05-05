@@ -196,7 +196,7 @@ const Workloads = () => {
             loading={loading}
             columns={columns}
             showSorterTooltip={false}
-            onChange={(pagination, filters, { columnKey, order }, { action }) => {
+            onChange={(_, __, { columnKey, order }, { action }) => {
               if (action === 'sort') {
                 if (!order) setSortBy();
                 else setSortBy({ field: columnKey, order: order === 'ascend' ? 'asc' : 'desc' });

@@ -29,12 +29,14 @@ const TableTitle = ({
           Movimientos de crédito
         </Title>
         <Select
-          style={{ width: 250, margin: 'auto 10px' }}
+          style={{ width: 250, margin: 'auto 10px auto auto' }}
           allowClear
           value={type}
-          placeholder="Filtrar por tipo"
           onChange={setType}
         >
+          <option value="" hidden>
+            Filtrar por tipo
+          </option>
           {Object.keys(types).map((typeKey) => (
             <Option key={typeKey} value={typeKey}>
               {types[typeKey]}
