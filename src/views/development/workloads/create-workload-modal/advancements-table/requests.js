@@ -1,29 +1,33 @@
 import { gql } from '@apollo/client';
 
-const GET_WORKLOADS = gql`
-  query workloads(
-    $search: WorkloadSearchInput
+const GET_ADVANCEMENTS = gql`
+  query advancements(
+    $id: QueryOperators
+    $search: AdvancementSearchInput
     $params: QueryParams
-    $sortBy: WorkloadSortInput
+    $sortBy: AdvancementSortInput
     $createdBy: QueryOperators
     $provider: QueryOperators
     $development: QueryOperators
+    $allotment: QueryOperators
+    $block: QueryOperators
+    $workload: QueryOperators
     $createdAt: DateRange
     $updatedAt: DateRange
-    $start: DateRange
-    $end: DateRange
   ) {
-    workloads(
+    advancements(
+      id: $id
       search: $search
       params: $params
       sortBy: $sortBy
       createdBy: $createdBy
       provider: $provider
       development: $development
+      allotment: $allotment
+      block: $block
+      workload: $workload
       createdAt: $createdAt
       updatedAt: $updatedAt
-      start: $start
-      end: $end
     ) {
       info {
         count
@@ -31,31 +35,30 @@ const GET_WORKLOADS = gql`
       results {
         id
         folio
-        start
-        end
-        paid
-        createdAt
-        updatedAt
         createdBy {
           id
           username
           firstName
           lastName
-          profileImg
         }
-        provider {
+        subconceptInstance {
           id
-          businessName
-          RFC
-        }
-        advancements {
-          info {
-            count
+          subconcept {
+            id
+            code
+            name
+          }
+          allotment {
+            id
+            number
           }
         }
+        percentageAdvanced
+        createdAt
+        updatedAt
       }
     }
   }
 `;
 
-export { GET_WORKLOADS };
+export { GET_ADVANCEMENTS };

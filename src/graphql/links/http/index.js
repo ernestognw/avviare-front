@@ -1,7 +1,7 @@
-import { createHttpLink } from '@apollo/client';
+import { createUploadLink } from 'apollo-upload-client';
 import { apiUrl } from '@config/environment';
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
   uri: apiUrl,
   credentials: 'include',
 });
