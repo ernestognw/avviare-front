@@ -2,10 +2,13 @@ import PropTypes from 'prop-types';
 import { Button, Typography, DatePicker, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { types } from '@config/constants/credit-movement';
+import { useQuery } from '@apollo/client';
+import { useParams } from 'react-router-dom';
 import { datePresets } from '@utils';
 import Box from '@components/box';
 import moment from 'moment';
 import TitleContainer from './elements';
+import { GET_CREDIT } from './requests';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
@@ -22,11 +25,19 @@ const TableTitle = ({
   setType,
   openCreateCreditMovementModal,
 }) => {
+  const { creditId } = useParams();
+
+  const { data } = useQuery(GET_CREDIT, {
+    variables: {
+      id: creditId,
+    },
+  });
+
   return (
     <TitleContainer>
       <Box display="flex">
         <Title style={{ margin: 'auto 10px' }} level={3}>
-          Movimientos de crédito
+          Movimientos del crédito {data?.credit.number}
         </Title>
         <Select
           style={{ width: 250, margin: 'auto 10px auto auto' }}
