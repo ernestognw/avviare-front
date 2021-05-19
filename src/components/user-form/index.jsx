@@ -68,7 +68,7 @@ const UserForm = ({ onFinish, loading, form, disabled, initialValues, ...props }
     } else if (usernameExists) {
       message.warning('El username que estás intentando registrar ya le pertenece a alguien más');
     } else {
-      await onFinish({ ...values, profileImg: values.profileImg || imageUrl });
+      await onFinish({ ...values, profileImg: imageUrl || values.profileImg });
     }
   };
 
