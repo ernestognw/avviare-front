@@ -7,4 +7,9 @@ const banks = {
   ION: 'ION',
 };
 
-export { searchableFields, banks };
+const types = {
+  SIMPLE: 'Simple',
+  BRIDGE: 'Puente',
+};
+
+export { searchableFields, banks, types };

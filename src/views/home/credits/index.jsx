@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import moment from 'moment';
 import { useQuery } from '@apollo/client';
 import { useDebounce } from 'use-debounce';
@@ -17,6 +17,7 @@ import { searchableFields, banks as creditBanks } from '@config/constants/credit
 import { Container, ActionsContainer } from './elements';
 import { GET_CREDITS } from './requests';
 import Title from './title';
+import CreateCreditModal from './create-credit-modal';
 
 const defaultParams = {
   page: 1,
@@ -24,6 +25,7 @@ const defaultParams = {
 };
 
 const Credits = () => {
+  const [isOpenCreateCreditModal, toggleCreateCreditModal] = useState(false);
   const { pathname } = useLocation();
 
   const [params, setParams] = useQueryParam('params', defaultParams);
@@ -64,7 +66,7 @@ const Credits = () => {
     end,
   };
 
-  const { data, loading } = useQuery(GET_CREDITS, { variables });
+  const { data, loading, refetch } = useQuery(GET_CREDITS, { variables });
 
   const columns = [
     {
@@ -166,48 +168,55 @@ const Credits = () => {
   const memoizedColumns = useMemo(() => columns.map((col) => ({ ...col, ellipsis: true })), []);
 
   return (
-    <Container>
-      <Card style={{ width: '100%' }}>
-        <Table
-          loading={loading}
-          columns={memoizedColumns}
-          title={() => (
-            <Title
-              search={search}
-              openCreateCreditModal={() => {}}
-              setSearch={setSearch}
-              end={end}
-              setEnd={setEnd}
-              createdAt={createdAt}
-              setCreatedAt={setCreatedAt}
-              updatedAt={updatedAt}
-              setUpdatedAt={setUpdatedAt}
-              banks={banks}
-              setBanks={setBanks}
-            />
-          )}
-          scroll={{
-            x: true,
-          }}
-          rowKey="id"
-          pagination={{
-            current: Number(params.page),
-            defaultCurrent: defaultParams.page,
-            pageSize: Number(params.pageSize),
-            defaultPageSize: defaultParams.pageSize,
-            total: data?.credits.info.count,
-            showTotal: (total) => `${total} créditos`,
-            showSizeChanger: true,
-            onChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
-            onShowSizeChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
-            style: {
-              marginRight: 20,
-            },
-          }}
-          dataSource={data?.credits.results}
-        />
-      </Card>
-    </Container>
+    <>
+      <Container>
+        <Card style={{ width: '100%' }}>
+          <Table
+            loading={loading}
+            columns={memoizedColumns}
+            title={() => (
+              <Title
+                search={search}
+                openCreateCreditModal={() => toggleCreateCreditModal(true)}
+                setSearch={setSearch}
+                end={end}
+                setEnd={setEnd}
+                createdAt={createdAt}
+                setCreatedAt={setCreatedAt}
+                updatedAt={updatedAt}
+                setUpdatedAt={setUpdatedAt}
+                banks={banks}
+                setBanks={setBanks}
+              />
+            )}
+            scroll={{
+              x: true,
+            }}
+            rowKey="id"
+            pagination={{
+              current: Number(params.page),
+              defaultCurrent: defaultParams.page,
+              pageSize: Number(params.pageSize),
+              defaultPageSize: defaultParams.pageSize,
+              total: data?.credits.info.count,
+              showTotal: (total) => `${total} créditos`,
+              showSizeChanger: true,
+              onChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
+              onShowSizeChange: (page, pageSize) => setParams({ ...params, page, pageSize }),
+              style: {
+                marginRight: 20,
+              },
+            }}
+            dataSource={data?.credits.results}
+          />
+        </Card>
+      </Container>
+      <CreateCreditModal
+        visible={isOpenCreateCreditModal}
+        onClose={() => toggleCreateCreditModal(false)}
+        updateCredits={refetch}
+      />
+    </>
   );
 };
 
