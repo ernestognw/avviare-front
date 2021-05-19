@@ -34,7 +34,13 @@ const CreateCreditModal = ({ onClose, visible, updateCredits }) => {
       visible={visible}
       bodyStyle={{ paddingBottom: 80 }}
     >
-      <CreditForm form={form} onFinish={onFinish} loading={saving} />
+      <CreditForm
+        form={form}
+        onFinish={onFinish}
+        disabled={{ type: true }}
+        initialValues={{ type: 'SIMPLE' }}
+        loading={saving}
+      />
     </Drawer>
   );
 };

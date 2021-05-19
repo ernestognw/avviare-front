@@ -26,7 +26,10 @@ const CreditForm = ({ onFinish, loading, form, initialValues, disabled, ...props
       layout="vertical"
       onFinish={handleOnFinish}
       form={form}
-      initialValues={initialValues}
+      initialValues={{
+        ...initialValues,
+        end: initialValues.end ? moment(initialValues.end) : undefined,
+      }}
       {...props}
     >
       <Item
@@ -168,13 +171,6 @@ CreditForm.propTypes = {
   initialValues: PropTypes.shape({
     number: PropTypes.string,
     bank: PropTypes.oneOf(Object.keys(banks)),
-    end: PropTypes.any,
-    interestRate: PropTypes.number,
-    addTIIE: PropTypes.bool,
-  }),
-  disabled: PropTypes.shape({
-    number: PropTypes.string,
-    bank: PropTypes.oneOf(Object.keys(banks)),
     type: PropTypes.oneOf(Object.keys(types)),
     end: PropTypes.any,
     TIIEDay: PropTypes.number,
@@ -183,6 +179,19 @@ CreditForm.propTypes = {
     development: PropTypes.string,
     interestRate: PropTypes.number,
     defaultInterestRate: PropTypes.number,
+    addTIIE: PropTypes.bool,
+  }),
+  disabled: PropTypes.shape({
+    number: PropTypes.bool,
+    bank: PropTypes.bool,
+    type: PropTypes.bool,
+    end: PropTypes.bool,
+    TIIEDay: PropTypes.bool,
+    billingDay: PropTypes.bool,
+    paymentDay: PropTypes.bool,
+    development: PropTypes.bool,
+    interestRate: PropTypes.bool,
+    defaultInterestRate: PropTypes.bool,
     addTIIE: PropTypes.bool,
   }),
 };

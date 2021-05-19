@@ -18,6 +18,7 @@ import { Container, ActionsContainer } from './elements';
 import { GET_CREDITS } from './requests';
 import Title from './title';
 import CreateCreditModal from './create-credit-modal';
+import EditCreditModal from './edit-credit-modal';
 
 const defaultParams = {
   page: 1,
@@ -25,6 +26,7 @@ const defaultParams = {
 };
 
 const Credits = () => {
+  const [creditEditId, setCreditEditId] = useState(null);
   const [isOpenCreateCreditModal, toggleCreateCreditModal] = useState(false);
   const { pathname } = useLocation();
 
@@ -155,9 +157,9 @@ const Credits = () => {
           <Tooltip title="Editar crédito">
             <Button
               style={{ marginLeft: 10 }}
-              onClick={() => {}}
               icon={<EditOutlined />}
               size="small"
+              onClick={() => setCreditEditId(id)}
             />
           </Tooltip>
         </ActionsContainer>
@@ -215,6 +217,11 @@ const Credits = () => {
         visible={isOpenCreateCreditModal}
         onClose={() => toggleCreateCreditModal(false)}
         updateCredits={refetch}
+      />
+      <EditCreditModal
+        visible={!!creditEditId}
+        creditEditId={creditEditId}
+        onClose={() => setCreditEditId(null)}
       />
     </>
   );

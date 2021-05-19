@@ -29,7 +29,7 @@ const TableTitle = ({
     <TitleContainer>
       <Box display="flex">
         <Title style={{ margin: 'auto 10px' }} level={3}>
-          Créditos
+          Créditos simples
         </Title>
         <Search
           style={{ width: 250, margin: 'auto 10px auto auto' }}
